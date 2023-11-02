@@ -1,0 +1,101 @@
+\begin{frame} {Deep Ritz Method (DRM)}
+
+ 
+Minimization of the total energy:
+
+\vspace{0.5cm}
+
+\begin{equation*}
+ \mathcal{L}_{Ritz}  := \frac{1}{2} \int_{\Omega} (\nabla u )^2 - \int_{\Omega} f \, u - \int_{\Gamma_N }g \, u
+\end{equation*}
+
+\vspace{0.5cm}
+
+\begin{itemize}
+\item Requires a symmetric and positive definite bilinear form.
+\end{itemize}
+
+\vspace{1cm}
+
+%\beamertemplatebookbibitems
+\begin{thebibliography}{1}
+\bibitem{Ritz}E, W., Yu, B.: The Deep Ritz method: A Deep Learning-Based Numerical Algorithm for Solving Variational Problems. Communications in Mathematics and Statistics \textbf{6}, 1--12 (2018)
+\end{thebibliography}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame} {Numerical Methods Based on Residual Minimization}
+
+%\begin{columns}
+%\begin{column}{0.5\textwidth}
+%    \textbf{residual in strong-form}
+%%\vspace{0.5cm}
+%\begin{equation*}
+%\renewcommand\arraystretch{2}
+%\left\{
+%\begin{array}{rll}
+%r   & := \bigtriangleup u + f = 0,      & x \in \Omega,\\ 
+%r_N & := \nabla u \cdot \bs{n} -g = 0, &  x  \in \Gamma_N.
+%\end{array}
+%\right.
+%\end{equation*}
+%
+%\end{column}
+%\begin{column}{0.5\textwidth} 
+%	\textbf{residual in weak-form}
+%\begin{equation*}
+%\renewcommand\arraystretch{2}
+%{ \everymath={\displaystyle}	
+%\left\{
+%\begin{array}{rll}
+% R_i  & := \int_{\Omega} r \, v_i,  \\
+% R_{N,i} & := \int_{\Gamma_N} r_N \,  v_i.
+%\end{array}
+%\right.
+%}
+%\end{equation*}
+%
+%\end{column}
+%\end{columns}
+
+\begin{equation*}
+\mathcal{L}_{(\cdot)} := \sum_{i=1}^{n} \left\langle   \textcolor{blue}{\bigtriangleup u + f}, \textcolor{red}{v_i}   \right\rangle_{L^2(\Omega)} +
+\omega_N \sum_{i=1}^{n_N} \left\langle  \textcolor{blue}{ \nabla u \cdot \bs{n} -g} , \textcolor{red}{ v_i}\right\rangle_{L^2(\Gamma_N)}
+\end{equation*}
+
+The selection of \textcolor{red}{test functions} determines the numerical method:
+
+\centering
+%
+%
+\vspace{0.2cm}
+\renewcommand{\arraystretch}{1.3}
+\begin{table}[]
+\begin{tabular}{lll}
+\rowcolor[HTML]{C0C0C0} \hline  
+ Method & \textcolor{red}{Test function} &  Deep method\\ \hline \hline
+Collocation & sgn(\textcolor{blue}{residual}) $\cdot$ Dirac delta & PINNs  
+\\ \rowcolor[HTML]{EFEFEF}
+Least-Squares & \textcolor{blue}{residual} &  DGM
+\\
+Petrov-Galerkin &  \begin{tabular}[c]{@{}l@{}} polynomials \\ piece-wise polynomials\end{tabular}& \begin{tabular}[c]{@{}l@{}}VPINNs \\ VarNet  \end{tabular} 
+\\ \rowcolor[HTML]{EFEFEF}
+\begin{tabular}[c]{@{}l@{}} Petrov-Galerkin with \\ domain decomposition \end{tabular} & \begin{tabular}[c]{@{}l@{}} polynomials over \\ each subdomain \end{tabular} &  $hp-$VPINNS 
+\end{tabular}
+\end{table}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame} {References:}
+\bibliographystyle{splncs04}{\small \bibliography{bib/biblio_1}}
+\textcolor{white}{\tiny
+\cite{pinn}
+\cite{dgm}
+\cite{VarNET}
+\cite{hp_vpinn}
+}
+\end{frame}

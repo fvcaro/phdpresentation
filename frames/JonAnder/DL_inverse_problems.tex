@@ -1,0 +1,219 @@
+\def\layersep{1.5cm}
+
+
+\begin{frame}{Geophysics Synthetic Example: Input Measurements}
+\vspace{-0.35 cm}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[scale=1.0]
+	\node (layers) at (0.0,0.0)[scale=0.7]{
+		\input{frames/JonAnder/Latex_files/Fig_tool1.tex}
+	};       
+	\end{tikzpicture}
+\end{figure}
+\vspace{-0.7 cm}
+
+	\begin{itemize}
+		\item Co-axial attenuation and phase difference
+	\end{itemize}
+	
+	\vspace{0.4 cm}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[scale=1.0]
+	\node (layers) at (0.0,0.0)[scale=0.7]{
+		\input{frames/JonAnder/Latex_files/Fig_tool2.tex}
+	};       
+	\end{tikzpicture}
+\end{figure}
+\vspace{-0.7 cm}
+	\begin{itemize}
+		\item Co-axial attenuation and phase difference
+		\item Geosignal
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Geophysics Synthetic Example: Output Earth Parametrization}
+\begin{columns}
+    \begin{column}{0.35\textwidth}
+    \begin{figure}[!h]
+	\centering
+	\input{frames/JonAnder/Latex_files/1D_1_position.tex}
+	\label{fig:param}
+	\end{figure}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        {\footnotesize $\rho_u \in [1,10^3] \Omega \cdot m$: Upper layer resistivity}\\
+        \vspace{0.3cm}
+        {\footnotesize $\rho_h \in [1,10^3] \Omega \cdot m$: Central layer resistivity}\\
+        \vspace{0.3cm}
+        {\footnotesize $\rho_l \in [1,10^3] \Omega \cdot m$: Lower layer resistivity}\\
+        \vspace{0.3cm}
+        {\footnotesize $d_u \in [10^{-2},10] m$: Vertical distance to upper layer}\\
+        \vspace{0.3cm}
+        {\footnotesize $d_l \in [10^{-2},10] m$: Vertical distance to lower layer}
+    \end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{Geophysics Synthetic Example: Loss Function}
+%\vspace{-0.6 cm}
+
+Definitions:
+%\vspace{-0.2 cm}
+\begin{flalign}
+\hspace{3cm}
+\notag
+	& \mathcal{F} \;\;\: := \text{Forward operator (Earth properties $-->$ Measurements)}  & \\
+\notag
+	& \mathcal{I} \;\;\:\: := \text{Inverse operator (Measurements $-->$ Earth properties)}  & \\
+\notag
+	& \mathcal{I}_{\phi^\ast} \: := \text{Neural Network approx. of }\mathcal{I} & 
+\notag
+\end{flalign}
+
+Desired loss function:
+\begin{flalign}
+\hspace{3cm}
+\notag
+	 & \mathcal{I}_{\phi^\ast} \: := \arg \min_{\mathcal{I}_\phi, \phi \in \Phi} \sum_i \|(\mathcal{F} \circ \mathcal{I}_{\phi})(\mathbf{m}_i)-\mathbf{m}_i\| & \\
+	 \qquad
+\notag
+\end{flalign}
+
+\end{frame}
+
+
+
+\begin{frame}[t]{Deep Neural Networks (Deep Learning) for Inverse Problems}\linespread{1.05}
+\vspace{-.2 cm}
+\begin{center}
+	Approximate: ${\cal I} \approx {\cal I}_{\phi} :=  N \circ A_k \circ N \circ A_{k-1}  \circ \cdots \circ N \circ A_1 $\\
+\end{center}
+\only<1>{
+	\vspace{0.2 cm}
+	\centerline{$N$ -- Non-linear activation function  \hspace{0.3 cm};\hspace{0.3 cm} $A_k$ -- Affine transformation}
+\begin{figure}
+	\vspace*{-0.25in}
+	\input{frames/JonAnder/Latex_files/fully_connected_network.tex}
+\end{figure}}
+\only<2>{
+	\vspace{0.4cm}
+	
+	$A_k$ -- Affine transformation: \hspace{0.1cm} $A_k \cdot x+b_k$
+	\vspace{0.4cm}
+	
+	$N$ -- Non-linear activation function:
+%	\begin{figure}
+%	\hspace*{-0.25in}
+%	\includegraphics[scale=0.85,trim=100 30 0 30,clip]{frames/JonAnder/Figures/activation}
+%%	\includegraphics[scale=0.7]{frames/JonAnder/Figures/activation}
+%	\end{figure}
+	\begin{figure}
+	\centering
+		\begin{subfigure}{.5\textwidth}
+		\centering
+		\input{frames/JonAnder/Latex_files/tanh.tex}
+		%	\caption{Tanh}
+		\label{fig:tanh}
+		\end{subfigure}%
+		\begin{subfigure}{.5\textwidth}
+		\centering
+		\input{frames/JonAnder/Latex_files/ReLU.tex}
+		%	\caption{Tanh}
+		\label{fig:tanh}
+		\end{subfigure}
+%	\caption{A figure with two subfigures}
+	\label{fig:test}
+	\end{figure}
+	}
+\end{frame}
+
+
+\begin{frame}{Geophysics Synthetic Example: Loss Function}
+%\vspace{-0.6 cm}
+
+Definitions:
+%\vspace{-0.2 cm}
+\begin{flalign}
+\hspace{3cm}
+\notag
+	& \mathcal{F} \;\;\: := \text{Forward operator (Earth properties $-->$ Measurements)}  & \\
+\notag
+	& \mathcal{I} \;\;\:\: := \text{Inverse problem (Measurements $-->$ Earth properties)}  & \\
+\notag
+	& \mathcal{I}_{\phi^\ast} \: := \text{Neural Network approx. of }\mathcal{I} & 
+\notag
+\end{flalign}
+
+\begin{flalign}
+\hspace{3cm}
+\notag
+	 & \mathcal{I}_{\phi^\ast} \: := \arg \min_{\mathcal{I}_\phi, \phi \in \Phi} \sum_i \|(\mathcal{F} \circ \mathcal{I}_{\phi})(\mathbf{m}_i)-\mathbf{m}_i \| & \\
+	 \qquad
+\notag
+\end{flalign}
+
+\centerline{\textcolor{red}{Evaluating $\mathcal{F}$  is expensive}}
+
+\end{frame}
+
+
+\begin{frame}{Definitions and Loss Function}
+%\vspace{-0.6 cm}
+
+Definitions:
+%\vspace{-0.2 cm}
+\begin{flalign}
+\hspace{3cm}
+\notag
+	& \mathcal{F} \;\;\: := \text{Forward operator (Earth properties $-->$ Measurements)}  & \\
+\notag
+	& \mathcal{I} \;\;\:\: := \text{Inverse operator (Measurements $-->$ Earth properties)}  & \\
+\notag
+	& \mathcal{F}_{\theta^\ast}:= \text{Neural Network approx. of }\mathcal{F} & \\
+	& \mathcal{I}_{\phi^\ast} \: := \text{Neural Network approx. of }\mathcal{I} & 
+\notag
+\end{flalign}
+
+Two-step loss function:
+\begin{flalign}
+\hspace{3cm}
+\notag
+	& \mathcal{F}_{\theta^\ast}:= \arg \min_{\mathcal{F}_\theta, \theta \in \Theta}  \sum_i \|{\cal F}_{\theta}(\mathbf{z}_i)-{\cal F}(\mathbf{z}_i) \| & \\
+	 & \mathcal{I}_{\phi^\ast} \: := \arg \min_{\mathcal{I}_\phi, \phi \in \Phi} \sum_i \|(\mathcal{F}_{\theta^\ast} \circ \mathcal{I}_{\phi})(\mathbf{m}_i)-\mathbf{m}_i \| &
+\notag
+\end{flalign}
+%\begin{flalign}
+%\hspace{3cm}
+%\notag
+%	& \mathcal{F}_{\theta^\ast}:= \arg \min_{\theta \in \Theta} \|{\cal F}_{\theta}(\mathbf{z})-{\bf u} \| , & \mathcal{I}_{\phi^\ast} \: := \arg \min_{\phi \in \Phi}\|(\mathcal{F}_{\theta^\ast} \circ \mathcal{I}_{\phi})(\mathbf{u})-\mathbf{u} \|
+%\notag
+%\end{flalign}
+
+\begin{thebibliography}{1}
+\bibitem{Ritz}Shahriari, M., Pardo, D., Rivera, J. A., Torres-Verd\'in, C., Picon, A., Del Ser, J., Ossand\'on, S., Calo, V. M.: Error control and loss functions for the deep learning inversion of borehole resistivity measurements. International Journal for Numerical Methods in Engineering \textbf{122}(6), 1629--1657 (2021)
+\end{thebibliography}
+
+\end{frame}
+
+
+\begin{frame}{Synthetic Example: Numerical Results}
+\begin{figure}[!h]
+	\begin{subfigure}[]{\textwidth}
+				\centering
+	\input{frames/JonAnder/Latex_files/Figures/real.tex}%
+%	\caption{Original model}
+	\end{subfigure}
+
+	\begin{subfigure}[]{\textwidth}
+				\centering
+	\input{frames/JonAnder/Latex_files/Figures/Enco-Deco_REG/Predicted_F_FI_reg.tex}%
+%	\caption{Inverted model}
+	\end{subfigure}
+
+\end{figure}
+\end{frame}

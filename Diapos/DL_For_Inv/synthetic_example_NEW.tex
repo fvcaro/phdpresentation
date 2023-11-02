@@ -1,0 +1,207 @@
+\def\layersep{1.5cm}
+
+\def\checkmark{\tikz\fill[scale=0.8, color=green_jon](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
+\definecolor{green_jon}{rgb}{0.0, 0.5, 0.0}
+
+\begin{frame}{Geophysics Synthetic Example: Input Measurements}
+\vspace{-0.35 cm}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[scale=1.0]
+	\node (layers) at (0.0,0.0)[scale=0.7]{
+		\input{Diapos/DL_For_Inv/Figures/Syn_example/Fig_tool1.tex}
+	};       
+	\end{tikzpicture}
+\end{figure}
+\vspace{-0.7 cm}
+
+	\begin{itemize}
+		\item Co-axial attenuation and phase difference
+	\end{itemize}
+	
+	\vspace{0.4 cm}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[scale=1.0]
+	\node (layers) at (0.0,0.0)[scale=0.7]{
+		\input{Diapos/DL_For_Inv/Figures/Syn_example/Fig_tool2.tex}
+	};       
+	\end{tikzpicture}
+\end{figure}
+\vspace{-0.7 cm}
+	\begin{itemize}
+		\item Co-axial attenuation and phase difference
+		\item Geosignal
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Geophysics Synthetic Example: Output Earth Parametrization}
+\begin{columns}
+    \begin{column}{0.35\textwidth}
+    \begin{figure}[!h]
+	\centering
+	\input{Diapos/DL_For_Inv/Figures/Syn_example/1D_1_position.tex}
+	\label{fig:param}
+	\end{figure}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        {\footnotesize $\rho_u \in [1,10^2] \Omega \cdot m$: Upper layer resistivity}\\
+        \vspace{0.3cm}
+        {\footnotesize $\rho_h \in [1,10^2] \Omega \cdot m$: Central layer resistivity}\\
+        \vspace{0.3cm}
+        {\footnotesize $\rho_l \in [1,10^2] \Omega \cdot m$: Lower layer resistivity}\\
+        \vspace{0.3cm}
+        {\footnotesize $d_u \in [10^{-2},10] m$: Vertical distance to upper layer}\\
+        \vspace{0.3cm}
+        {\footnotesize $d_l \in [10^{-2},10] m$: Vertical distance to lower layer}
+    \end{column}
+\end{columns}
+\end{frame}
+
+
+
+\begin{frame}{Synthetic Example}
+\begin{center}
+{\large Formation of model problem}
+\end{center}
+\begin{figure}
+		\centering
+		\input{Diapos/DL_For_Inv/Figures/Syn_example/Numerical_results/real.tex}
+	%\caption{Formation of model problem}
+	\label{fig:formation_model_1_original}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Encoder-Decoder Loss}
+\begin{center}
+Predicted formation
+\end{center}
+\begin{figure}
+		\centering
+		\input{Diapos/DL_For_Inv/Figures/Syn_example/Numerical_results/Enco-Deco/Predicted_F_FI.tex}
+	%\caption{Formation of model problem}
+	\label{fig:formation_model_1_original}
+\end{figure}
+\begin{center}
+Geosignal measurement
+\end{center}
+\begin{figure}
+		\centering
+		\input{Diapos/DL_For_Inv/Figures/Syn_example/Numerical_results/Enco-Deco/Atten-Syn-1-geo_without_regularization.tex}
+	%\caption{Formation of model problem}
+	\label{fig:formation_model_1_original}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Encoder-Decoder Loss}
+%\vspace{-0.5cm}
+\begin{equation}
+\begin{aligned}
+	(\mathcal{F}_{\theta^\ast}, \mathcal{I}_{\phi^\ast}):=\arg \min_{\phi \in \Phi, \theta \in \Theta} \{ & \|(\mathcal{F}_{\theta} \circ \textcolor{blue}{\mathcal{I}_{\phi}})(\mathbf{M})-\mathbf{M}\| + \textcolor{green_jon}{\|{\cal F}_{\theta}({\bf P})-{\bf M}\|} \}
+\end{aligned}
+\notag
+\end{equation}
+
+\begin{figure}[!h]
+	\centering
+	\input{Diapos/DL_For_Inv/Figures/regularization.tex}
+	\label{fig:regu}
+\end{figure}
+
+\center
+\textcolor{green_jon}{x}=training samples
+
+${\cal F}_\theta(\textcolor{green_jon}{x}) \approx {\cal F}(\textcolor{green_jon}{x})$
+
+${\cal F}_\theta(\textcolor{blue}{O}) \neq {\cal F}(\textcolor{blue}{O})$
+%\vspace{0.5cm}
+\end{frame}
+
+
+\begin{frame}{Two-Step Loss}
+\begin{center}
+Predicted formation
+\end{center}
+\begin{figure}[!h]
+				\centering
+	\input{Diapos/DL_For_Inv/Figures/Syn_example/Numerical_results/Two_Step/Predicted_F_FI_two_step.tex}%
+	%\caption{Predicted formation using the Encoder-Decoder loss function with regularization}
+\end{figure}
+\begin{center}
+Geosignal measurement
+\end{center}
+\begin{figure}[!h]
+	\centering
+	\input{Diapos/DL_For_Inv/Figures/Syn_example/Numerical_results/Two_Step/Atten-Syn-1-geo_two_step.tex}%
+	%\caption{Deep coaxial measurement}
+\end{figure}
+\end{frame}
+
+
+%==========================================================
+\begin{frame}{Cross-plot}
+\centering
+\setlength{\fboxrule}{0.5mm}
+\setlength{\fboxsep}{1mm}
+\color{red}
+\fbox{\parbox{3cm}{{\begin{align}
+\textcolor{black}
+{\mathcal{I} \hspace{0.25cm} vs \hspace{0.25cm} \mathcal{I}_{\phi^\ast}}
+\notag
+\end{align}}}}
+\color{black}
+
+$\qquad$ \\
+\hspace{0.5cm} $d_u$ $\qquad \qquad \qquad \qquad \qquad$ $\rho_h$ $\qquad \qquad \qquad \qquad \qquad$ $\rho_u$
+\begin{figure}[!h]
+\centering
+	{%
+		\includegraphics[scale=0.8]{Diapos/DL_For_Inv/Figures/Syn_example/Cross_plots/Two_Step_loss/C_P_4/d_u.pdf}
+		\hspace{0.1cm}
+		\includegraphics[scale=0.8]{Diapos/DL_For_Inv/Figures/Syn_example/Cross_plots/Two_Step_loss/C_P_4/rho_h.pdf}
+		\hspace{0.1cm}
+		\includegraphics[scale=0.8]{Diapos/DL_For_Inv/Figures/Syn_example/Cross_plots/Two_Step_loss/C_P_4/rho_u.pdf}
+		}	
+\end{figure}	
+\end{frame}
+
+
+\begin{frame}{Encoder-Decoder Loss Regularization}
+\begin{equation}
+\begin{aligned}
+	(\mathcal{F}_{\theta^\ast}, \mathcal{I}_{\phi^\ast}):=\arg \min_{\phi \in \Phi, \theta \in \Theta} \{ & \|(\mathcal{F}_{\theta} \circ \mathcal{I}_{\phi})(\mathbf{M})-\mathbf{M}\| +\|{\cal F}_{\theta}({\bf P})-{\bf M}\|\\
+	&  + \textcolor{red}{\|{\cal I}_{\phi}({\bf M})-{\bf P}\| } \}
+\end{aligned}
+\notag
+\end{equation} \\
+\vspace{0.2cm}
+
+\begin{figure}[!h]
+				\centering
+	\input{Diapos/DL_For_Inv/Figures/Syn_example/Numerical_results/Enco-Deco_REG/Predicted_F_FI_reg.tex}%
+	%\caption{Predicted formation using the Encoder-Decoder loss function with regularization}
+\end{figure}
+
+\begin{figure}[!h]
+				\centering
+	\input{Diapos/DL_For_Inv/Figures/Syn_example/Numerical_results/Enco-Deco_REG/Atten-Syn-1-geo.tex}%
+	%\caption{Predicted formation using the Encoder-Decoder loss function with regularization}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Deep Learning for Inverse Borehole Problems}
+\begin{itemize}
+\item Deep Learning (DL) is an adequate option to invert borehole resistivity measurements in real time.
+\vspace{0.5cm}
+\item Traditional loss functions are not effective.
+\vspace{0.5cm}
+\item Both Encoder-Decoder and Two-Step are adequate alternatives.
+\vspace{0.5cm}
+\item Encoder-Decoder demands a regularization term.
+\end{itemize}
+\end{frame}

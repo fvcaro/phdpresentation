@@ -1,0 +1,195 @@
+\begin{frame}{Key Concept}
+\centerline{Different earth models may deliver identical measurements}
+\vspace{0.2in}
+\hspace{0.57in}
+	\begin{tikzpicture}	
+	\node at (2.0,0.0)[scale=1.03]{\input{Diapos/DL_For_Inv/Figures/Fig_field_example2.tex}};
+	\node at (9.0,0.0)[scale=1.03]{\input{Diapos/DL_For_Inv/Figures/Fig_field_example3.tex}};
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Simple example}
+\centering
+Simple example of an inverse problem.\\
+$\qquad$\\
+\begin{figure}[!htp]
+	\subcaptionbox{Forward function}{%
+	\input{Diapos/DL_For_Inv/Figures/Sqrt/Fig_example1.tex}} 
+	\subcaptionbox{Inverse function with two branches}{%
+	\input{Diapos/DL_For_Inv/Figures/Sqrt/Fig_example2.tex}}
+	%\caption{Model problem with known analytical solution.}
+	%\label{fig:real_graphics}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Loss function: Data misfit}
+%\vspace{-0.6 cm}
+Definitions:
+%\vspace{-0.2 cm}
+\begin{flalign}
+\hspace{3cm}
+\notag
+	& \mathcal{I} \;\;\:\: := \text{Inverse operator (Measurements $-->$ Earth properties)}  & \\
+\notag
+	& \mathcal{I}_{\phi^\ast} \: := \text{Neural Network approx. of }\mathcal{I} & 
+\notag
+\end{flalign}
+
+Data misfit loss function:
+\begin{flalign}
+\hspace{3cm}
+\notag
+	 & \mathcal{I}_{\phi^\ast} \: := \arg \min_{\phi \in \Phi} \sum_i \|\mathcal{I}_{\phi}(\mathbf{m}_i)-\mathbf{p}_i\| & \\
+	 \qquad
+\notag
+\end{flalign}
+\end{frame}
+
+
+\begin{frame}{Loss function: Data misfit}
+\begin{figure}[!h]
+\centering
+	\subcaptionbox{$\left\Vert \cdot \right\Vert_{1}$-norm \label{fig:loss1_norm2}}{%
+	\input{Diapos/DL_For_Inv/Figures/Sqrt/Fig_loss1_norm1.tex}}
+	\hspace{0.3cm}
+	\subcaptionbox{$\left\Vert \cdot \right\Vert_{2}$-norm \label{fig:loss1_norm1}}{%
+	\input{Diapos/DL_For_Inv/Figures/Sqrt/Fig_loss1_norm2.tex}}
+	%\caption{Analytical solution vs DNN predicted solution evaluated over the test dataset using the loss function based on the data misfit.}
+	%\label{fig:loss1}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}[t]{$|| \cdot ||_2$-norm}
+\visible<1-4>{For every sample of the form $(m_i,p_i)=(m_i, \sqrt{m_i})$, there exists another one $(m_i, -\sqrt{m_i})$.}
+\vspace{0.3cm}
+
+\visible<2-4>{Then, for a specific sample $m$, the solution that minimizes the loss must satisfy
+\begin{equation}
+(\mathcal{I}_{{\cal R},\theta}(m) - \sqrt{m})^2 + (\mathcal{I}_{{\cal R},\theta}(m) - (-\sqrt{m}))^2.
+\label{eq:norm2_proof_2}
+\end{equation}}
+
+\visible<3-4>{Taking the derivative of Eq. (\ref{eq:norm2_proof_2}) with respect to $\mathcal{I}_{{\cal R},\theta}(m)$ and equaling it to zero, we obtain
+\begin{equation}
+4\cdot\mathcal{I}_{{\cal R},\theta}(m)= 0.
+\label{eq:loss1_norm2_derived}
+\end{equation}}
+
+\visible<4-4>{Thus, for any sample $m_i$, the function is minimized when the approximated value is $\mathcal{I}_{{\cal R},\theta}(m_i)=0$.}
+\end{frame}
+
+
+\begin{frame}{Loss function: Desired}
+%\vspace{-0.6 cm}
+
+Definitions:
+%\vspace{-0.2 cm}
+\begin{flalign}
+\hspace{3cm}
+\notag
+	& \mathcal{F} \;\;\: := \text{Forward operator (Earth properties $-->$ Measurements)}  & \\
+\notag
+	& \mathcal{I} \;\;\:\: := \text{Inverse problem (Measurements $-->$ Earth properties)}  & \\
+\notag
+	& \mathcal{I}_{\phi^\ast} \: := \text{Neural Network approx. of }\mathcal{I} & 
+\notag
+\end{flalign}
+
+Desired loss function:
+\begin{flalign}
+\hspace{3cm}
+\notag
+	 & \mathcal{I}_{\phi^\ast} \: := \arg \min_{\phi \in \Phi} \sum_i \|(\mathcal{F} \circ \mathcal{I}_{\phi})(\mathbf{m}_i)-\mathbf{m}_i \| & \\
+	 \qquad
+\notag
+\end{flalign}
+
+\visible<2>{\centerline{\textcolor{red}{Evaluating $\mathcal{F}$  is expensive}}}
+\end{frame}
+
+
+\begin{frame}{Loss function: Encoder-Decoder}
+%\vspace{-0.6 cm}
+
+Definitions:
+%\vspace{-0.2 cm}
+\begin{flalign}
+\hspace{3cm}
+\notag
+	& \mathcal{F} \;\;\: := \text{Forward operator (Earth properties $-->$ Measurements)}  & \\
+\notag
+	& \mathcal{I} \;\;\:\: := \text{Inverse operator (Measurements $-->$ Earth properties)}  & \\
+\notag
+	& \mathcal{F}_{\theta^\ast}:= \text{Neural Network approx. of }\mathcal{F} & \\
+	& \mathcal{I}_{\phi^\ast} \: := \text{Neural Network approx. of }\mathcal{I} & 
+\notag
+\end{flalign}
+
+Encoder-Decoder loss function:
+\begin{flalign}
+\hspace{3cm}
+\notag
+	 \{ \mathcal{I}_{\phi^\ast},\mathcal{F}_{\theta^\ast} \}:= & \arg \min_{\shortstack{$\scriptstyle \theta \in \Theta$ \\ $\scriptstyle \phi \in \Phi$}}  \sum_i ( \|(\mathcal{F}_{\theta} \circ \mathcal{I}_{\phi})(\mathbf{m}_i)-\mathbf{m}_i \|  + \|{\cal F}_{\theta}(\mathbf{p}_i)-\mathbf{m}_i \| )& \\
+%	 & + \|{\cal F}_{\theta}(\mathbf{z}_i)-\mathbf{m}_i \| ) &
+\notag
+\end{flalign}
+\end{frame}
+
+
+\begin{frame}{Loss function: Encoder-Decoder}
+\begin{figure}[!h]
+\centering
+	\subcaptionbox{$\left\Vert \cdot \right\Vert_{1}$-norm \label{fig:loss1_norm2}}{%
+	\input{Diapos/DL_For_Inv/Figures/Sqrt/Fig_loss4_norm1_INV.tex}}
+	\hspace{0.3cm}
+	\subcaptionbox{$\left\Vert \cdot \right\Vert_{2}$-norm \label{fig:loss1_norm1}}{%
+	\input{Diapos/DL_For_Inv/Figures/Sqrt/Fig_loss4_norm2_INV.tex}}
+	%\caption{Analytical solution vs DNN predicted solution evaluated over the test dataset using the loss function based on the data misfit.}
+	%\label{fig:loss1}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Loss function: Two-Step}
+%\vspace{-0.6 cm}
+Definitions:
+%\vspace{-0.2 cm}
+\begin{flalign}
+\hspace{3cm}
+\notag
+	& \mathcal{F} \;\;\: := \text{Forward operator (Earth properties $-->$ Measurements)}  & \\
+\notag
+	& \mathcal{I} \;\;\:\: := \text{Inverse operator (Measurements $-->$ Earth properties)}  & \\
+\notag
+	& \mathcal{F}_{\theta^\ast}:= \text{Neural Network approx. of }\mathcal{F} & \\
+	& \mathcal{I}_{\phi^\ast} \: := \text{Neural Network approx. of }\mathcal{I} & 
+\notag
+\end{flalign}
+
+Two-step loss function:
+\begin{flalign}
+\hspace{3cm}
+\notag
+	& \mathcal{F}_{\theta^\ast}:= \arg \min_{\theta \in \Theta}  \sum_i \|{\cal F}_{\theta}(\mathbf{p}_i)-\mathbf{m}_i \| & \\
+	 & \mathcal{I}_{\phi^\ast} \: := \arg \min_{\phi \in \Phi} \sum_i \|(\mathcal{F}_{\theta^\ast} \circ \mathcal{I}_{\phi})(\mathbf{m}_i)-\mathbf{m}_i \| &
+\notag
+\end{flalign}
+\end{frame}
+
+
+\begin{frame}{Loss function: Two-Step}
+\begin{figure}[!h]
+\centering
+	\subcaptionbox{$\left\Vert \cdot \right\Vert_{1}$-norm \label{fig:loss1_norm2}}{%
+	\input{Diapos/DL_For_Inv/Figures/Sqrt/Fig_loss5_norm1_INV.tex}}
+	\hspace{0.3cm}
+	\subcaptionbox{$\left\Vert \cdot \right\Vert_{2}$-norm \label{fig:loss1_norm1}}{%
+	\input{Diapos/DL_For_Inv/Figures/Sqrt/Fig_loss5_norm2_INV.tex}}
+	%\caption{Analytical solution vs DNN predicted solution evaluated over the test dataset using the loss function based on the data misfit.}
+	%\label{fig:loss1}
+\end{figure}
+\end{frame}
+
+

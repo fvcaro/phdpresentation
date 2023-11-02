@@ -1,0 +1,10 @@
+\begin{tikzpicture}
+\begin{axis}[scale only axis, xlabel = $Epoch$, ylabel = $Loss$, ytick pos=left, y label style={at={(-0.12,0.5)}}, legend style= {at={(0.65,0.35)},draw=none,fill=none,nodes={scale=0.8, transform shape}}, legend cell align={left}, height=4cm, width=12cm, xmin=0.95, ymin=-15, xmax=45000, ymax=12, ytick = {8,-1.54,-15}, xmode=log, xticklabel style={yshift=-3pt}, yticklabel style={xshift=-3pt}]
+\addplot [black, dashed, line width=0.7pt,domain=0.99999:39900] {-1.54};
+%\addlegendentry{Loss of exact solution}
+\addplot[line width=0.8pt,color=red] %
+	table[x=epoch ,y=loss]{Diapos/PDEs_with_NN/Figures/Quadrature_problem//Data//loss_Ritz_normal_treshold.csv};
+%\addlegendentry{Loss of NN approximation};
+
+\end{axis}
+\end{tikzpicture}

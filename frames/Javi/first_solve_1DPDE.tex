@@ -1,0 +1,153 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Model problem}
+
+\begin{tikzpicture}
+\node [anchor = west] at (0, 0.7){\textbf{\textcolor{blue}{Parametric} problem:}};
+\node [anchor = west] at (1, -0.5){$
+\left\{
+\begin{array}{rrcl}
+-\nabla \cdot (\textcolor{blue}{\sigma} \nabla u) & = & f & \; \text{in} \; \Omega, \\ 
+u & = & 0 & \; \text{on} \; \Gamma_D,\\  
+(\textcolor{blue}{\sigma}\nabla u) \cdot \bs{n}  & = & g & \; \text{on} \; \Gamma_N.
+\end{array}
+\right.
+$};
+
+
+\node [anchor = west] at (0, -3.){\textbf{Non-parametric problem: $\textcolor{blue}{\sigma}:= 1$}};
+\node [anchor = west] at (1, -4.2){$
+\left\{
+\begin{array}{rrcl}
+-\bigtriangleup u & = & f & \; \text{in} \; \Omega, \\ 
+u & = & 0 & \; \text{on} \; \Gamma_D,\\  
+\nabla u \cdot \bs{n}  & = & g & \; \text{on} \; \Gamma_N.
+\end{array}
+\right.
+$};
+
+%\node [anchor = west] at (0, -4.6) {\textbf{1D non-parametric model problem over unitary domain:}};
+%\node [anchor = west] at (1, -5.7) {$
+%V := \{v \in H^1 (\Omega) \;\big| \, v|_{\Gamma_D} = 0 \} 
+%\qquad
+%f \in L^2(\Omega)
+%\qquad 
+%\sigma \in L^\infty(\Omega)
+%\qquad 
+%g \in H^{-1/2}(\Gamma_N)
+%$};
+
+
+\node [anchor = west] at (7.5, -1) {
+\begin{tikzpicture}[x=1.2cm, y =1.2cm]
+\draw[fill=orange!30!white, opacity=0.5] plot [smooth cycle] coordinates {(0,.3)(2.,0)(3,2.2)(1.5,2)(.8,1.5)(-0.1,1.8)} node[sloped,inner sep=0cm, below, anchor=center, minimum height=0.6cm,minimum width=0.6cm](N){};
+
+\draw[->] (N.center) --  (N.north west) node[right=2pt] {$\bs{n}$};
+
+\node [right = 1pt, color = red] at (2.8,2.5) {$\Gamma_D$};
+\node [left = 1pt, color = violet] at (0.2,0.1) {$\Gamma_N$};
+
+\begin{scope}
+\clip plot [smooth cycle] coordinates {(1.5,0)(3,0)(3,2.5)(1.7,2)};
+\draw[red, line width=0.5mm] plot [smooth cycle] coordinates {(0,.3)(2.,0)(3,2.2)(1.5,2)(.8,1.5)(-0.1,1.8)};
+\end{scope}
+%
+\begin{scope}
+\clip plot [smooth cycle] coordinates {(1.5,0)(3,0)(3,2.5)(1.7,2)} (current bounding box.south west) rectangle (current bounding box.north east);
+\draw[violet, line width=0.5mm] plot [smooth cycle] coordinates {(0,.3)(2.,0)(3,2.2)(1.5,2)(.8,1.5)(-0.1,1.8)};
+\end{scope}
+
+\node at (2.2,1.8) {\Large$\Omega$};
+\node (A) at (0.5,0.6) {$\textcolor{blue}{\sigma (x)}$};
+\node (O) at (1.5,-0.6) {\textcolor{blue}{material property}};
+
+\draw [<-,very thick, draw = blue] (A) to [bend left=35] (O);
+
+
+\end{tikzpicture}
+};
+
+
+
+%\node [anchor = west] at (3, -5.6) {
+%%\node [anchor = west] at (7, -1) {
+%\begin{tikzpicture}[x=0.6cm, y=1cm]
+%\draw[-] (0,0) -- (10,0);
+%\draw[->, dashed] (10,0) -- (11,0);
+%%
+%\draw[red,fill=red] (0,0) circle (0.7ex);
+%\draw[violet,fill=violet] (10,0) circle (0.7ex);
+%\node [red] at (0,0.4){$\Gamma_D$};
+%\node [violet] at (10,0.4){$\Gamma_N$};
+%\node at (3.5,0.3){$-u''(x) = f $};
+%\node at (0,-0.4){$u(0) = 0$};
+%\node at (10,-0.4){$u'(1) = g$};
+%\node at (11,0.1){$x$};
+%\end{tikzpicture}
+%};
+
+
+\end{tikzpicture}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}{1D Model Problem}
+%
+%\begin{tikzpicture}
+%\node [anchor = west] at (0, 0.7){\textbf{Strong Formulation:}};
+%\node [anchor = west] at (1, -0.5){$
+%\left\{
+%\begin{array}{rrcl}
+%-\nabla \cdot (\textcolor{teal}{\sigma} \nabla u) & = & f & \; \text{in} \; \Omega, \\ 
+%u & = & 0 & \; \text{on} \; \Gamma_D,\\  
+%(\sigma\nabla u) \cdot \bs{n}  & = & g & \; \text{on} \; \Gamma_N.
+%\end{array}
+%\right.
+%$};
+%
+%
+%\node [anchor = west] at (0, -2.1){\textbf{Weak Formulation:}};
+%\node [anchor = west] at (1, -3.3){$
+%\left\{
+%  \begin{array}{l}
+%     \mbox{Find} \; u \in V, \; \mbox{such that:} \\[1mm]
+%     \ds 
+%     \int_{\Omega} \sigma \, \nabla u \cdot \nabla v
+%     =\int_{\Omega} f \, v 
+%     + \int_{\Gamma_N} g \, v , \; \mbox{for all} \, v \in V.
+%  \end{array}
+%\right.
+%$};
+%
+%\node [anchor = west] at (0, -5) {\textbf{Regularity assumptions:}};
+%\node [anchor = west] at (1, -5.7) {$
+%V := \{v \in H^1 (\Omega) \;\big| \, v|_{\Gamma_D} = 0 \} 
+%\qquad
+%f \in L^2(\Omega)
+%\qquad 
+%\sigma \in L^\infty(\Omega)
+%\qquad 
+%g \in H^{-1/2}(\Gamma_N)
+%$};
+%
+%\node [anchor = west] at (7, -1) {
+%\begin{tikzpicture}[x=0.6cm, y=1cm]
+%\draw[-] (0,0) -- (10,0);
+%\draw[->, dashed] (10,0) -- (11,0);
+%%
+%\draw[red,fill=red] (0,0) circle (0.7ex);
+%\draw[violet,fill=violet] (10,0) circle (0.7ex);
+%\node [red] at (0,0.4){$\Gamma_D$};
+%\node [violet] at (10,0.4){$\Gamma_N$};
+%\node at (5,0.4){$\Omega$};
+%\node at (0,-0.4){$0$};
+%\node at (10,-0.4){$1$};
+%\node at (11,0.1){$x$};
+%\end{tikzpicture}
+%};
+%
+%
+%\end{tikzpicture}
+%
+%\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

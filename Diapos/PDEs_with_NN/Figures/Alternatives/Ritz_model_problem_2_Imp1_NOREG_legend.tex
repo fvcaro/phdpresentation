@@ -1,0 +1,9 @@
+\begin{tikzpicture}
+%https://tex.stackexchange.com/questions/451704/tikz-position-of-an-imported-image
+\node at (0,0) {};
+  \node[anchor=south west,inner sep=0] (image) at (0.05,0.03) {\input{Diapos/PDEs_with_NN/Figures/Alternatives/Graphics/Ritz_model_problem_2_Imp1_NOREG.tex}};
+  \begin{scope}[x={(image.south east)},y={(image.north west)}]
+  \draw[<-, color=red] (0.27,0.3) -- (0.35,0.25) node[right] {\textcolor{red}{$u_{NN}$}};
+  \draw[<-] (0.55,0.45) -- (0.65,0.4) node[below right] {$u_{exact}$};
+  \end{scope}
+\end{tikzpicture}

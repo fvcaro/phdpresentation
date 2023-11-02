@@ -1,0 +1,92 @@
+\begin{frame}[t]{Deep Neural Networks for Solving PDEs}
+\visible<1-3>{\textbf{Objective:} Generate the database for DL inversion faster than with traditional methods.}
+\vspace{0.2cm}
+
+\visible<2-3>{\textbf{Main goal:} Solve a \textcolor{blue}{parametric} PDE using NNs.
+\vspace{0.2cm}
+
+$
+\left\{
+\begin{array}{rrcl}
+-\nabla \cdot (\textcolor{blue}{\sigma} \nabla u) & = & f & \; \text{in} \; \Omega, \\ 
+u & = & 0 & \; \text{on} \; \Gamma_D,\\  
+(\textcolor{blue}{\sigma}\nabla u) \cdot \bs{n}  & = & g & \; \text{on} \; \Gamma_N.
+\end{array}
+\right.
+$
+}
+\vspace{0.2cm}
+
+\visible<3>{\textbf{First step:} Approximate a non-parametric ($\textcolor{blue}{\sigma}:= 1$) PDE solution by a NN.
+%\begin{equation*}
+%u \approx u_{NN}.
+%\end{equation*}
+\vspace{0.2cm}
+
+$
+\left\{
+\begin{array}{rrcl}
+-\bigtriangleup u & = & f & \; \text{in} \; \Omega, \\ 
+u & = & 0 & \; \text{on} \; \Gamma_D,\\  
+\nabla u \cdot \bs{n}  & = & g & \; \text{on} \; \Gamma_N.
+\end{array}
+\right.
+$
+
+\begin{thebibliography}{1}
+\bibitem{pinn} {\small J. A. Rivera, J. M. Taylor, A. J. Omella, and D. Pardo. On quadrature rules for solving Partial Differential Equations using Neural Networks. Computer Methods in Applied Mechanics and Engineering 393, 114710, 2022.}
+\end{thebibliography}
+}
+\end{frame}
+
+
+\begin{frame}[t]{Deep Neural Networks for Solving PDEs}
+\textbf{Physics-Informed Neural Networks (PINNs)}
+
+Monte Carlo integration
+\begin{thebibliography}{2}
+\bibitem{pinn} {\small Z. Mao, A. D. Jagtap, and G. E. Karniadakis. Physics-informed neural networks for high-speed flows. Computer Methods in Applied Mechanics and Engineering, 360:112789, 2020.}
+\end{thebibliography}
+Gaussian quadrature rule
+
+\textit{"there is no proper quadrature rule in the literature developed for integrals of DNNs"}
+\begin{thebibliography}{2}
+\bibitem{vpinn} {\small E. Kharazmi, Z. Zang, and G. E. Karniadakis. VPINNs: Variational Physics-Informed Neural Networks For Solving Partial Differential Equations, \textit{Arxiv}, 2019.}
+\end{thebibliography}
+
+\textbf{Deep Least Square}
+
+Adaptive integration.
+\begin{thebibliography}{3}
+\bibitem{DLS} {\small Z. Cai, J. Chen, M. Liu, and X. Liu. Deep least-squares methods: An unsupervised learning-based numerical method for solving elliptic PDEs.
+Journal of Computational Physics, 420:109707, 2020.}
+\end{thebibliography}
+\end{frame}
+
+
+
+
+\begin{frame} {Deep Ritz Method (DRM)}
+\vspace{-0.2cm}
+\begin{thebibliography}{1}
+\bibitem{Ritz}E, W., Yu, B.: The Deep Ritz method: A Deep Learning-Based Numerical Algorithm for Solving Variational Problems. Communications in Mathematics and Statistics \textbf{6}, 1--12 (2018)
+\end{thebibliography}
+\vspace{0.3cm}
+
+Minimization of the total energy:
+
+\begin{equation*}
+ \mathcal{L}_{Ritz}  := \frac{1}{2} \int_{\Omega} (\nabla u )^2 - \int_{\Omega} f \, u - \int_{\Gamma_N }g \, u
+\end{equation*}
+
+\begin{itemize}
+%\item Requires a symmetric and positive definite bilinear form.
+\item We will denote $\mathcal{L}_{Ritz}$ as $\mathcal{L}_{\mathcal{R}}$
+\item Standard inner products:
+\begin{equation*}
+(u,v) = \int_{\Omega} u \, v
+\end{equation*}
+\end{itemize}
+\end{frame}
+
+

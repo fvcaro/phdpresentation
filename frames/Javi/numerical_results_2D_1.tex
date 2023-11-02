@@ -1,0 +1,102 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}{Model Problem 3 - Smooth solutions}
+
+\begin{tikzpicture}
+
+\draw[very thin,rounded corners=2pt, fill=orange!30!white ] (-1,0.5) rectangle (4.,2);
+
+\node [anchor = west] at (-0.5,1.25){
+$
+\def\arraystretch{1.1}
+\left\{ \! \! \!
+\begin{array}{rll}
+-\triangle u & \!\!= f &  x \in (0,1)^2 
+\\
+u & \!\!= 0 &  x =0 
+\end{array}
+\right.
+$
+};
+
+%\draw[very thin,rounded corners=4pt, fill=gray!30!white ] (-1.8,2.7) rectangle (0.6,3.3);
+%\node [anchor = west] at (-1.8,3){Test problem};
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
+%%small squares
+\draw[very thin,rounded corners=2pt, fill=orange!30!white ] (-1.5,0) rectangle (4,-0.6);
+\node [anchor =  west] at (-1.3,-0.3){
+$u_{exact} = x_1^2 (x_1 -1)\, x_2^2 (x_2 -1) $
+};
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%\node [anchor = north west] at (0,0){
+%
+%\begin{tikzpicture}
+%\draw[very thin,rounded corners=2pt, fill=orange!30!white ] (0,0) rectangle (11.,-1.8);
+%
+%%\draw[very thin,rounded corners=4pt, fill=gray!30!white ] (0.3,-1.7) rectangle (3,-2.3);
+%%\node [anchor = west] at (0.5,-2){Test problem};
+%
+%\node [anchor = north west] at (0.0,0){\small
+%$
+%\renewcommand{\arraystretch}{1.}
+%\left\{ \begin{array}{ll}
+%-\triangle u 
+%=
+%-\alpha \, (\alpha +1) \, x_1 ^{\alpha -1}
+%+ \alpha (\alpha-1) \, x_1^{\alpha-2} \, x_2^{\alpha} \, (x_2 -1)  
+%\\\phantom{ -\triangle u =} \!
+%-\alpha \, (\alpha +1) \, x_2 ^{\alpha -1}
+%+ \alpha \, (\alpha-1) \, x_2^{\alpha-2} \, x_1^{\alpha} \, (x_1 -1), \quad \bs{x}  \in \Omega.
+%\\ [1.5ex]
+%\phantom{ -\triangle } u  = 0, \quad \bs{x}  \in \partial\Omega.
+%\end{array} \right.
+%$
+%};
+%
+%%%%
+%\draw[very thin,rounded corners=2pt, fill=gray!40!white ] (0.5,-2.2) rectangle (4.5,-2.8);
+%\node  at (0.5,-2.2){$\, \,  \Omega := (0,1)^2 \quad  \, \, \alpha = 2$};
+%%
+%
+%\draw[very thin,rounded corners=2pt,  fill=orange!30!white] (0.5,-3.2) rectangle (5.5,-4.5);
+%\node  at (0.5,-3.2){$\, \,  u = x_1^{\alpha} \, (x_1 -1) \, x_2^{\alpha} \, (x_2 -1)$};
+%\node  at (0.5,-3.8){$\, \,  F_R(u_{exact})= -1.2698 \cdot 10^{-3}$};
+%
+%\node  at (0.5,-4.8){$\, \,  F_R(u_{p}) = -1.2617 \cdot 10^{-3}$};
+%
+%%%
+%\end{tikzpicture}
+%};
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\node [anchor = north east]at (13,2.9){
+  \begin{tikzpicture}
+    \begin{axis}[view={-25}{25},
+    scaled z ticks=false,
+	zticklabel=\pgfkeys{/pgf/number format/.cd,fixed,precision=2,zerofill}\pgfmathprintnumber{\tick}, 
+    grid=both,
+    colorbar,
+    xlabel = $x_1$,
+    ylabel = $x_2$,
+    zlabel = $u_{p}$,
+    height=7.5cm, width=7cm, 
+	xmin=0, ymin=0, 
+	xmax=1, ymax=1,
+	zmin = 0, zmax = 0.035,
+	ztick = {0,0.01,0.02},
+%    scaled z ticks=false,   
+    ]
+      \addplot3[surf] file {frames/Javi/data/prueba.txt};
+      \addplot3[surf, point meta=explicit] table [z expr=0.035, meta index=2] {frames/Javi/data/prueba.txt};
+    \end{axis}
+  \end{tikzpicture}
+  
+};
+\end{tikzpicture}  
+\end{frame}

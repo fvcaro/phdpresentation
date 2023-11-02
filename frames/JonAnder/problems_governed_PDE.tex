@@ -1,0 +1,66 @@
+\begin{frame}{Governing PDEs in Geophysics}
+\begin{columns}
+\begin{column}{0.35\textwidth}
+\begin{tikzpicture}[x=0.8cm, y=0.8cm]
+%Material   Block A
+\draw[very thin,rounded corners=2pt, fill=orange!30!white ] (-1.5,0) rectangle (1.5,1);
+\node[color=black] at (0,0.5) {\footnotesize \textcolor{black}{\textbf{\begin{tabular}{c} Physical \\ properties \end{tabular}}}};
+%Measurments Block C
+\draw[very thin,rounded corners=2pt, fill=orange!30!white ] (-1.5,-8) rectangle (1.5,-7);
+\node[color=black] at (0,-7.5) {\footnotesize \textcolor{black}{\textbf{\begin{tabular}{c} Measurements \end{tabular}}}};
+%%PDE -- Block U
+%\draw[very thin,rounded corners=2pt, fill=black ] (4.5,0) rectangle (5.5,1);
+\draw[very thin, fill=blue!40!white] (0,-3.5) ellipse (0.5 and 0.5);
+\node[color=black] at (0,-3.5) {\footnotesize \textcolor{black}{\textbf{\begin{tabular}{c} u \end{tabular}}}};
+%
+%%Define some nodes for origen-destination
+\node (Aup) at (0,1) {};
+\node (Adw) at (0,0) {};
+\node (Ar) at (1.5,0.5) {};
+\node (Al) at (-1.5,0.5) {};
+%
+\node (Cup) at (0,-7) {};
+\node (Cdw) at (0,-8) {};
+\node (Cr) at (1.5,-7.5) {};
+\node (Cl) at (-1.5,-7.5) {};
+%
+\node (Uup) at (0,-3) {};
+\node (Udw) at (0,-4) {};
+%%arrows
+\draw [<-,very thick, draw = green!40!black, postaction={decorate,decoration={raise=1ex,text along path,text align=center,text={|\color{green!40!black}\sffamily|Inverse Problem}}}] (Ar) to [bend left=35] (Cr);
+%
+\draw [<-,very thick, draw = red, postaction={decorate,decoration={raise=1ex,text along path,text align=center,text={|\color{red}\sffamily|Forward Problem}}}] (Cl) to [bend left=35] (Al);
+%
+\draw [<-,draw = black, very thick,] (Uup) to [bend left=0]  (Adw);
+%
+\draw [<-,draw = black, very thick, ] (Cup) to [bend left=0]  (Udw);
+%
+\fill[fill=white] (-1.5,-5.2) rectangle (1.5,-5.8);
+\node at (0,-5.5) {\footnotesize Post-processing};
+\fill[fill=white] (-1.5,-1.2) rectangle (1.5,-1.8);
+\node at (0,-1.5) {\footnotesize Solve PDE};
+\end{tikzpicture}
+\end{column}
+%
+\begin{column}{0.55\textwidth}
+{\large Maxwell's equations}
+\vspace{0,15cm}
+\begin{equation}
+\notag
+\left\{
+                \begin{array}{lll}
+                \vspace{0,2cm}
+                  \mathbf{\nabla} \times \mathbf{H} & = (\boldsymbol{\sigma} + j \omega \boldsymbol{\epsilon})\mathbf{E} + \mathbf{J}^{imp} & \textup{Ampère's law,}\\
+                  \vspace{0,2cm}
+                  \mathbf{\nabla} \times \mathbf{E} & = -j \omega \boldsymbol{\mu}\mathbf{H} + \mathbf{M}^{imp} & \textup{Faraday's law,}\\
+                  \mathbf{\nabla} \cdot (\boldsymbol{\epsilon}\mathbf{E}) & = \rho_{e} & \textup{Gauss' law of} \\
+                  \vspace{0,2cm}
+                  & & \textup{electricity,} \\
+                  \mathbf{\nabla} \cdot (\boldsymbol{\mu}\mathbf{H}) & =0 & \textup{Gauss' law of} \\
+                 & & \textup{magnetism.}
+                \end{array}
+              \right.
+\end{equation}
+\end{column}
+\end{columns}
+\end{frame}

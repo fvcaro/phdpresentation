@@ -1,0 +1,297 @@
+\documentclass[aspectratio=169]{beamer}
+% \logo{
+% \includegraphics[scale=0.05]{logo_uppa.jpg}%
+%   \hspace{\dimexpr\paperwidth-2cm}%
+% \includegraphics[height=0.8cm, width=1cm]{logo_upv.jpg}%
+% 
+% }
+\usecolortheme[RGB={08,164,255}]{structure}
+\usetheme[height=8mm]{Rochester}
+\setbeamertemplate{items}[ball]
+\setbeamertemplate{blocks}[rounded][shadow=true]
+\setbeamertemplate{navigation symbols}{}
+\usefonttheme{structurebold}
+
+\usepackage{etex}
+%\reserveinserts{28}
+\usepackage{times}
+\usepackage[english]{babel}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage{makeidx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[figuresright]{rotating}
+\usepackage[intoc]{nomencl} 
+\usepackage{amssymb}
+\usepackage{pgfpages}
+\usepackage{overpic}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{nicefrac}
+\usepackage{color, colortbl}
+\usepackage{empheq}
+\usepackage{tcolorbox}
+\captionsetup[figure]{labelformat=empty}
+\captionsetup[table]{labelformat=empty}
+\usepackage{float,tikz,pgfplotstable}
+\usetikzlibrary{shapes.arrows}
+\usepgfplotslibrary{fillbetween}
+%%%%%%%
+\newlength{\stabfreqwidth}
+\newlength{\stabboundwidth}
+\newlength{\stabestimlwidth}
+\newlength{\stabestimmwidth}
+\setlength{\stabfreqwidth}{5cm}
+\setlength{\stabboundwidth}{2pt}
+\setlength{\stabestimmwidth}{2pt}
+\setlength{\stabestimlwidth}{1pt}
+%%%%%%%
+\usepackage{pgfplots}
+\usepackage{tikz-3dplot} %after pgfpages and pgfplots
+\usetikzlibrary{decorations.text}
+\pgfplotsset{compat=newest}
+\usetikzlibrary[patterns]
+\usetikzlibrary{arrows,positioning,shapes}  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usetikzlibrary{plotmarks}
+\usetikzlibrary{decorations.pathmorphing}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usetikzlibrary{calc}
+
+%\usetikzlibrary{plotmarks}
+
+\tikzset{
+    myarrow/.style={
+        draw,
+        fill=red,
+        single arrow,
+        minimum height=4.5ex,
+        single arrow head extend=1ex
+    }
+}
+\newcommand{\arrowup}{%
+\tikz [baseline=-0.5ex]{\node [myarrow,rotate=90] {};}
+}
+\newcommand{\arrowdown}{%
+\tikz [baseline=-1ex]{\node [myarrow,rotate=-90] {};}
+}
+\newcommand{\arrowright}{%
+\tikz [baseline=-1ex]{\node [myarrow,rotate=0] {};}
+}
+
+%%%%%%%%%%%%%%%%%%%inclued by javi
+\usepackage{pifont}
+\newcommand{\tickYes}{\textcolor{green!80!blue!}{\ding{51}}}%
+\newcommand{\tickNo}{\textcolor{red}{\ding{55}}}%
+
+\newcommand*{\TakeFourierOrnament}[1]{{%
+\fontencoding{U}\fontfamily{futs}\selectfont\char#1}}
+\newcommand*{\danger}{\textcolor{red}{\TakeFourierOrnament{66}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \setbeameroption{show notes}
+%  \setbeameroption{show notes on second screen=<location> (top, bottom, left)}
+% \setbeameroption{show notes on second screen} 
+% \setbeameroption{show only notes}
+%
+
+\newlength{\plotwidth}
+\newlength{\plotheight}
+
+\newlength{\subplotwidth}
+\newlength{\subplotheight}
+
+\newlength{\trisubplotwidth}
+\newlength{\trisubplotheight}
+
+\setlength{\plotwidth}{8cm}
+\setlength{\plotheight}{7cm}
+
+\setlength{\subplotwidth}{0.45\textwidth}
+\setlength{\subplotheight}{0.45\textwidth}
+
+\setlength{\trisubplotwidth}{0.3\textwidth}
+\setlength{\trisubplotheight}{0.3\textwidth}
+%
+%
+\setbeamertemplate{footline}{%
+   \raisebox{5pt}{\makebox[\paperwidth]{\hfill\makebox[10pt]{\tiny\insertframenumber}}}}
+%%%% ARROW
+\usetikzlibrary{fadings,shapes.arrows,shadows}  
+\tikzfading[name=arrowfading, top color=transparent!0, bottom color=transparent!95]
+\tikzset{arrowfill/.style={top color=blue!20, bottom color=blue!70, general shadow={fill=black, shadow yshift=-0.8ex, path fading=arrowfading}}}
+\tikzset{arrowstyle/.style={draw=blue,arrowfill, single arrow,minimum height=#1, single arrow,
+single arrow head extend=.4cm,}}
+\newcommand{\tikzfancyarrow}[2][2cm]{\tikz[baseline=-0.5ex]\node [arrowstyle=#1] {#2};}
+
+\newcommand{\ds}{\displaystyle}
+\newcommand{\bs}{\boldsymbol}
+\newcommand{\wt}{\widetilde}
+\newcommand{\wtb}[1]{\overline{\widetilde{#1}}} 
+\newcommand{\wtbF}[1]{\overline{\widetilde{\bsF}}} 
+\newcommand{\ol}{\overline}
+\newcommand{\tcr}{\textcolor{red}}
+\newcommand{\tcw}{\textcolor{white}}
+\newcommand{\tcb}{\textcolor{blue}}
+\newcommand{\tcc}{\textcolor{cyan}}
+\newcommand{\bsmu}{\boldsymbol{\mu}}
+\newcommand{\sig}{\sigma}
+\newcommand{\bssig}{\boldsymbol{\sigma}}
+\newcommand{\bsrho}{\boldsymbol{\rho}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\bseps}{\boldsymbol{\varepsilon}}
+\newcommand{\bsk}{\boldsymbol{k}}
+\newcommand{\bsx}{\boldsymbol{x}}
+\newcommand{\bsF}{\boldsymbol{F}}
+\newcommand{\bsE}{\boldsymbol{E}}
+\newcommand{\bsH}{\boldsymbol{H}}
+\newcommand{\bsJ}{\boldsymbol{J}}
+\newcommand{\bsM}{\boldsymbol{M}}
+\newcommand{\bsnabla}{\boldsymbol{\nabla}}
+\newcommand{\dO}{d\Omega}
+\newcommand{\p}{\mathfrak{p}}
+\newcommand{\f}{\mathfrak{f}}
+\newcommand{\Crossred}{$\mathbin{\tikz [x=1.4ex,y=1.4ex,line width=.2ex, red] \draw (0,0) -- (1,1) (0,1) -- (1,0);}$}% 
+\newcommand{\Crossblue}{$\mathbin{\tikz [x=1.4ex,y=1.4ex,line width=.2ex, blue] \draw (0,0) -- (1,1) (0,1) -- (1,0);}$}% 
+\renewcommand\u{\mathbf{u}}
+\newcommand\bv{\mathbf{v}}
+\newcommand\g{\mathbf{g}}
+\newcommand\e{{\mbox{\boldmath $\varepsilon$}}}
+\newcommand\bsi{{\mbox{\boldmath $\sigma$}}}
+\newcommand\C{\mathcal{C}}
+\newcommand\bdiv{{\mathbf{div}}}
+\newcommand\R{\mathbb{R}}
+\newcommand\bze{{\mbox{\boldmath $\zeta$}}}
+\newcommand\I{\mathbf{I}}
+\newcommand\tr{\mathrm{tr}}
+
+\newlength{\xmax}
+\setbeamercovered{transparent}
+
+\usepackage{multirow}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{material1}{RGB}{243,217,24}
+\definecolor{material2}{RGB}{0,101,19}
+\definecolor{material3}{RGB}{59,59,248}
+\definecolor{material4}{RGB}{0,225,94}
+\definecolor{material5}{RGB}{0,170,255}
+\definecolor{material1_3}{RGB}{0,255,223}
+\definecolor{material2_3}{RGB}{0,191,255}
+\definecolor{material3_3}{RGB}{59,59,248}
+\definecolor{myGreen}{RGB}{46,139,87}
+\definecolor{myblue}{RGB}{08,164,255}
+\definecolor{jon_green}{rgb}{0.0, 0.5, 0.0}
+
+\hypersetup{colorlinks,linkcolor=,urlcolor=myblue}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%this scales is necessary to scale a tikz to textwith
+\usepackage{environ}
+\newsavebox{\measure@tikzpicture}
+\NewEnviron{scaletikzpicturetowidth}[1]{%
+  \def\tikz@width{#1}%
+  \def\tikzscale{1}\begin{lrbox}{\measure@tikzpicture}%
+  \BODY
+  \end{lrbox}%
+  \pgfmathparse{#1/\wd\measure@tikzpicture}%
+  \edef\tikzscale{\pgfmathresult}%
+  \BODY
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+   \newif\ifdeveloppath
+    \tikzset{/tikz/develop clipping path/.is if=developpath,
+      /tikz/develop clipping path=true}
+
+    \newcommand{\clippicture}[2]{
+      \begin{tikzpicture}
+    % Include the image to determine the size and set up the relative coordinate system. Enclose the \includegraphics in \phantom{} once the clipping path has been set up
+    \ifdeveloppath
+      \node[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics#1};
+    \else
+      \node[anchor=south west,inner sep=0] (image) at (0,0) {\phantom{\includegraphics#1}};
+    \fi
+    \pgfresetboundingbox
+    \begin{scope}[x={(image.south east)},y={(image.north west)}]
+      % Draw grid while developing clipping path
+      \ifdeveloppath
+        \draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
+        \foreach \x in {0,1,...,9} { \node [anchor=north] at (\x/10,0) {0.\x}; }
+        \foreach \y in {0,1,...,9} { \node [anchor=east] at (0,\y/10) {0.\y}; }
+        \draw[red, ultra thick] #2 -- cycle;
+      \else
+        % Use the path to clip, include the image
+        \path[clip] #2 -- cycle;
+        \node[anchor=south west,inner sep=0pt] {\includegraphics#1};
+      \fi
+    \end{scope}
+    \end{tikzpicture}
+    }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%make blocks with variable color    
+\newenvironment{variableblock}[3]{%
+  \setbeamercolor{block body}{#2}
+  \setbeamercolor{block title}{#3}
+  \begin{block}{#1}}{\end{block}}
+
+%to put transparency in image
+\usepackage{transparent}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%to create \mybullet{1}{text}
+\newcommand{\mybullet}[2]{
+\begin{tikzpicture}
+\node (A) at (0,0){};
+\shade [shading=ball, ball color=structure]  (A) circle (.2);
+\node at (0,0){\small \textbf{\textcolor{white}{#1}}};
+\node [right=0.2cm of A]{\large #2};
+\end{tikzpicture}
+}    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Carlos Tikz preamble
+
+\usepackage{tikz}
+%\usetikzlibrary{overlay-beamer-styles}
+\usetikzlibrary{arrows,positioning} 
+\tikzset{
+    %Define standard arrow tip
+    >=stealth',
+    %Define style for boxes
+    punkt/.style={
+           rectangle,
+           rounded corners,
+           draw=black, very thick,
+           text width=4em,
+           minimum height=2em,
+           text centered},
+    % Define arrow style
+    pil/.style={
+           ->,
+           thick,
+           shorten <=2pt,
+           shorten >=2pt,}
+}
+
+\tikzset{
+  invisible/.style={opacity=0},
+  visible on/.style={alt={#1{}{invisible}}},
+  alt/.code args={<#1>#2#3}{%
+    \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+  },
+}
+
+\newcommand{\roundpic}[4][]{
+  \tikz\node [circle, minimum width = #2,
+    path picture = {
+      \node [#1] at (path picture bounding box.center) {
+        \includegraphics[width=#3]{#4}};
+    }] {};}
+    
+\usepackage[ruled, vlined]{algorithm2e}
+\SetKwComment{Comment}{/* }{ */}
+\SetKwInput{KwOutput}{Output}
+
+\usepackage{booktabs, multirow}

@@ -1,0 +1,34 @@
+\pgfplotsset{every axis legend/.append style={
+		at={(0.5,1.03)},
+		anchor=south},
+	every axis plot/.append style={line width=1.8pt},
+}
+\begin{tikzpicture}
+\begin{axis}[
+%  ymode=log,
+%  xmode=log,
+%  grid=both,
+%xmin=0,
+%xmax=540,
+legend columns=2,
+%  ymin=-20.0,
+%  ymax=-11,
+height=0.27*\textwidth,
+width=0.77*\textwidth,
+% 
+ y dir=reverse,
+xlabel={HD ($m$)},
+ylabel near ticks,
+ylabel={TVD ($m$)},
+%axis equal image,
+enlargelimits=false,
+]
+
+%[enlargelimits=false, axis on top, axis equal image, width=6cm]
+
+%\node[] at (rel axis cs:0,0) {\includegraphics{Syn_1/Predicted.png}};
+
+\addplot graphics[xmin=0,xmax=540,ymin=45,ymax=60] {frames/JonAnder/Latex_files/Figures/Enco-Deco_REG/Predicted_F_FI_reg.png};
+
+\end{axis}	
+\end{tikzpicture}

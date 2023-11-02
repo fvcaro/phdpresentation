@@ -1,0 +1,11 @@
+\begin{tikzpicture}
+\draw (0,0) -- (8,0);
+\foreach \Point in {(0,0), (8,0)}{\node at \Point {\textbullet};}
+\foreach \Point in {(1,0), (4,0), (7,0)}{\node[blue] at \Point {\textbullet};}
+%\node at (9.5,0) {\textup{Training set}};
+\node[blue] at (1,0.3) {$q_1$};
+\node[blue] at (4,0.3) {$q_2$};
+\node[blue] at (7,0.3) {$q_3$};
+\node at (0,-0.25) {$x_i$};
+\node at (8,-0.25) {$x_{i+1}$};
+\end{tikzpicture}

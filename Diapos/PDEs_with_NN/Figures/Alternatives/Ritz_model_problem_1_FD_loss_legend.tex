@@ -1,0 +1,10 @@
+\begin{tikzpicture}
+%https://tex.stackexchange.com/questions/451704/tikz-position-of-an-imported-image
+  \node[anchor=south west,inner sep=0] (image) at (0,0) {\input{Diapos/PDEs_with_NN/Figures/Alternatives/Graphics/Ritz_model_problem_1_FD_loss.tex}};
+  \begin{scope}[x={(image.south east)},y={(image.north west)}]
+%  \draw[<-, color=red] (0.355,0.26) -- (0.355,0.29) node[above] {\textcolor{red}{{\small $\mathcal{F}_{R}(u_{exact})$}}};
+  \node[] at (0.37,0.3) (c) {\textcolor{black}{{\small $\mathcal{L}_{\mathcal{R}}(u_{exact})$}}};
+  \draw[<-,red] (0.53,0.36) -- (0.6,0.75) node[above, text width=1.3cm] {\textcolor{red}{{\small $\mathcal{L}_{\mathcal{R}}(u^{*}_{NN,4})$}}};
+  \draw[<-, color=blue] (0.61,0.36) -- (0.8,0.45) node[above, text width=1.5cm] {\textcolor{blue}{{\small $\mathcal{L}_{\mathcal{R}}(u^{*}_{NN,10})$}}};
+  \end{scope}
+\end{tikzpicture}

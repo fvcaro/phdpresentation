@@ -1,0 +1,33 @@
+\begin{tikzpicture}[->,>=stealth',auto,node distance=5cm,
+  thick, minimum size=3.3cm,
+  %,main node/.style={circle,draw,font=\sffamily\Large\bfseries}
+  LabelStyle/.style = {font = \sffamily\Large\bfseries },
+  EdgeStyle/.append style = {->, bend left} 
+  ]
+  %First layer
+\visible<1,2>{\node[rectangle,fill=white!70!blue,font=\bfseries,align=center,rounded corners] (1) {Subsurface \\ properties ${\bf P}$ \\ + \\ Well trajectory ${\bf T}$};}
+
+\visible<1,2>{\node[rectangle,fill=white!40!pink,font=\bfseries,rounded corners] (2) [right of=1] {Measurements ${\bf M}$};}
+
+%Second layer
+\visible<1,2>{\node[rectangle,fill=white!40!pink,font=\bfseries,align=center,rounded corners] (4) [below=0.5cm of 1] {Measurements ${\bf M}$ \\ + \\ Well trajectory ${\bf T}$};}
+
+\visible<1,2>{\node[rectangle,fill=white!70!blue,font=\bfseries,align=center,rounded corners] (5) [below=0.5cm of 2] {Subsurface \\ properties ${\bf P}$};}
+
+%
+
+\visible<1,2>{\draw [->] (1) -- (2) node[pos=0.5,above=0.01 cm] {};}
+
+
+\visible<1,2>{\draw [->] (4) -- (5)  node[pos=0.5,above] {};}
+
+\visible<1,2>{\node[align=center] (z12) at (2.5,0.5) {\bfseries $\mathcal{F}$};}
+
+\visible<1,2>{\node[align=center] (z12) at (2.5,-3.3) {\bfseries $\mathcal{I}$};}
+
+\visible<1,2>{\node[align=center] (z12) at (-3,0.0) {\bfseries Forward:};}
+
+\visible<1,2>{\node[align=center] (z12) at (-3,-3.70) {\bfseries Inverse:};}
+
+\visible<2>{\draw[draw=red,rounded corners,line width=0.7 mm] (-4,-5.7) rectangle (7,-1.95);}
+\end{tikzpicture}
