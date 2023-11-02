@@ -21,6 +21,10 @@
 # *.eps
 # *.pdf
 
+## Beamer class generated files
+*.nav
+*.snm
+
 ## Bibliography auxiliary files (bibtex/biblatex/biber):
 *.bbl
 *.bcf
