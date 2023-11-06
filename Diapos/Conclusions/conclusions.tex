@@ -2,15 +2,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{Conclusions}
 
-\vspace{0.1cm}
 \begin{itemize}
-\item Deep Learning (DL) is an adequate option to invert borehole resistivity measurements in real time.
-\vspace{0.5cm}
-\item We need efficient DL solvers of PDEs to create the databased for the Neural Network training.
-\vspace{0.5cm}
-\item New challenges arise when solving PDEs using DL due to quadrature errors.
-\vspace{0.5cm}
-\item Selecting an adequate quadrature strategy is critical. We propose adaptive integration for low dimensions.
+\item We employ hierarchical basis functions that effectively address the challenge of \emph{hanging nodes}.
+\item We have developed \textbf{simple-to-implement} \( h \)- and \( p \)-GOA strategies that use an unconventional symmetric and positive definite bilinear form for possibly non-elliptic goal-oriented problems.
+\item We have expanded upon a painless automatic \( hp \) strategy, initially developed for energy-norm adaptivity, to both non-elliptic and goal-oriented problems.
+\item We have extended the applicability of a coarsening strategy to encompass parametric PDEs.
 \end{itemize}
 
 \end{frame}
