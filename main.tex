@@ -1,33 +1,41 @@
 \input{covers/presentation_preamble.tex}
-\input{covers/title_data.tex}
+\input{covers/title_data.tex}  
+\input{covers/plot_beamer.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 \input{Diapos/Auxiliar/title_frame.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\begin{section}{Geophysical Problems}
-%\input{Diapos/Intro/geophysical_app.tex}
-%\input{Diapos/Intro/problems_governed_PDE.tex}
-%\input{Diapos/Intro/traditional_simulations.tex}
-%\end{section}
+\begin{section}{Geophysical Problems} 
+\input{Diapos/Intro/electromagnetic_app.tex}
+\input{Diapos/Intro/forward_inverse_problems.tex}
+\input{Diapos/Intro/data_bases.tex}
+\input{Diapos/Intro/traditional_simulations.tex}
+\end{section}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\input{Diapos/Auxiliar/outline.tex}
+\input{Diapos/Auxiliar/outline.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\begin{section}{Why use Deep Learning for Geophysics?}
-%\input{Diapos/Auxiliar/section_why_use_DL}
-%\input{Diapos/Intro/DL_review.tex}
-%%\input{Diapos/Intro/DL_advatanges.tex}
-%\end{section}
+\begin{section}{Goal-Oriented $hp$-adaptivity for non-parametric PDEs}
+\input{Diapos/Auxiliar/section_go_hp_adaptivity}
+\input{Diapos/go_hp/why_hp.tex}
+\input{Diapos/go_hp/main_ingredients.tex}
+\input{Diapos/go_hp/data_structures_1D.tex}
+\input{Diapos/go_hp/data_structures_2D.tex} 
+\input{Diapos/go_hp/coarsening_strategy.tex}
+\input{Diapos/go_hp/algos.tex}
+\input{Diapos/go_hp/solutions_meshes.tex}
+%\input{Diapos/go_hp/unref.tex}
+\end{section}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\begin{section}{Deep Learning for Solving Inverse and Forward Problems}x
-%\input{Diapos/Auxiliar/section_DL_forward_inverse}
+\begin{section}{Goal-Oriented coarsening strategy}
+\input{Diapos/Auxiliar/section_coarsening_strategy}
 %\input{Diapos/DL_For_Inv/problems_governed_PDE.tex}
 %\input{Diapos/DL_For_Inv/sqrt_part.tex}
 %\input{Diapos/Auxiliar/synthetic_example}
 %\input{Diapos/DL_For_Inv/synthetic_example_NEW.tex}
-%\end{section}
+\end{section}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\begin{section}{Database Generation for Borehole Inversion Problems using rIGA}

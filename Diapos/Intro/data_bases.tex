@@ -1,0 +1,31 @@
+\begin{frame}
+    \frametitle{Generation of Massive Databases}    
+\vspace{-2mm}
+
+\begin{block}{Objective}
+	\centering
+	Building the \textbf{Inverse Operator} (not just evaluating it).
+\end{block}
+
+\begin{block}{Loss Function and Training}
+Find $\mathcal{I}_{\phi^*}$ such that
+\[
+\phi^* = \argmin_{\phi \in \boldsymbol{\Phi}} \sum \left\| (\textcolor{red}{\mathcal{F}} \circ \mathcal{I}_{\phi})(\boldsymbol{d}_i) - \boldsymbol{d}_i \right\|^2
+\]
+where evaluating $\textcolor{red}{\mathcal{F}}$ is \textcolor{red}{expensive}!
+\end{block}
+    
+\begin{block}{Difficulties}
+    \begin{enumerate}
+        \item We need a Forward Solver \textcolor{red}{$\mathcal{F}$} for \textcolor{red}{any parameterization} (model).
+        \item \textcolor{red}{A huge number} of evaluations needed \textcolor{red}{to train} the DNN.
+    \end{enumerate}
+\end{block}
+
+\begin{block}{Solution}
+    \begin{enumerate}
+        \item  \textcolor{red}{Approximate} the Forward Operator with a  \textcolor{red}{Neural Network}.
+    \end{enumerate}
+\end{block}
+
+\end{frame}

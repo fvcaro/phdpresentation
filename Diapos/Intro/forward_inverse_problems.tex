@@ -1,0 +1,63 @@
+\begin{frame}{Overview of Forward and Inverse Problems}
+\begin{columns}
+\begin{column}{0.35\textwidth}
+\begin{tikzpicture}[x=0.8cm, y=0.8cm]
+%Material   Block A
+\draw[very thin,rounded corners=2pt, fill=orange!30!white ] (-1.5,0) rectangle (1.5,1);
+\node[color=black] at (0,0.5) {\footnotesize \textcolor{black}{\textbf{\begin{tabular}{c} Physical \\ properties $(\boldsymbol{m})$ \end{tabular}}}};
+%Measurments Block C
+\draw[very thin,rounded corners=2pt, fill=orange!30!white ] (-1.5,-8) rectangle (1.5,-7);
+\node[color=black] at (0,-7.5) {\footnotesize \textcolor{black}{\textbf{\begin{tabular}{c} Measurements \\ $(\boldsymbol{d})$ \end{tabular}}}};
+%%PDE -- Block U
+%\draw[very thin,rounded corners=2pt, fill=black ] (4.5,0) rectangle (5.5,1);
+\draw[very thin, fill=blue!40!white] (0,-3.5) ellipse (0.5 and 0.5);
+\node[color=black] at (0,-3.5) {\footnotesize \textcolor{black}{\textbf{\begin{tabular}{c} u \end{tabular}}}};
+%
+%%Define some nodes for origen-destination
+\node (Aup) at (0,1) {};
+\node (Adw) at (0,0) {};
+\node (Ar) at (1.5,0.5) {};
+\node (Al) at (-1.5,0.5) {};
+%
+\node (Cup) at (0,-7) {};
+\node (Cdw) at (0,-8) {};
+\node (Cr) at (1.5,-7.5) {};
+\node (Cl) at (-1.5,-7.5) {};
+%
+\node (Uup) at (0,-3) {};
+\node (Udw) at (0,-4) {};
+%%arrows
+\draw [<-,very thick, draw = green!40!black, postaction={decorate,decoration={raise=1ex,text along path,text align=center,text={|\color{green!40!black}\sffamily|Inverse Problem}}}] (Ar) to [bend left=35] (Cr);
+%
+\draw [<-,very thick, draw = red, postaction={decorate,decoration={raise=1ex,text along path,text align=center,text={|\color{red}\sffamily|Forward Problem}}}] (Cl) to [bend left=35] (Al);
+%
+\draw [<-,draw = black, very thick,] (Uup) to [bend left=0]  (Adw);
+%
+\draw [<-,draw = black, very thick, ] (Cup) to [bend left=0]  (Udw);
+%
+\fill[fill=white] (-1.5,-5.2) rectangle (1.5,-5.8);
+\node at (0,-5.5) {\footnotesize Post-processing};
+\fill[fill=white] (-1.5,-1.2) rectangle (1.5,-1.8);
+\node at (0,-1.5) {\footnotesize Solve PDE};
+\end{tikzpicture}
+\end{column}
+%
+\begin{column}{0.55\textwidth}
+\vspace{0,15cm}
+\begin{block}{Definitions}
+\begin{equation*}
+  \begin{array}{cll}
+    \mathcal{F} &: & \text{Forward Operator} \\
+    & & \boldsymbol{m} \mapsto \boldsymbol{d} \\[2mm]
+   \mathcal{I} &: & \text{Inverse Operator} \\
+    & & \boldsymbol{d} \mapsto \boldsymbol{m} \\[2mm]
+    \mathcal{I}_{\phi} &: & \text{Neural Network approximation of } \mathcal{I}
+  \end{array}
+\end{equation*}
+\end{block}
+
+\end{column}
+\end{columns}
+\end{frame}
+
+% The arrows indicating the "Inverse Problem" and "Forward Problem" are reversed, as the inverse problem typically goes from data to model, and the forward problem from model to data.

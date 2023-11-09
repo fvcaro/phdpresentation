@@ -1,45 +1,38 @@
 \documentclass[aspectratio=169]{beamer}
-% \logo{
-% \includegraphics[scale=0.05]{logo_uppa.jpg}%
-%   \hspace{\dimexpr\paperwidth-2cm}%
-% \includegraphics[height=0.8cm, width=1cm]{logo_upv.jpg}%
-% 
-% }
+
 \usecolortheme[RGB={08,164,255}]{structure}
 \usetheme[height=8mm]{Rochester}
 \setbeamertemplate{items}[ball]
 \setbeamertemplate{blocks}[rounded][shadow=true]
 \setbeamertemplate{navigation symbols}{}
 \usefonttheme{structurebold}
-
-\usepackage{etex}
-%\reserveinserts{28}
-\usepackage{times}
 \usepackage[english]{babel}
 \usepackage{lmodern}
-\usepackage[utf8]{inputenc}
 \usepackage{makeidx}
 \usepackage{amsmath}
 \usepackage{amsfonts}
-\usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage[figuresright]{rotating}
+\usepackage{rotating} 
 \usepackage[intoc]{nomencl} 
-\usepackage{amssymb}
+\usepackage{amssymb} 
 \usepackage{pgfpages}
 \usepackage{overpic}
-\usepackage{caption}
 \usepackage{subcaption}
 \usepackage{nicefrac}
 \usepackage{color, colortbl}
 \usepackage{empheq}
 \usepackage{tcolorbox}
-\captionsetup[figure]{labelformat=empty}
+%\usepackage{caption}
+%\captionsetup[figure]{labelformat=empty}
 \captionsetup[table]{labelformat=empty}
 \usepackage{float,tikz,pgfplotstable}
+\usetikzlibrary{positioning}
+\usetikzlibrary{fit}
+% ... (rest of your preamble continues unchanged) ...
+\usepackage{xstring}
+\usetikzlibrary{decorations.markings}
 \usetikzlibrary{shapes.arrows}
 \usepgfplotslibrary{fillbetween}
-%%%%%%%
 \newlength{\stabfreqwidth}
 \newlength{\stabboundwidth}
 \newlength{\stabestimlwidth}
@@ -53,16 +46,12 @@
 \usepackage{tikz-3dplot} %after pgfpages and pgfplots
 \usetikzlibrary{decorations.text}
 \pgfplotsset{compat=newest}
+\usepgfplotslibrary{colorbrewer}
 \usetikzlibrary[patterns]
 \usetikzlibrary{arrows,positioning,shapes}  
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usetikzlibrary{plotmarks}
 \usetikzlibrary{decorations.pathmorphing}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usetikzlibrary{calc}
-
-%\usetikzlibrary{plotmarks}
 
 \tikzset{
     myarrow/.style={
@@ -82,8 +71,6 @@
 \newcommand{\arrowright}{%
 \tikz [baseline=-1ex]{\node [myarrow,rotate=0] {};}
 }
-
-%%%%%%%%%%%%%%%%%%%inclued by javi
 \usepackage{pifont}
 \newcommand{\tickYes}{\textcolor{green!80!blue!}{\ding{51}}}%
 \newcommand{\tickNo}{\textcolor{red}{\ding{55}}}%
@@ -91,13 +78,6 @@
 \newcommand*{\TakeFourierOrnament}[1]{{%
 \fontencoding{U}\fontfamily{futs}\selectfont\char#1}}
 \newcommand*{\danger}{\textcolor{red}{\TakeFourierOrnament{66}}}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \setbeameroption{show notes}
-%  \setbeameroption{show notes on second screen=<location> (top, bottom, left)}
-% \setbeameroption{show notes on second screen} 
-% \setbeameroption{show only notes}
-%
 
 \newlength{\plotwidth}
 \newlength{\plotheight}
@@ -127,7 +107,7 @@
 \tikzset{arrowstyle/.style={draw=blue,arrowfill, single arrow,minimum height=#1, single arrow,
 single arrow head extend=.4cm,}}
 \newcommand{\tikzfancyarrow}[2][2cm]{\tikz[baseline=-0.5ex]\node [arrowstyle=#1] {#2};}
-
+% Custom commands
 \newcommand{\ds}{\displaystyle}
 \newcommand{\bs}{\boldsymbol}
 \newcommand{\wt}{\widetilde}
@@ -169,11 +149,13 @@ single arrow head extend=.4cm,}}
 \newcommand\I{\mathbf{I}}
 \newcommand\tr{\mathrm{tr}}
 
+\DeclareMathOperator*{\argmin}{arg\,min}
+
 \newlength{\xmax}
 \setbeamercovered{transparent}
 
 \usepackage{multirow}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \definecolor{material1}{RGB}{243,217,24}
 \definecolor{material2}{RGB}{0,101,19}
 \definecolor{material3}{RGB}{59,59,248}
@@ -187,8 +169,6 @@ single arrow head extend=.4cm,}}
 \definecolor{jon_green}{rgb}{0.0, 0.5, 0.0}
 
 \hypersetup{colorlinks,linkcolor=,urlcolor=myblue}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %this scales is necessary to scale a tikz to textwith
 \usepackage{environ}
 \newsavebox{\measure@tikzpicture}
@@ -201,7 +181,6 @@ single arrow head extend=.4cm,}}
   \edef\tikzscale{\pgfmathresult}%
   \BODY
 }
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
    \newif\ifdeveloppath
     \tikzset{/tikz/develop clipping path/.is if=developpath,
@@ -231,7 +210,6 @@ single arrow head extend=.4cm,}}
     \end{scope}
     \end{tikzpicture}
     }
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %make blocks with variable color    
 \newenvironment{variableblock}[3]{%
   \setbeamercolor{block body}{#2}
@@ -240,7 +218,6 @@ single arrow head extend=.4cm,}}
 
 %to put transparency in image
 \usepackage{transparent}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %to create \mybullet{1}{text}
 \newcommand{\mybullet}[2]{
 \begin{tikzpicture}
@@ -250,11 +227,7 @@ single arrow head extend=.4cm,}}
 \node [right=0.2cm of A]{\large #2};
 \end{tikzpicture}
 }    
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Carlos Tikz preamble
-
-\usepackage{tikz}
-%\usetikzlibrary{overlay-beamer-styles}
 \usetikzlibrary{arrows,positioning} 
 \tikzset{
     %Define standard arrow tip
@@ -295,3 +268,6 @@ single arrow head extend=.4cm,}}
 \SetKwInput{KwOutput}{Output}
 
 \usepackage{booktabs, multirow}
+\newlength{\plotwidthmesh}
+\setlength{\plotwidthmesh}{0.49\textwidth}
+\newcommand{\subplotwidthhp}{0.49\textwidth}

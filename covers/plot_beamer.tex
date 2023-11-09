@@ -1,0 +1,2635 @@
+% !TEX spellcheck = English
+\newcommand*{\PbName}{}
+\newcommand*{\GOAPbName}{}
+\newcommand*{\EnergyPbName}{}
+\newcommand*{\ColName}{}
+\newcommand*{\FigurePath}{Figures}
+\newcommand*{\DataPath}{}
+
+\newcommand*{\directadjointsolution}[5]{%
+  \renewcommand*{\DataPath}{\FigurePath/#1}
+  \pgfplotsset{%
+    colormap={paraview}{rgb=(0.231373, 0.298039, 0.752941) rgb=(0.865003, 0.865003, 0.865003) rgb=(0.705882, 0.0156863, 0.14902)}%
+  }%
+  \pgfplotsset{colormap name={paraview}}%
+
+  \getelemdbl{\DataPath/#3_#2_ColorbarValues.dat}{min_value}{0}{\scaleMin}
+  \getelemdbl{\DataPath/#3_#2_ColorbarValues.dat}{max_value}{0}{\scaleMax}
+  \getelemdbl{\DataPath/#3_#2_ColorbarValues.dat}{mean_value}{0}{\scaleMean}
+
+  %\tikzset{/tikz/external/export next=false}
+
+  \begin{tikzpicture}
+    \begin{axis}[name=master,
+        width=\textwidth,height=\textwidth,
+        enlargelimits=false,
+        xlabel=$x$,
+        ylabel=$y$,
+        xlabel near ticks,
+        ylabel near ticks,
+        colorbar horizontal,
+        colorbar style={%
+            xtick={\scaleMin,\scaleMean,\scaleMax},
+            title={#4 solution},
+            at={(master.above north west)},anchor=south west,
+            yshift=2pt,
+            title style={yshift=5pt},
+            xticklabel pos=upper,
+        },
+        point meta min=\scaleMin,
+        point meta max=\scaleMax,
+        xmin=0, xmax=1,
+        ymin=0, ymax=1,
+        xtick={0,0.5,1},
+        ytick={0,0.5,1},
+        tick align=outside,
+        axis y line*=#5, % Position of y axis, left or right
+        axis x line*=bottom,
+        axis line style={draw=none},
+        tick style={draw=none},
+    ]
+      \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/coarse_mesh_fine_#2_#3.png};
+    \end{axis}
+  \end{tikzpicture}
+}
+
+\newcommand*{\goasolutions}[2]{%
+  \renewcommand*{\DataPath}{\FigurePath/#1/hp/order_1}
+  \findmax{\DataPath/outputs.txt}{iter}{\endIter}
+
+  \FormatIntegerTwoDigit{\endIter}{\endIterformated}
+  \FormatIntegerThreeDigit{\endIter}{\endIterformatedthree}
+  %
+  \begin{subfigure}[t]{0.4\textwidth}
+    \centering
+    \directadjointsolution{#1/hp/order_1}{\endIterformated}{Direct_solution_#2}{Direct}{left}%
+    \caption{Solution to the direct problem.}
+    \label{fig:#1_dir}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[t]{0.4\textwidth}
+   \centering
+   \directadjointsolution{#1/hp/order_1}{\endIterformated}{Adjoint_solution_#2}{Adjoint}{right}%
+    \caption{Solution to the adjoint problem.}
+    \label{fig:#1_adj}
+  \end{subfigure}
+}
+
+\newcommand{\plothpmeshes}[2][]{
+  \renewcommand{\DataPath}{\FigurePath/#2/hp/order_1}
+  \findmax{\DataPath/outputs.txt}{iter}{\endIter}
+  \FormatIntegerTwoDigit{\endIter}{\endIterformated}
+  \FormatIntegerThreeDigit{\endIter}{\endIterformatedthree}
+
+  \only<+>{%
+    \begin{figure}
+      \centering
+      \foreach \i in {x,y}{%
+        \begin{subfigure}[t]{0.4\textwidth}
+          \centering
+          \hpmeshes{#2/hp/order_1}{\endIterformatedthree}{\i}%
+          \subcaption{Polynomial orders $p$ in the \i-direction}
+        \end{subfigure}
+      }
+      \caption{Final $hp$-adapted meshes after the adaptivity}
+    \end{figure}
+  }
+}
+
+\newcommand{\hpmeshes}[3]{%
+  \renewcommand{\DataPath}{\FigurePath/#1}
+
+  \lastelement{\DataPath/outputs.txt}{MaxP}{\maxp}
+  \lastelement{\DataPath/outputs.txt}{MinP}{\minp}
+  %\tikzset{/tikz/external/export next=false}
+  \pgfplotsset{colormap/YlOrRd}
+  \begin{tikzpicture}
+    \begin{axis}[name=master,
+        width=\textwidth,height=\textwidth,
+        enlargelimits=false,
+        xlabel=$x$,
+        ylabel=$y$,
+        xlabel near ticks,
+        ylabel near ticks,
+        axis line style={draw=none},
+        tick style={draw=none},
+        hide axis,
+        colorbar horizontal,
+        colorbar style={%
+            xtick={1,3,...,\maxp},
+            title={Order of approximation},
+            at={(master.above north west)},anchor=south west,
+            yshift=1em,
+            title style={
+                yshift=2pt
+              },
+            xticklabel pos=upper,
+          },
+        point meta min=1,
+        point meta max=\maxp,
+      ]
+      %
+      \ifstrequal{#1}{}{%
+        \addplot [forget plot] graphics[xmin=-1,xmax=1,ymin=-1,ymax=1] {\DataPath/mesh_#3_#2.png};
+      }{%
+        \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/mesh_#3_#2.png};
+      }
+    \end{axis}
+  \end{tikzpicture}
+}
+% ========
+% unrefmago
+% ========
+%\newcommand{\plothpunrefmago}[1]{
+%  \renewcommand{\DataPath}{\FigurePath/Unref/#1/hp/order_1}
+%  \findmax{\DataPath/outputs.txt}{iter}{\endIter}
+%
+%  \findmax{\FigurePath/#1/hp/outputs.txt}{iter}{\endIterh}
+%
+%  \FormatIntegerTwoDigit{\endIterh}{\endIterhformated}
+%
+%  \begin{center}
+%    \begin{figure}
+%      \foreach \i in {1,2,...,\endIter}{%
+%        \only<+>{%
+%          \begin{subfigure}{\subplotwidthhp}
+%            \centering
+%            \tikzset{/tikz/external/export next=false}
+%            \FormatIntegerThreeDigit{\i}{\iformat}
+%            \plothpmagomesh{Unref/#1/hp/order_1}{\iformat}{#1/hp/coarse_mesh_fine_\endIterhformated_Direct_solution_abs}%
+%            \subcaption{Adaptive iteration \i ~of \endIter}
+%          \end{subfigure}
+%          \begin{subfigure}{\subplotwidthhp}
+%            \centering
+%            \errorplotlogUnrefBorrar{Unref/#1/hp/order_1}{\i}
+%            \subcaption{Evolution of the relative error}
+%          \end{subfigure}
+%          \only<1->{\caption{Adaptive process for a Helmholtz problem}}
+%        }
+%      }
+%    \end{figure}
+%  \end{center}
+%}
+%
+%\newcommand{\plothpmagomesh}[3]{%
+%  \renewcommand{\DataPath}{\FigurePath/#1}
+%
+%  \begin{tikzpicture}
+%    \begin{axis}[name=master,
+%        width=\textwidth,height=\textwidth,
+%        enlargelimits=false,
+%        xlabel=$x$,
+%        ylabel=$y$,
+%        xlabel near ticks,
+%        ylabel near ticks,
+%        hide axis,
+%      ]
+%
+%      \IfSubStr{#1}{square}{%
+%        \addplot [forget plot] graphics[xmin=-1,xmax=1,ymin=-1,ymax=1] {\DataPath/mesh_X_#2.png};
+%      }{%
+%        \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/mesh_X_#2.png};
+%      }
+%      \addplot [forget plot, opacity=0.2] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\FigurePath/#3};
+%
+%    \end{axis}
+%  \end{tikzpicture}%
+%}
+%
+%\newcommand{\errorplotlogUnrefBorrar}[2]{
+%  \renewcommand{\DataPath}{\FigurePath/#1}
+%
+%  \findmax{\DataPath/outputs.txt}{nr_dof}{\maxdof}
+%  \findmin{\DataPath/outputs.txt}{nr_dof}{\mindof}
+%  \findmaxDbl{\DataPath/outputs.txt}{Error}{\maxerror}
+%  \findminDbl{\DataPath/outputs.txt}{Error}{\minerror}
+%
+%  \begin{tikzpicture}
+%    \begin{axis}[name=mainerrorplot,
+%        xlabel={Number of dof},
+%        ylabel=Relative error in \%,
+%        ymode=log,
+%        xmode=log,
+%        ymin=1e-7,
+%        ymax=1e3,
+%        xmin=\mindof,
+%        xmax=\maxdof,
+%        width=0.9\textwidth,height=0.85\plotwidthmesh,
+%        ylabel near ticks,
+%        xlabel near ticks,
+%        enlargelimits=true,
+%        legend style={draw=black,fill=white,legend cell align=left, at={(0.5,1.01)}, anchor=south},
+%        legend columns=-1
+%      ]
+%      \addplot+[ line width=1pt, select coords between index={0}{#2}] table[x expr=\thisrow{nr_dof},y expr=\thisrow{Error}] {\FigurePath/#1/outputs.txt};
+%    \end{axis}
+%  \end{tikzpicture}
+%}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OLD
+
+
+
+\tikzset{mark size=3}
+
+%:\plothp
+\newcommand{\plothp}[2]{
+
+\newcommand{\ResultPath}{Results}
+\newcommand{\FigurePath}{Figures}
+\renewcommand{\DataPath}{\FigurePath/#1/hp/p2/unref_0.1/unref_h_0.3}
+\findmax{\DataPath/outputs.txt}{iter}{\endIter}
+
+\pgfmathparse{subtract(#2,0)} 
+\pgfmathtruncatemacro\index{\pgfmathresult}
+\getelem{\DataPath/outputs.txt}{nr_dof}{\index}{\nrdof}
+\getelemdbl{\DataPath/outputs.txt}{Error}{\index}{\error}
+
+\only<+>{f
+\begin{figure}
+\centering
+\FormatIntegerTwoDigit{#2}{\Iterformated}
+\plothpmesh{#1/hp/p2/unref_0.1/unref_h_0.3}{\Iterformated}%
+\caption{%
+\ifthenelse{\equal{#1}{sin1D}}{Regular}{%
+\ifthenelse{\equal{#1}{singular1D}}{Singular}{%
+\ifthenelse{\equal{#1}{atan1D}}{Shock}{prout!}%
+}%
+} Problem. Solution and adapted $hp$-mesh. The drawn mesh needs %
+\nrdof~dofs for an error of \pgfmathprintnumber[std, precision=2]{\error}\%.}
+\end{figure}
+}
+\only<+>{
+%\quad\quad\quad
+\begin{figure}
+\centering
+%\errorplot{#1}{#3}{#4}
+\errorplotlog{#1}{Error}%
+\caption{%
+\ifthenelse{\equal{#1}{sin1D}}{Regular}{%
+\ifthenelse{\equal{#1}{singular1D}}{Singular}{%
+\ifthenelse{\equal{#1}{atan1D}}{Shock}{prout!}%
+}%
+} Problem. Evolution of the error in $H^1$ semi-norm.}
+\end{figure}
+}
+}
+
+\newcommand{\boxplotmagochecksize}[3][]{
+
+%\ResultPath
+  \renewcommand{\DataPath}{#1/#2/mat_check_1k}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskeruno{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartileuno{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\medianuno{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartileuno{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskeruno{\pgfplotsretval}
+
+
+  \renewcommand{\DataPath}{#1/#2/mat_check_10k}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskerdos{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartiledos{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\mediandos{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartiledos{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskerdos{\pgfplotsretval}
+
+  \renewcommand{\DataPath}{#1/#2/mat_check_100k}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskertres{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartiletres{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\mediantres{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartiletres{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskertres{\pgfplotsretval}
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+  \begin{axis}
+    [
+      boxplot/draw direction=y,
+       boxplot/variable width,
+      x axis line style={opacity=0},
+      axis x line*=bottom,
+      axis y line=left,
+      enlarge y limits,
+      ymajorgrids,
+      xtick={1,2,3,4,5},
+      xticklabels={1k, 10k, 100k},
+      ymode=log,
+      height=\plotheight,
+      width=0.8\plotwidth,
+%      ymin=1e-2,
+%      ymax=1e1,
+      xlabel={Number of \textbf{validation} samples},
+      ylabel={Relative error in the QoI ($\%$)}
+    ]
+     \addplot+[
+      boxplot prepared={
+          median=\medianuno,
+          upper quartile=\uppquartileuno,
+          lower quartile=\lowquartileuno,
+          upper whisker=\uppwiskeruno,
+          lower whisker=\lowwiskeruno,
+%          every box/.style={very thick,dashed,draw=black,fill=yellow},
+%         every whisker/.style={red,ultra thick},
+%    	 every median/.style={densely dotted,cyan,ultra thick},
+        },
+    ] coordinates {}; 
+    \addplot+[
+      boxplot prepared={
+          median=\mediandos,
+          upper quartile=\uppquartiledos,
+          lower quartile=\lowquartiledos,
+          upper whisker=\uppwiskerdos,
+          lower whisker=\lowwiskerdos,
+%          every box/.style={very thick,dashed,draw=black,fill=yellow},
+%    	 every whisker/.style={red,ultra thick},
+%    	 every median/.style={densely dotted,cyan,ultra thick},
+        },
+    ] coordinates {};
+    \addplot+[
+      boxplot prepared={
+          median=\mediantres,
+          upper quartile=\uppquartiletres,
+          lower quartile=\lowquartiletres,
+          upper whisker=\uppwiskertres,
+          lower whisker=\lowwiskertres
+        },
+    ] coordinates {};
+%%    \addplot+[
+%%      boxplot prepared={
+%%          median=\mediancin,
+%%          upper quartile=\uppquartilecin,
+%%          lower quartile=\lowquartilecin,
+%%          upper whisker=\uppwiskercin,
+%%          lower whisker=\lowwiskercin,
+%%          every box/.style={fill=gray!70}
+%%%         every whisker/.style={red,ultra thick},
+%%%    	 every median/.style={densely dotted,cyan,ultra thick}
+%%        },
+%%    ] coordinates {};
+  \end{axis}
+\end{tikzpicture}
+ \caption{Different number of testing samples in an \textbf{adaptive grid of #3 samples.}}
+\end{figure}
+}
+
+
+%%%%%%%%%%%%%%%%
+% \boxplotmagoTimeAdapt
+%%%%%%%%%%%%%%%%
+
+
+\newcommand{\boxplotmagoTimeAdapt}[5][]{
+
+%\ResultPath
+  \renewcommand{\DataPath}{#1/#3/mat_check#2}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskeruno{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartileuno{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\medianuno{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartileuno{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskeruno{\pgfplotsretval}
+
+
+  \renewcommand{\DataPath}{#1/#4/mat_check#2}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskerdos{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartiledos{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\mediandos{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartiledos{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskerdos{\pgfplotsretval}
+
+  \renewcommand{\DataPath}{#1/#5/trapi_adapt100_100k}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskertres{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartiletres{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\mediantres{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartiletres{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskertres{\pgfplotsretval}
+
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+  \begin{axis}
+    [
+      boxplot/draw direction=y,
+       boxplot/variable width,
+      x axis line style={opacity=0},
+      axis x line*=bottom,
+      axis y line=left,
+      enlarge y limits,
+      ymajorgrids,
+      xtick={1,2,3,4,5},
+      xticklabels={1, 10, 100},
+      yticklabels={},
+      ymode=log,
+      height=\plotheight,
+      width=0.8\plotwidth,
+%      ymin=1e-2,
+      ymax=200,
+      xlabel={Number of samples for the \textbf{adaptive} process},
+%      ylabel={Relative error in the QoI ($\%$)}
+    ]
+     \addplot+[
+      boxplot prepared={
+          median=\medianuno,
+          upper quartile=\uppquartileuno,
+          lower quartile=\lowquartileuno,
+          upper whisker=\uppwiskeruno,
+          lower whisker=\lowwiskeruno,
+%          every box/.style={very thick,dashed,draw=black,fill=yellow},
+%         every whisker/.style={red,ultra thick},
+%    	 every median/.style={densely dotted,cyan,ultra thick},
+        },
+    ] coordinates {}; 
+    \addplot+[
+      boxplot prepared={
+          median=\mediandos,
+          upper quartile=\uppquartiledos,
+          lower quartile=\lowquartiledos,
+          upper whisker=\uppwiskerdos,
+          lower whisker=\lowwiskerdos,
+%          every box/.style={very thick,dashed,draw=black,fill=yellow},
+%    	 every whisker/.style={red,ultra thick},
+%    	 every median/.style={densely dotted,cyan,ultra thick},
+        },
+    ] coordinates {};
+    \addplot+[
+      boxplot prepared={
+          median=\mediantres,
+          upper quartile=\uppquartiletres,
+          lower quartile=\lowquartiletres,
+          upper whisker=\uppwiskertres,
+          lower whisker=\lowwiskertres
+        },
+    ] coordinates {};
+
+\node[red] at (1,300) {\large $\sim10$s};
+\node[blue] at (2,300) {\large$\sim1$min};
+\node[black!60!green!80] at (3,300) {\large $\sim16$h};
+%\node[black] at (4,300) {\large 1.5h};
+  
+   \end{axis}
+\end{tikzpicture}
+ \caption{\textbf{Execution times} in a Mac laptop for grids with a threshold max-error of 1 $\%$.}
+% \caption{Box plot for \textbf{different adaptive grids} with a threshold error of 1 $\%$}
+\end{figure}
+}
+
+%%%%%%%%%%%%%%%%
+% \boxplotmagoTime
+%%%%%%%%%%%%%%%%
+
+\newcommand{\boxplotmagoTime}[5][]{
+
+%\ResultPath
+  \renewcommand{\DataPath}{#1/#3/mat_check#2}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskeruno{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartileuno{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\medianuno{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartileuno{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskeruno{\pgfplotsretval}
+
+
+  \renewcommand{\DataPath}{#1/#4/mat_check#2}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskerdos{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartiledos{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\mediandos{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartiledos{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskerdos{\pgfplotsretval}
+
+  \renewcommand{\DataPath}{#1/#5/trapi_adapt100_100k}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskertres{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartiletres{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\mediantres{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartiletres{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskertres{\pgfplotsretval}
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+  \begin{axis}
+    [
+      boxplot/draw direction=y,
+       boxplot/variable width,
+      x axis line style={opacity=0},
+      axis x line*=bottom,
+      axis y line=left,
+      enlarge y limits,
+      ymajorgrids,
+      xtick={1,2,3,4,5},
+      xticklabels={1, 10, 100},
+      yticklabels={},
+      ymode=log,
+      height=\plotheight,
+      width=0.8\plotwidth,
+%      ymin=1e-2,
+      ymax=200,
+      xlabel={Number of samples for the \textbf{adaptive} process},
+%      ylabel={Relative error in the QoI ($\%$)}
+    ]
+     \addplot+[
+      boxplot prepared={
+          median=\medianuno,
+          upper quartile=\uppquartileuno,
+          lower quartile=\lowquartileuno,
+          upper whisker=\uppwiskeruno,
+          lower whisker=\lowwiskeruno,
+        },
+    ] coordinates {}; 
+    \addplot+[
+      boxplot prepared={
+          median=\mediandos,
+          upper quartile=\uppquartiledos,
+          lower quartile=\lowquartiledos,
+          upper whisker=\uppwiskerdos,
+          lower whisker=\lowwiskerdos,
+        },
+    ] coordinates {};
+    \addplot+[
+      boxplot prepared={
+          median=\mediantres,
+          upper quartile=\uppquartiletres,
+          lower quartile=\lowquartiletres,
+          upper whisker=\uppwiskertres,
+          lower whisker=\lowwiskertres
+        },
+    ] coordinates {};
+
+\node[red] at (1,300) {\large $\sim10$min};
+\node[blue] at (2,300) {\large$\sim80$min};
+\node[black!60!green!80] at (3.1,300) {\large $\sim28$h (1sam/s)};
+%\node[black] at (4,300) {\large 1.5h};
+  
+   \end{axis}
+\end{tikzpicture}
+ \caption{\textbf{Execution times} in a Mac laptop for grids with a threshold max-error of 1 $\%$.}
+% \caption{Box plot for \textbf{different adaptive grids} with a threshold error of 1 $\%$}
+\end{figure}
+}
+
+%%%%%%%%%%%%%%%%
+% \boxplotmagoNdof
+%%%%%%%%%%%%%%%%
+
+\newcommand{\boxplotmagoNdof}[6][]{
+
+%\ResultPath
+  \renewcommand{\DataPath}{#1/mat_check_#3}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskeruno{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartileuno{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\medianuno{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartileuno{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskeruno{\pgfplotsretval}
+
+
+  \renewcommand{\DataPath}{#1/mat_check_#4}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskerdos{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartiledos{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\mediandos{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartiledos{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskerdos{\pgfplotsretval}
+
+  \renewcommand{\DataPath}{#1/mat_check_#5}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskertres{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartiletres{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\mediantres{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartiletres{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskertres{\pgfplotsretval}
+
+  \renewcommand{\DataPath}{#1/mat_check_#6}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskercua{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartilecua{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\mediancua{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartilecua{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskercua{\pgfplotsretval}
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+  \begin{axis}
+    [
+      boxplot/draw direction=y,
+       boxplot/variable width,
+      x axis line style={opacity=0},
+      axis x line*=bottom,
+      axis y line=left,
+      enlarge y limits,
+      ymajorgrids,
+      xtick={1,2,3,4},
+      xticklabels={1, 5, 10, 100},
+      ymode=log,
+      height=\plotheight,
+      width=0.8\plotwidth,
+%      ymin=1e-2,
+%      ymax=1e1,
+      xlabel={Number of samples for the \textbf{adaptive} process},
+      ylabel={Relative error in the QoI ($\%$)}
+    ]
+     \addplot+[
+      boxplot prepared={
+          median=\medianuno,
+          upper quartile=\uppquartileuno,
+          lower quartile=\lowquartileuno,
+          upper whisker=\uppwiskeruno,
+          lower whisker=\lowwiskeruno,
+%          every box/.style={very thick,dashed,draw=black,fill=yellow},
+%         every whisker/.style={red,ultra thick},
+%    	 every median/.style={densely dotted,cyan,ultra thick},
+        },
+    ] coordinates {}; 
+    \addplot+[
+      boxplot prepared={
+          median=\mediandos,
+          upper quartile=\uppquartiledos,
+          lower quartile=\lowquartiledos,
+          upper whisker=\uppwiskerdos,
+          lower whisker=\lowwiskerdos,
+%          every box/.style={very thick,dashed,draw=black,fill=yellow},
+%    	 every whisker/.style={red,ultra thick},
+%    	 every median/.style={densely dotted,cyan,ultra thick},
+        },
+    ] coordinates {};
+    \addplot+[
+      boxplot prepared={
+          median=\mediantres,
+          upper quartile=\uppquartiletres,
+          lower quartile=\lowquartiletres,
+          upper whisker=\uppwiskertres,
+          lower whisker=\lowwiskertres
+        },
+    ] coordinates {};
+    \addplot+[
+      boxplot prepared={
+          median=\mediancua,
+          upper quartile=\uppquartilecua,
+          lower quartile=\lowquartilecua,
+          upper whisker=\uppwiskercua,
+          lower whisker=\lowwiskercua
+        },
+    ] coordinates {};
+  \end{axis}
+\end{tikzpicture}
+ \caption{Different number of adaptive grids with a \textbf{stopping criteria of #2 DoFs}.}
+\end{figure}
+}
+
+\newcommand{\boxplotmagocheck}[7][]{
+
+%\ResultPath
+  \renewcommand{\DataPath}{#1/#3/mat_check#2}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskeruno{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartileuno{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\medianuno{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartileuno{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskeruno{\pgfplotsretval}
+
+
+  \renewcommand{\DataPath}{#1/#4/mat_check#2}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskerdos{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartiledos{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\mediandos{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartiledos{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskerdos{\pgfplotsretval}
+
+  \renewcommand{\DataPath}{#1/#5/mat_check#2}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskertres{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartiletres{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\mediantres{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartiletres{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskertres{\pgfplotsretval}
+
+  \renewcommand{\DataPath}{#1/#6/mat_check#2}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskercua{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartilecua{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\mediancua{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartilecua{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskercua{\pgfplotsretval}
+
+  \renewcommand{\DataPath}{#1/#7/mat_check#2}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskercin{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartilecin{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\mediancin{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartilecin{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskercin{\pgfplotsretval}
+
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+  \begin{axis}
+    [
+      boxplot/draw direction=y,
+       boxplot/variable width,
+      x axis line style={opacity=0},
+      axis x line*=bottom,
+      axis y line=left,
+      enlarge y limits,
+      ymajorgrids,
+      xtick={1,2,3,4,5},
+      xticklabels={1, 5, 10, 50, 100},
+      ymode=log,
+      height=\plotheight,
+      width=0.8\plotwidth,
+%      ymin=1e-2,
+%      ymax=1e1,
+      xlabel={Number of samples for the \textbf{adaptive} process},
+      ylabel={Relative error in the QoI ($\%$)}
+    ]
+     \addplot+[
+      boxplot prepared={
+          median=\medianuno,
+          upper quartile=\uppquartileuno,
+          lower quartile=\lowquartileuno,
+          upper whisker=\uppwiskeruno,
+          lower whisker=\lowwiskeruno,
+%          every box/.style={very thick,dashed,draw=black,fill=yellow},
+%         every whisker/.style={red,ultra thick},
+%    	 every median/.style={densely dotted,cyan,ultra thick},
+        },
+    ] coordinates {}; 
+    \addplot+[
+      boxplot prepared={
+          median=\mediandos,
+          upper quartile=\uppquartiledos,
+          lower quartile=\lowquartiledos,
+          upper whisker=\uppwiskerdos,
+          lower whisker=\lowwiskerdos,
+%          every box/.style={very thick,dashed,draw=black,fill=yellow},
+%    	 every whisker/.style={red,ultra thick},
+%    	 every median/.style={densely dotted,cyan,ultra thick},
+        },
+    ] coordinates {};
+    \addplot+[
+      boxplot prepared={
+          median=\mediantres,
+          upper quartile=\uppquartiletres,
+          lower quartile=\lowquartiletres,
+          upper whisker=\uppwiskertres,
+          lower whisker=\lowwiskertres
+        },
+    ] coordinates {};
+    \addplot+[
+      boxplot prepared={
+          median=\mediancua,
+          upper quartile=\uppquartilecua,
+          lower quartile=\lowquartilecua,
+          upper whisker=\uppwiskercua,
+          lower whisker=\lowwiskercua
+        },
+    ] coordinates {};
+    \addplot+[
+      boxplot prepared={
+          median=\mediancin,
+          upper quartile=\uppquartilecin,
+          lower quartile=\lowquartilecin,
+          upper whisker=\uppwiskercin,
+          lower whisker=\lowwiskercin,
+%          every box/.style={fill=gray!70}
+%         every whisker/.style={red,ultra thick},
+%    	 every median/.style={densely dotted,cyan,ultra thick}
+        },
+    ] coordinates {};
+  \end{axis}
+\end{tikzpicture}
+ \caption{Different number of adaptive grids with a \textbf{threshold max-error of 1 $\%$}.}
+% \caption{Box plot for \textbf{different adaptive grids} with a threshold error of 1 $\%$}
+\end{figure}
+}
+
+
+
+\newcommand{\boxplotmago}[5][]{
+
+%\ResultPath
+  \renewcommand{\DataPath}{#1/#2/Check/mat_check}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskeruno{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartileuno{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\medianuno{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartileuno{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskeruno{\pgfplotsretval}
+
+
+  \renewcommand{\DataPath}{#1/#3/Check/mat_check}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskerdos{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartiledos{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\mediandos{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartiledos{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskerdos{\pgfplotsretval}
+
+
+ \renewcommand{\DataPath}{#1/#4/Check/mat_check}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskertres{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartiletres{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\mediantres{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartiletres{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskertres{\pgfplotsretval}
+
+ \renewcommand{\DataPath}{#1/#5/Check/mat_check}
+  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
+
+ \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowwiskercua{\pgfplotsretval}
+
+\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
+\pgfmathsetmacro\lowquartilecua{\pgfplotsretval}
+
+\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
+\pgfmathsetmacro\mediancua{\pgfplotsretval}
+
+\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppquartilecua{\pgfplotsretval}
+
+\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
+\pgfmathsetmacro\uppwiskercua{\pgfplotsretval}
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+  \begin{axis}
+    [
+      boxplot/draw direction=y,
+       boxplot/variable width,
+      x axis line style={opacity=0},
+      axis x line*=bottom,
+      axis y line=left,
+      enlarge y limits,
+      ymajorgrids,
+      xtick={1,2,3,4,5},
+      xticklabels={1, 5, 10, 100, 100(10k)},
+      ymode=log,
+      height=\plotheight,
+      width=0.8\plotwidth,
+%      ymin=1e-2,
+%      ymax=1e1,
+      xlabel={Number of samples for the \textbf{adaptive} process},
+      ylabel={Relative error in the QoI ($\%$)}
+    ]
+     \addplot+[
+      boxplot prepared={
+          median=\medianuno,
+          upper quartile=\uppquartileuno,
+          lower quartile=\lowquartileuno,
+          upper whisker=\uppwiskeruno,
+          lower whisker=\lowwiskeruno,
+%          every box/.style={very thick,dashed,draw=black,fill=yellow},
+%         every whisker/.style={red,ultra thick},
+%    	 every median/.style={densely dotted,cyan,ultra thick},
+        },
+    ] coordinates {}; 
+    \addplot+[
+      boxplot prepared={
+          median=\mediandos,
+          upper quartile=\uppquartiledos,
+          lower quartile=\lowquartiledos,
+          upper whisker=\uppwiskerdos,
+          lower whisker=\lowwiskerdos,
+%          every box/.style={very thick,dashed,draw=black,fill=yellow},
+%    	 every whisker/.style={red,ultra thick},
+%    	 every median/.style={densely dotted,cyan,ultra thick},
+        },
+    ] coordinates {};
+    \addplot+[
+      boxplot prepared={
+          median=\mediantres,
+          upper quartile=\uppquartiletres,
+          lower quartile=\lowquartiletres,
+          upper whisker=\uppwiskertres,
+          lower whisker=\lowwiskertres
+        },
+    ] coordinates {};
+    \addplot+[
+      boxplot prepared={
+          median=\mediancua,
+          upper quartile=\uppquartilecua,
+          lower quartile=\lowquartilecua,
+          upper whisker=\uppwiskercua,
+          lower whisker=\lowwiskercua
+        },
+    ] coordinates {};
+%    \addplot+[
+%      boxplot prepared={
+%          median=\mediancin,
+%          upper quartile=\uppquartilecin,
+%          lower quartile=\lowquartilecin,
+%          upper whisker=\uppwiskercin,
+%          lower whisker=\lowwiskercin,
+%          every box/.style={fill=gray!70}
+%%         every whisker/.style={red,ultra thick},
+%%    	 every median/.style={densely dotted,cyan,ultra thick}
+%        },
+%    ] coordinates {};
+  \end{axis}
+\end{tikzpicture}
+ \caption{Different number of adaptive grids with a \textbf{threshold max-error of 0.1 $\%$}.}
+\end{figure}
+}
+
+%:\plothpunrefMAGO
+\newcommand{\plothpunrefmago}[1]{
+\renewcommand{\DataPath}{\FigurePath/Unref/#1/hp/order_1}
+\findmax{\DataPath/outputs.txt}{iter}{\endIter}
+
+\findmax{\FigurePath/#1/hp/outputs.txt}{iter}{\endIterh}
+
+\FormatIntegerTwoDigit{\endIterh}{\endIterhformated}
+
+\begin{center}
+
+\begin{figure}
+\foreach \i in {1,2,...,\endIter}{%
+\only<+>{%
+\begin{subfigure}{\subplotwidthhp}
+\centering
+%\tikzset{/tikz/external/export next=false}
+\FormatIntegerThreeDigit{\i}{\iformat}
+\plothpmagomesh{Unref/#1/hp/order_1}{\iformat}{#1/hp/coarse_mesh_fine_\endIterhformated_Direct_solution_abs}%
+%\pgfmathparse{add(\i,0)} 
+%\pgfmathtruncatemacro\plotindex{\pgfmathresult}
+%\pgfmathparse{add(\endIter,0)} 
+%\pgfmathtruncatemacro\lastindex{\pgfmathresult}
+%\vspace{10mm}
+\subcaption{Adaptive iteration \i ~of \endIter}
+\end{subfigure}
+\begin{subfigure}{\subplotwidthhp}
+\centering
+% % %
+\errorplotlogUnrefBorrar{Unref/#1/hp/order_1}{\i}
+\subcaption{ Evolution of the relative error}
+\end{subfigure}
+\only<1->{\caption{Adaptive process for a Helmholtz problem}}
+}%
+}
+%}
+\end{figure}
+\end{center}
+}
+
+
+%:\plothpmagomesh
+\newcommand{\plothpmagomesh}[3]{%
+\renewcommand{\DataPath}{\FigurePath/#1}
+%
+%\lastelement{\DataPath/outputs.txt}{MaxP}{\maxp}
+%\lastelement{\DataPath/outputs.txt}{MinP}{\minp}
+%
+%\pgfplotsset{colormap/YlOrRd}
+%\tikzset{/tikz/external/export next=false}
+\begin{tikzpicture}
+\begin{axis}[name=master,
+width=\textwidth,height=\textwidth,
+enlargelimits=false,
+xlabel=$x$,
+ylabel=$y$,
+xlabel near ticks,
+ylabel near ticks,
+hide axis,
+]
+%
+
+\IfSubStr{#1}{square}{%
+ \addplot [forget plot] graphics[xmin=-1,xmax=1,ymin=-1,ymax=1] {\DataPath/mesh_X_#2.png};
+}{
+ \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/mesh_X_#2.png};
+ }
+ \addplot [forget plot, opacity=0.2] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\FigurePath/#3};
+
+
+\end{axis}
+\end{tikzpicture}%
+}
+
+
+
+\newcommand{\plothpmago}[2][]{
+
+  \renewcommand{\DataPath}{\FigurePath/#2}%\PbName/hp
+  \findmax{\DataPath/outputs.txt}{iter}{\endIter}
+
+  \FormatIntegerThreeDigit{\endIter}{\endIterformated}
+
+  \foreach \idim in {X,Y}{
+      \begin{subfigure}{\subplotwidth} %subplot (a) (b)
+        \plothpmeshnew{#2}{\endIterformated}{\idim}
+        \caption{$hp$-adapted mesh. $p$ in the \ifthenelse{\equal{\idim}{X}}{$x$}{$y$}-direction}
+        \label{fig:mesh_\idim_#2}
+      \end{subfigure}
+    }
+}
+
+%%%%%%%%%%%%%%%%%%%%%%\PLOT_HP_MESH %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%: \plothpmesh{#2/hp}{\endIterformated}{\idim} \idim in {X,Y}
+\newcommand{\plothpmeshnew}[3]{
+  \renewcommand{\DataPath}{\FigurePath/#1}
+
+  \lastelement{\DataPath/outputs.txt}{MaxP}{\maxp}
+  \lastelement{\DataPath/outputs.txt}{MinP}{\minp}
+
+  %\pgfplotsset{colormap/jet} %Barra de color
+  \pgfplotsset{colormap/YlOrRd} %Barra de color
+  %\tikzset{/tikz/external/export next=false}
+  \begin{tikzpicture}
+    \begin{axis}[name=master,
+        width=\textwidth,height=\textwidth,
+        enlargelimits=false,
+        xlabel=$x$,
+        ylabel=$y$,
+        xlabel near ticks,
+        ylabel near ticks,
+        colorbar horizontal,
+        colorbar style={%
+            xtick={1,2,...,\maxp},
+            title={Order of approximation},
+            at={(master.above north west)},anchor=south west,
+            yshift=2pt,
+            title style={
+                yshift=2pt
+              },
+            yshift=0.2em,
+            xticklabel pos=upper,
+          },
+        %point meta min=\minp,
+        point meta min=1,
+        point meta max=\maxp,
+      ]
+      %
+      \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/mesh_#3_#2.png}; %Li­mites del dominio de los subplots (a) y (b). #3 X o Y, #2 por ejemplo 015
+
+    \end{axis}
+  \end{tikzpicture}
+}
+
+
+\newcommand{\plothpmesh}[2]{
+\pgfplotsset{colormap/YlOrRd}
+\renewcommand{\DataPath}{\FigurePath/#1}
+
+%\getelem{\DataPath/outputs.txt}{iter}{#2}{\iter}
+\findmax{\DataPath/coarse_mesh_#2.txt}{order}{\maxp}
+%\findmin{\DataPath/initial_mesh.txt}{order}{\minp}
+
+\begin{tikzpicture}
+\begin{axis}[name=master,
+width=\plotwidth,height=0.8\plotheight,
+enlargelimits=false,
+enlarge y limits=true,
+enlarge y limits=0.2,
+%point meta min=\minp,
+point meta min=1,
+point meta max=\maxp,
+xlabel=$x$,
+ylabel=$u(x)$ ,
+]
+
+%\addplot[line width=1pt, opacity=0.2] table[x=X, y=My_beautiful_solution_real] {\DataPath/sol#2.txt};
+
+\addplot[solid, line width=1pt, color=black] table[x=X, y=My_beautiful_exact_solution_real] {\DataPath/exact_sol.txt};
+\end{axis}
+
+\begin{axis}[
+%colormap access=direct,
+%colormap access=piecewise const,
+%colorbar sampled,
+%colorbar right,
+colorbar horizontal,
+  colorbar style={ %samples=5,
+%    ytick=data,
+%    y tick label as interval=true,
+%	at={(master.east)}, anchor=west,
+	xtick={1,2,...,\maxp},
+         at={(master.above north west)},anchor=south west,
+    	title=Approximation order $p$,
+	xticklabel pos=upper,
+	yshift=1em,
+	title style={yshift=2pt},
+	%	height=\plotheight/1.5%\pgfkeysvalueof{/pgfplots/master axis height}
+} ,
+width=\plotwidth,%
+%at={(master.above north west)},anchor=south west,
+at={(master.south west)},%anchor=south west,
+enlargelimits=false,
+%enlarge x limits=true,
+axis lines=none,
+height=2cm,%\pgfkeysvalueof{/pgfplots/colorbar/width},
+ticks=none,
+%point meta min=\minp,
+point meta min=1,
+point meta max=\maxp,
+title=Mesh,
+name=coarse_mesh,
+title style={left,at={(0,0)}, align=right},
+ ]
+    \addplot [patch, patch type=rectangle, point meta=explicit,line width=0.6pt, faceted color= black]  table[meta=order] {\DataPath/coarse_mesh_#2.txt};%\mesh};
+
+\end{axis}
+
+\IfSubStr{#1}{singular1D}{%
+\begin{axis}[
+%
+width=0.8\textwidth,%
+at={($(coarse_mesh.north)+(1em,1em)$)},anchor=south ,
+enlargelimits=false,
+%%enlarge x limits=true,
+%axis lines=none,
+height=2cm,%\pgfkeysvalueof{/pgfplots/colorbar/width},
+ticks=none,
+xmin=0,
+xmax=1.4901161193847656e-008,
+%ytick style={draw=none},
+%yticklabels={},
+%xtick={0,5e-9,1e-8},
+%xticklabels={0, $5\cdot10^{-9}$, $10^{-8}$},
+%%point meta min=\minp,
+point meta min=1,
+point meta max=\maxp,
+title=Zoomed Mesh ($\times 10^{8}$),
+name=coarse_mesh_zoom,
+title style={above, yshift=-0.5em},
+ ]
+    \addplot [patch, patch type=rectangle, point meta=explicit,line width=0.6pt, faceted color= black]  table[meta=order] {\DataPath/coarse_mesh_#2_zoom.txt};
+%
+\end{axis}
+
+\draw [<-, thick, dashed] (coarse_mesh_zoom.west) to [out=180, in=90] (coarse_mesh.north west);
+
+}
+{}
+
+\end{tikzpicture}
+
+}
+
+
+%:\errorplotlog
+\newcommand{\errorplotlog}[2]{
+
+%\tikzset{/tikz/external/export next=false}
+\begin{tikzpicture}
+\pgfplotsset{xmode=log}
+
+\begin{axis}[name=mainerrorplot,
+xlabel={Number of DoFs},
+%x dir=reverse,
+ylabel=Relative error in \% (log scale),
+ymode=log,
+xmode=log,
+%yticklabel pos=right,
+width=\plotwidth,height=\plotheight,
+ylabel near ticks,
+xlabel near ticks,
+enlargelimits=true,
+legend style={draw=black,fill=white,legend cell align=left, at={(0.5,1.01)}, anchor=south},
+legend columns=-1
+]
+
+\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{#2}] {\FigurePath/#1/hp/p2/unref_0.1/unref_h_0.3/outputs.txt}node[pos=0.9, pin={[pin edge=solid]180:$hp$}]{};
+%\addlegendentry{$hp$}
+
+%\IfSubStr{#1}{lap2DLshape}{%
+%\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_1/outputs.txt}node[pos=1, pin={[pin edge=solid]90:$h$ ($p=1$)}]{};
+%}{%
+%\IfSubStr{#1}{maxwellGOA}{%
+%\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_4/outputs.txt}node[pos=1, pin={[pin edge=solid, anchor=north]-60:$h$ ($p=4$)}]{};
+%}{%
+%\IfSubStr{#1}{DiffConv2D}{%
+%\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_1/outputs.txt}node[pos=0.95, pin={[pin edge=solid]90:$h$ ($p=1$)}]{};
+%}{%
+\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_1/outputs.txt}node[pos=0.9, pin={[pin edge=solid]90:$h$ ($p=1$)}]{};
+%}}}
+
+\IfSubStr{#1}{singular2D}{%
+\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_2/outputs.txt} node[pos=0.95, pin={[pin edge=solid, pin distance=0.2cm]90:$h$ ($p=2$)}]{};%
+}{%
+\IfSubStr{#1}{atancircle2D}{%
+\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_2/outputs.txt} node[pos=0.98, pin={[pin edge=solid]-90:$h$ ($p=2$)}]{};%
+}{%
+%\IfSubStr{#1}{lap2DLshape}{%
+%\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_2/outputs.txt} node[pos=0.1, pin={[pin edge=solid]0:$h$ ($p=2$)}]{};%
+%}{%
+%\IfSubStr{#1}{Helm2DGOA}{%
+%\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_2/outputs.txt} node[pos=0.95, pin={[pin edge=solid]180:$h$ ($p=2$)}]{};%
+%}{%
+\IfSubStr{#1}{DiffConv2D}{%
+\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_2/outputs.txt} node[pos=0.1, pin={[pin edge=solid]0:$h$ ($p=2$)}]{};%
+}{%
+\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_2/outputs.txt} node[pos=0.9, pin={[pin edge=solid]-90:$h$ ($p=2$)}]{};%
+}%
+%}
+%}
+}
+}
+
+
+
+%\addlegendentry{$h$ ($p=2$)}
+
+%\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{#2}] {\FigurePath/#1/p/unref_0.2/outputs.txt};
+%\addlegendentry{$p$}
+
+%\begin{scope}[yshift=0.5em]
+%\ifthenelse{#2 = 1}{
+%\addplot[color=red, thin] [domain=\maxdof/4:\maxdof, samples=10]{exp(-#3*x^(1/#2))*\minerror/exp(-#3*\maxdof^(1/#2))} node [pos=0.3](pin){};
+%%,pin={60:$e^{-#3N}$}]{};
+%}%
+%{
+%\addplot[color=red, thin] [domain=1:\maxdof, samples=10]{exp(-#3*x^(1/#2))*\minerror/exp(-#3*\maxdof^(1/#2))} node [pos=0.3](pin){};
+%}
+%
+%\end{scope}
+
+
+
+\end{axis}
+\end{tikzpicture}
+}
+
+%:\errorplotsemilog
+\newcommand{\errorplotsemilog}[3]{
+
+%\tikzset{/tikz/external/export next=false}
+\begin{tikzpicture}
+\pgfplotsset{xmode=log}
+
+\begin{axis}[name=mainerrorplot,
+xlabel={Number of dof$^{#3}$},
+%x dir=reverse,
+ylabel=Relative error in \%,
+ymode=log,
+%xmode=log,
+%yticklabel pos=right,
+width=\plotwidth,height=\plotheight,
+ylabel near ticks,
+xlabel near ticks,
+enlargelimits=true,
+legend style={draw=black,fill=white,legend cell align=left, at={(0.5,1.01)}, anchor=south},
+legend columns=-1
+]
+
+\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof}^(#3),y expr=\thisrow{#2}] {\FigurePath/#1/hp/p2/unref_0.1/unref_h_0.3/outputs.txt}node[pos=0.9, pin={[pin edge=solid]180:$hp$}]{};
+%\addlegendentry{$hp$}
+
+\IfSubStr{#1}{lap2DLshape}{%
+\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof}^(#3),y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_1/outputs.txt}node[pos=1, pin={[pin edge=solid]90:$h$ ($p=1$)}]{};
+}{%
+\IfSubStr{#1}{maxwellGOA}{%
+\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof}^(#3),y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_4/outputs.txt}node[pos=1, pin={[pin edge=solid, anchor=north]-60:$h$ ($p=4$)}]{};
+}{%
+\IfSubStr{#1}{DiffConv2D}{%
+\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof}^(#3),y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_1/outputs.txt}node[pos=0.95, pin={[pin edge=solid]90:$h$ ($p=1$)}]{};
+}{%
+\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof}^(#3),y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_1/outputs.txt}node[pos=0.9, pin={[pin edge=solid]90:$h$ ($p=1$)}]{};
+}}}
+
+\IfSubStr{#1}{singular2D}{%
+\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof}^(#3),y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_2/outputs.txt} node[pos=0.95, pin={[pin edge=solid, pin distance=0.2cm]90:$h$ ($p=2$)}]{};%
+}{%
+\IfSubStr{#1}{atancircle2D}{%
+\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof}^(#3),y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_2/outputs.txt} node[pos=0.98, pin={[pin edge=solid]-90:$h$ ($p=2$)}]{};%
+}{%
+\IfSubStr{#1}{lap2DLshape}{%
+\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof}^(#3),y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_2/outputs.txt} node[pos=0.1, pin={[pin edge=solid]0:$h$ ($p=2$)}]{};%
+}{%
+\IfSubStr{#1}{Helm2DGOA}{%
+\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof}^(#3),y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_2/outputs.txt} node[pos=0.95, pin={[pin edge=solid]180:$h$ ($p=2$)}]{};%
+}{%
+\IfSubStr{#1}{DiffConv2D}{%
+\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof}^(#3),y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_2/outputs.txt} node[pos=0.1, pin={[pin edge=solid]0:$h$ ($p=2$)}]{};%
+}{%
+\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof}^(#3),y expr=\thisrow{#2}] {\FigurePath/#1/h/unref_0.1/unref_h_0.3/order_2/outputs.txt} node[pos=0.9, pin={[pin edge=solid]-90:$h$ ($p=2$)}]{};%
+}%
+}
+}
+}
+}
+
+
+
+%\addlegendentry{$h$ ($p=2$)}
+
+%\addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{#2}] {\FigurePath/#1/p/unref_0.2/outputs.txt};
+%\addlegendentry{$p$}
+
+%\begin{scope}[yshift=0.5em]
+%\ifthenelse{#2 = 1}{
+%\addplot[color=red, thin] [domain=\maxdof/4:\maxdof, samples=10]{exp(-#3*x^(1/#2))*\minerror/exp(-#3*\maxdof^(1/#2))} node [pos=0.3](pin){};
+%%,pin={60:$e^{-#3N}$}]{};
+%}%
+%{
+%\addplot[color=red, thin] [domain=1:\maxdof, samples=10]{exp(-#3*x^(1/#2))*\minerror/exp(-#3*\maxdof^(1/#2))} node [pos=0.3](pin){};
+%}
+%
+%\end{scope}
+
+
+
+\end{axis}
+\end{tikzpicture}
+}
+
+
+\pgfplotsset{select coords between index/.style 2 args={
+    x filter/.code={
+        \ifnum\coordindex<#1\def\pgfmathresult{}\fi
+        \ifnum\coordindex>#2\def\pgfmathresult{}\fi
+    }
+}}
+
+\newcommand{\errorplotlogUnrefBorrar}[2]{
+%
+\renewcommand{\DataPath}{\FigurePath/#1}
+%
+\findmax{\DataPath/outputs.txt}{nr_dof}{\maxdof}
+\findmin{\DataPath/outputs.txt}{nr_dof}{\mindof}
+%\lastelement{\DataPath/outputs.txt}{nr_dof}{\lastdof}
+%\lastelement{\DataPath/outputs.txt}{Error}{\lasterror}
+\findmaxDbl{\DataPath/outputs.txt}{Error}{\maxerror}
+\findminDbl{\DataPath/outputs.txt}{Error}{\minerror}
+%
+%\tikzset{/tikz/external/export next=false}
+%
+%
+\begin{tikzpicture}
+%\pgfplotsset{ log y ticks with fixed point,}
+
+\begin{axis}[name=mainerrorplot,
+xlabel={Number of DoF},
+%x dir=reverse,
+ylabel=Relative error in the QoI (\%),
+ymode=log,
+xmode=log,
+%extra y ticks={1e3},
+ymin=1e-7,
+ymax=1e3,
+xmin=\mindof,
+xmax=\maxdof,
+% extra y tick labels={\pgfmathprintnumber[std, precision=2]{\minerror},\pgfmathprintnumber[std, precision=2]{\maxerror}},
+%yticklabel pos=right,
+width=0.9\textwidth,height=0.85\plotwidthmesh,
+ylabel near ticks,
+xlabel near ticks,
+enlargelimits=true,
+legend style={draw=black,fill=white,legend cell align=left, at={(0.5,1.01)}, anchor=south},
+legend columns=-1
+]
+
+\addplot+[ line width=1pt, select coords between index={0}{#2}] table[x expr=\thisrow{nr_dof},y expr=\thisrow{Error}] {\FigurePath/#1/outputs.txt};
+
+\end{axis}
+\end{tikzpicture}
+}
+
+
+%:\errorplotlogUnref
+\newcommand{\errorplotlogUnref}[2]{
+%
+
+
+\renewcommand{\DataPath}{\FigurePath/#1}
+
+
+%
+\findmax{\DataPath/outputs.txt}{nr_dof}{\maxdof}
+\findmin{\DataPath/outputs.txt}{nr_dof}{\mindof}
+%\lastelement{\DataPath/outputs.txt}{nr_dof}{\lastdof}
+%\lastelement{\DataPath/outputs.txt}{Error}{\lasterror}
+\findmaxDbl{\DataPath/outputs.txt}{Error}{\maxerror}
+\findminDbl{\DataPath/outputs.txt}{Error}{\minerror}
+%
+%\tikzset{/tikz/external/export next=false}
+%
+%
+\begin{tikzpicture}
+%\pgfplotsset{ log y ticks with fixed point,}
+
+\begin{axis}[name=mainerrorplot,
+xlabel={Number of dof},
+%x dir=reverse,
+ylabel=Relative error in \%,
+ymode=log,
+xmode=log,
+%extra y ticks={\minerror,\maxerror},
+ymin=\minerror,
+ymax=\maxerror,
+xmin=\mindof,
+xmax=\maxdof,
+% extra y tick labels={\pgfmathprintnumber[std, precision=2]{\minerror},\pgfmathprintnumber[std, precision=2]{\maxerror}},
+%yticklabel pos=right,
+width=0.9\textwidth,height=0.75\plotwidthmesh,
+ylabel near ticks,
+xlabel near ticks,
+enlargelimits=true,
+legend style={draw=black,fill=white,legend cell align=left, at={(0.5,1.01)}, anchor=south},
+legend columns=-1
+]
+
+\addplot+[ line width=1pt, select coords between index={0}{#2}] table[x expr=\thisrow{nr_dof},y expr=\thisrow{Error}] {\FigurePath/#1/outputs.txt};
+
+\end{axis}
+\end{tikzpicture}
+}
+
+
+%:\plothpDsol
+\newcommand{\plothpDsol}[3]{%
+\renewcommand{\DataPath}{\FigurePath/#1}
+\pgfplotsset{%
+    colormap={paraview}{rgb=(0.231373, 0.298039, 0.752941) rgb=(0.865003, 0.865003, 0.865003) rgb=(0.705882, 0.0156863, 0.14902)}%
+}%    
+\pgfplotsset{colormap name={paraview}}%
+
+%\getelemdbl{\DataPath/#3_ColorbarValues.dat}{min_value}{#2}{\scaleMin}
+%\getelemdbl{\DataPath/#3_ColorbarValues.dat}{max_value}{#2}{\scaleMax}
+%\getelemdbl{\DataPath/#3_ColorbarValues.dat}{mean_value}{#2}{\scaleMean}
+
+\getelemdbl{\DataPath/#3_ColorbarValues.dat}{min_value}{0}{\scaleMin}
+\getelemdbl{\DataPath/#3_ColorbarValues.dat}{max_value}{0}{\scaleMax}
+\getelemdbl{\DataPath/#3_ColorbarValues.dat}{mean_value}{0}{\scaleMean}
+
+
+
+%\tikzset{/tikz/external/export next=false}
+
+\begin{tikzpicture}
+\begin{axis}[name=master,
+width=\plotwidthmesh,height=0.95\plotwidthmesh,
+enlargelimits=false,
+xlabel=$x$,
+ylabel=$y$,
+xlabel near ticks,
+ylabel near ticks,
+axis line style={draw=none},
+tick style={draw=none},
+% hide axis,
+colorbar horizontal,
+colorbar style={%
+	xtick={\scaleMin,\scaleMean,\scaleMax},
+        title={Absolute value of the solution},
+       at={(master.above north west)},anchor=south west,
+	yshift=2pt,
+     title style={
+       yshift=4pt
+         },
+         yshift=0.2em,
+      xticklabel pos=upper,
+            },      
+%point meta min=\minp,
+point meta min=\scaleMin,
+point meta max=\scaleMax,
+]
+%
+\IfSubStr{#1}{square}{%
+ \addplot [forget plot] graphics[xmin=-1,xmax=1,ymin=-1,ymax=1] {\DataPath/coarse_mesh_fine_#2_#3.png};
+}{
+%\IfSubStr{#1}{Helm}{%
+% \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/coarse_mesh_fine_#2_#3.png};
+%}{
+%\IfSubStr{#1}{DiffConv}{%
+% \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/coarse_mesh_fine_#2_Direct_solution_real.png};
+%}{
+%\IfSubStr{#1}{lap}{%
+% \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/coarse_mesh_fine_#2_Direct_solution_real.png};
+%}{
+%\IfSubStr{#1}{DiffConv2DGOA}{%
+% \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/coarse_mesh_fine_#2_Direct_solution_real.png};
+%}{
+ \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/coarse_mesh_fine_#2_#3.png};
+% }
+% }
+% }
+% }
+ }
+ 
+\end{axis}
+\end{tikzpicture}
+}
+
+%:\plothpDmesh
+\newcommand{\plothpDmesh}[3]{%
+\renewcommand{\DataPath}{\FigurePath/#1}
+
+\lastelement{\DataPath/outputs.txt}{MaxP}{\maxp}
+\lastelement{\DataPath/outputs.txt}{MinP}{\minp}
+%\tikzset{/tikz/external/export next=false}
+\pgfplotsset{colormap/YlOrRd}
+\begin{tikzpicture}
+\begin{axis}[name=master,
+width=\textwidth,height=\textwidth,
+enlargelimits=false,
+xlabel=$x$,
+ylabel=$y$,
+xlabel near ticks,
+ylabel near ticks,
+axis line style={draw=none},
+tick style={draw=none},
+ hide axis,
+colorbar horizontal,
+colorbar style={%
+	xtick={1,3,...,\maxp},
+    title={Order of approximation},
+    at={(master.above north west)},anchor=south west,
+	yshift=1em,
+    title style={
+       yshift=2pt
+         },
+     xticklabel pos=upper,
+     },      
+%point meta min=\minp,
+point meta min=1,
+point meta max=\maxp,
+]
+%
+\IfSubStr{#1}{square}{%
+ \addplot [forget plot] graphics[xmin=-1,xmax=1,ymin=-1,ymax=1] {\DataPath/mesh_#3_#2.png};
+}{
+ \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/mesh_#3_#2.png};
+ }
+ 
+\end{axis}
+\end{tikzpicture}
+}
+%:\plothpDmeshGIF
+\newcommand{\plothpDmeshGIF}[4]{%
+\renewcommand{\DataPath}{\FigurePath/#1}
+
+\lastelement{\DataPath/outputs.txt}{MaxP}{\maxp}
+\lastelement{\DataPath/outputs.txt}{MinP}{\minp}
+%\tikzset{/tikz/external/export next=false}
+\pgfplotsset{colormap/YlOrRd}
+
+\begin{animateinline}[autoplay]{#4}
+\multiframe{#3}{iter=000+1}{
+\begin{tikzpicture}
+\begin{axis}[name=master,
+width=\textwidth,height=\textwidth,
+enlargelimits=false,
+xlabel=$x$,
+ylabel=$y$,
+xlabel near ticks,
+ylabel near ticks,
+ hide axis,
+colorbar horizontal,
+colorbar style={%
+	xtick={1,3,...,\maxp},
+    title={Order of approximation},
+    at={(master.above north west)},anchor=south west,
+	yshift=1em,
+    title style={
+       yshift=2pt
+         },
+     xticklabel pos=upper,
+     },      
+%point meta min=\minp,
+point meta min=1,
+point meta max=\maxp,
+]
+%
+\FormatIntegerThreeDigit{\iter}{\iterformatedthree}
+\IfSubStr{#1}{square}{%
+ \addplot [forget plot] graphics[xmin=-1,xmax=1,ymin=-1,ymax=1] {\DataPath/mesh_#2_\iterformatedthree.png};
+}{
+ \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/mesh_#2_\iterformatedthree.png};
+ }
+ 
+\end{axis}
+\end{tikzpicture}
+}
+\end{animateinline}
+}
+
+
+%:\plothDmesh
+\newcommand{\plothDmesh}[3]{%
+\renewcommand{\DataPath}{\FigurePath/#1}
+%
+%\lastelement{\DataPath/outputs.txt}{MaxP}{\maxp}
+%\lastelement{\DataPath/outputs.txt}{MinP}{\minp}
+%
+%\pgfplotsset{colormap/YlOrRd}
+%\tikzset{/tikz/external/export next=false}
+\begin{tikzpicture}
+\begin{axis}[name=master,
+width=\textwidth,height=\textwidth,
+enlargelimits=false,
+xlabel=$x$,
+ylabel=$y$,
+xlabel near ticks,
+ylabel near ticks,
+hide axis,
+]
+%
+
+\IfSubStr{#1}{square}{%
+ \addplot [forget plot] graphics[xmin=-1,xmax=1,ymin=-1,ymax=1] {\DataPath/grid_#2.png};
+}{
+ \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/grid_#2.png};
+ }
+ \addplot [forget plot, opacity=0.3] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\FigurePath/#3};
+
+
+\end{axis}
+\end{tikzpicture}%
+}
+\newcommand{\plothpsol}[2][]{
+
+\renewcommand{\DataPath}{\FigurePath/#2/hp/p2/unref_0.1/unref_h_0.3}
+\findmax{\DataPath/outputs.txt}{iter}{\endIter}
+
+\FormatIntegerTwoDigit{\endIter}{\endIterformated}
+\FormatIntegerThreeDigit{\endIter}{\endIterformatedthree}
+%
+\only<+>{%
+\begin{figure}
+\centering
+\begin{subfigure}{\subplotwidth}
+\plothpDsol{#2/hp/p2/unref_0.1/unref_h_0.3}{\endIterformated}{Solution_real}%
+\caption{Solution of the direct problem}
+\end{subfigure}
+\begin{subfigure}{\subplotwidth}
+\plothpDsol{#2/hp/p2/unref_0.1/unref_h_0.3}{\endIterformated}{Adjoint_solution_real}%
+\caption{Solution of the adjoint problem}
+\end{subfigure}
+
+
+%  \begin{subfigure}{\subplotwidth}
+%\plothpDsol{#2/hp/p2/unref_0.1/unref_h_0.3}{\endIterformated}{Solution_real}%
+%\caption{Numerical solution of a Helmholtz problem}
+%  \end{subfigure}
+%  \begin{subfigure}{\subplotwidth}
+%
+%\plothpDsol{#2/hp/p2/unref_0.1/unref_h_0.3}{\endIterformated}{Solution_real}%
+%\caption{Numerical solution of a Helmholtz problem}
+%  \end{subfigure}
+
+
+\end{figure}
+%  \begin{subfigure}{\subplotwidth}
+%    \plotsinglesolution{#2/#1}{\endIterformated}{forward_solution_#3}{#1}%
+%    \subcaption{Solution to the forward problem.}
+%    \label{fig:forward_solution_#2_dir}
+%  \end{subfigure}
+%  \begin{subfigure}{\subplotwidth}
+%    \plotsinglesolution{#2/#1}{\endIterformated}{adjoint_solution_#3}{#1}%
+%    \subcaption{Solution to the adjoint problem.}
+%    \label{fig:adjoint_solution_#2_adj}
+%  \end{subfigure}
+  
+  
+}%
+%
+
+}%
+
+\newcommand{\plothpsolmeshhp}[2][]{
+
+\renewcommand{\DataPath}{\FigurePath/#2/hp/p2/unref_0.1/unref_h_0.3}
+\findmax{\DataPath/outputs.txt}{iter}{\endIter}
+
+\FormatIntegerTwoDigit{\endIter}{\endIterformated}
+\FormatIntegerThreeDigit{\endIter}{\endIterformatedthree}
+%
+%
+{
+\only<+>{%
+\begin{figure}
+\centering
+\foreach \i in {x,y}{%
+\begin{subfigure}{\subplotwidth}
+\centering
+
+\plothpDmesh{#2/hp/p2/unref_0.1/unref_h_0.3}{\endIterformatedthree}{\i}%
+\subcaption{Polynomial orders in the \i-direction}
+\end{subfigure}
+}%
+\caption{Final $hp$-adapted meshes after the Goal Oriented Adaptivity}
+\end{figure}
+}
+%
+}
+}%
+
+
+\newcommand{\plothpsolmesh}[2][]{
+
+\renewcommand{\DataPath}{\FigurePath/#2/hp/p2/unref_0.1/unref_h_0.3}
+\findmax{\DataPath/outputs.txt}{iter}{\endIter}
+
+\FormatIntegerTwoDigit{\endIter}{\endIterformated}
+\FormatIntegerThreeDigit{\endIter}{\endIterformatedthree}
+%
+\only<+>{%
+\begin{figure}
+\centering
+\plothpDsol{#2/hp/p2/unref_0.1/unref_h_0.3}{\endIterformated}{Solution_real}%
+\caption{Numerical solution of a Helmholtz problem}
+\end{figure}
+}%
+%
+{
+\only<+>{%
+\begin{figure}
+\centering
+\foreach \i in {x,y}{%
+\begin{subfigure}{\subplotwidth}
+\centering
+
+\plothpDmesh{#2/hp/p2/unref_0.1/unref_h_0.3}{\endIterformatedthree}{\i}%
+\subcaption{Polynomial orders in the \i-direction}
+\end{subfigure}
+}%
+\caption{Final $hp$-adapted meshes after the Goal Oriented Adaptivity}
+\end{figure}
+}
+%
+}
+}%
+
+
+\newcommand{\plothunrefAdapt}[1]{
+\renewcommand{\DataPath}{\FigurePath/Unref/#1/h/unref_0.1/unref_h_0.3/order_1}
+\findmax{\DataPath/outputs.txt}{iter}{\endIter}
+
+\findmax{\FigurePath/#1/hp/p2/unref_0.1/unref_h_0.3/outputs.txt}{iter}{\endIterh}
+
+\FormatIntegerTwoDigit{\endIterh}{\endIterhformated}
+
+\begin{center}
+
+\begin{figure}
+\foreach \i in {1,2,...,\endIter}{%
+\only<+>{%
+\begin{subfigure}{\subplotwidth}
+\centering
+%\tikzset{/tikz/external/export next=false}
+\FormatIntegerThreeDigit{\i}{\iformat}
+\plothDmesh{Unref/#1/h/unref_0.1/unref_h_0.3/order_1}{\iformat}{#1/hp/p2/unref_0.1/unref_h_0.3/coarse_mesh_fine_\endIterhformated_Solution_real}%
+\pgfmathparse{add(\i,0)} 
+\pgfmathtruncatemacro\plotindex{\pgfmathresult}
+\pgfmathparse{add(\endIter,0)} 
+\pgfmathtruncatemacro\lastindex{\pgfmathresult}
+%\vspace{10mm}
+\subcaption{Adaptive iteration \i ~of \endIter}
+\end{subfigure}
+\begin{subfigure}{\subplotwidth}
+\centering
+% % %
+\errorplotlogUnref{Unref/#1/h/unref_0.1/unref_h_0.3/order_1}{\i}
+\subcaption{Error in $H^{1}$-semi-norm}
+\end{subfigure}
+\only<1->{\caption{Adaptive process}}
+}%
+}
+%}
+\end{figure}
+\end{center}
+}
+
+
+%:\plothpD
+\newcommand{\plothpD}[2][]{
+
+\renewcommand{\DataPath}{\FigurePath/#2/hp/p2/unref_0.1/unref_h_0.3}
+\findmax{\DataPath/outputs.txt}{iter}{\endIter}
+
+\FormatIntegerTwoDigit{\endIter}{\endIterformated}
+\FormatIntegerThreeDigit{\endIter}{\endIterformatedthree}
+%
+\only<+>{%
+\ifthenelse{\equal{#1}{GOA}}{%
+\begin{figure}
+\centering
+\begin{subfigure}{\subplotwidth}
+\plothpDsol{#2/hp/p2/unref_0.1/unref_h_0.3}{\endIterformated}{Direct_solution_real}%
+\caption{Solution of the direct problem}
+\end{subfigure}
+\begin{subfigure}{\subplotwidth}
+\plothpDsol{#2/hp/p2/unref_0.1/unref_h_0.3}{\endIterformated}{Adjoint_solution_real}%
+\caption{Solution of the adjoint problem}
+\end{subfigure}
+\end{figure}
+}{%
+\begin{figure}
+\centering
+\plothpDsol{#2/hp/p2/unref_0.1/unref_h_0.3}{\endIterformated}{Solution_real}%
+\caption{Solution of the \captionifthen{#2} Problem}
+\end{figure}
+}%
+}%
+%
+\ifthenelse{\equal{#2}{Helm2DGOA}}{%
+\only<+>{%
+\begin{figure}
+\centering
+\foreach \i in {x,y}{%
+\begin{subfigure}{\subplotwidth}
+\centering
+
+\plothpDmesh{Helm2DGOANon/hp/p2/unref_0.1/unref_h_0.3}{\endIterformatedthree}{\i}%
+\subcaption{Polynomial orders in the \i-direction}
+\end{subfigure}
+}%
+\caption{Final $hp$-adapted meshes in \alert{energy-norm adaptivity}}
+\end{figure}
+}
+\only<+>{%
+\begin{figure}
+\centering
+\foreach \i in {x,y}{%
+\begin{subfigure}{\subplotwidth}
+\centering
+
+\plothpDmesh{#2/hp/p2/unref_0.1/unref_h_0.3}{\endIterformatedthree}{\i}%
+\subcaption{Polynomial orders in the \i-direction}
+\end{subfigure}
+}%
+\caption{Final $hp$-adapted meshes in \alert{goal-oriented adaptivity}}
+\end{figure}
+}
+%	
+}
+{
+\only<+>{%
+\begin{figure}
+\centering
+\foreach \i in {x,y}{%
+\begin{subfigure}{\subplotwidth}
+\centering
+
+\plothpDmesh{#2/hp/p2/unref_0.1/unref_h_0.3}{\endIterformatedthree}{\i}%
+\subcaption{Polynomial orders in the \i-direction}
+\end{subfigure}
+}%
+\caption{Final $hp$-adapted meshes}
+\end{figure}
+}
+%
+}
+\only<+>{%
+\begin{figure}
+\errorplotlog{#2}{Error}%
+%
+\caption{Evolution of the error in \captionifthenlegend{#2}}
+\end{figure}
+}%
+}%
+
+%:\plothDunref
+\newcommand{\plothDunref}[1]{
+\renewcommand{\DataPath}{\FigurePath/Unref/#1/h/unref_0.1/unref_h_0.3/order_1}
+\findmax{\DataPath/outputs.txt}{iter}{\endIter}
+
+\findmax{\FigurePath/#1/hp/p2/unref_0.1/unref_h_0.3/outputs.txt}{iter}{\endIterh}
+
+\FormatIntegerTwoDigit{\endIterh}{\endIterhformated}
+
+\begin{center}
+\begin{figure}
+\centering
+\only<+>{%
+\plothpDsol{#1/hp/p2/unref_0.1/unref_h_0.3}{\endIterhformated}{Solution_real}%
+\caption{Solution with a strong gradient}
+% % %
+}
+\end{figure}
+
+\begin{figure}
+\foreach \i in {1,2,...,\endIter}{%
+\only<+>{%
+\begin{subfigure}{\subplotwidth}
+\centering
+%\tikzset{/tikz/external/export next=false}
+\FormatIntegerThreeDigit{\i}{\iformat}
+\plothDmesh{Unref/#1/h/unref_0.1/unref_h_0.3/order_1}{\iformat}{#1/hp/p2/unref_0.1/unref_h_0.3/coarse_mesh_fine_\endIterhformated_Solution_real}%
+\pgfmathparse{add(\i,0)} 
+\pgfmathtruncatemacro\plotindex{\pgfmathresult}
+\pgfmathparse{add(\endIter,0)} 
+\pgfmathtruncatemacro\lastindex{\pgfmathresult}
+%\vspace{10mm}
+\subcaption{Adaptive iteration \i ~of \endIter}
+\end{subfigure}
+\begin{subfigure}{\subplotwidth}
+\centering
+% % %
+\errorplotlogUnref{Unref/#1/h/unref_0.1/unref_h_0.3/order_1}{\i}
+\subcaption{Error in $H^{1}$-semi-norm}
+\end{subfigure}
+\only<2->{\caption{Adaptive process}}
+}%
+}
+%}
+\end{figure}
+\end{center}
+}
+
+
+\newcommand{\plothpfem}[2][]{
+
+  \renewcommand{\DataPath}{\FigurePath/#2/hp/p2/unref_0.1/unref_h_0.3}%\PbName/hp/...
+  \findmax{\DataPath/outputs.txt}{iter}{\endIter}
+
+  \FormatIntegerThreeDigit{\endIter}{\endIterformated}
+
+  \foreach \idim in {X,Y}{
+      \begin{subfigure}{\subplotwidth}
+        \plothpmeshfem{#2/hp/p2/unref_0.1/unref_h_0.3}{\endIterformated}{\idim}
+        \caption{\ifthenelse{\equal{\idim}{X}}{Initial $hp$-mesh}{Final $hp$-adapted mesh}}
+        %\label{fig:#2_\idim_final}
+      \end{subfigure}
+    }
+}
+
+\newcommand{\plothpmeshfem}[3]{
+  \renewcommand{\DataPath}{\FigurePath/#1}
+
+  \lastelement{\DataPath/outputs.txt}{MaxP}{\maxp}
+  \lastelement{\DataPath/outputs.txt}{MinP}{\minp}
+
+  %\pgfplotsset{colormap/jet} %Barra de color
+  \pgfplotsset{colormap/YlOrRd} %Barra de color
+  %\tikzset{/tikz/external/export next=false}
+  \begin{tikzpicture}
+    \begin{axis}[name=master,
+        width=\textwidth,height=\textwidth,
+        enlargelimits=false,
+        xlabel=$x$,
+        ylabel=$y$,
+        xlabel near ticks,
+        ylabel near ticks,
+        axis line style={draw=none},
+        tick style={draw=none},
+        colorbar horizontal,
+        colorbar style={%
+            xtick={1,2,...,\maxp},
+            title={Order of approximation},
+            at={(master.above north west)},anchor=south west,
+            yshift=2pt,
+            title style={
+                yshift=2pt
+              },
+            yshift=0.2em,
+            xticklabel pos=upper,
+          },
+        %point meta min=\minp,
+        point meta min=1,
+        point meta max=\maxp,
+      ]
+      %
+      \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/mesh_#3_#2.png}; %Límites del dominio de los subplots (a) y (b). #3 X o Y, #2 por ejemplo 015
+
+    \end{axis}
+  \end{tikzpicture}
+}
+
+\newcommand{\plothpDmat}[2][]{
+
+  \renewcommand{\DataPath}{\FigurePath/#2/hp/p2/unref_0.1/unref_h_0.3}
+  \findmax{\DataPath/outputs.txt}{iter}{\endIter}
+
+  \FormatIntegerTwoDigit{\endIter}{\endIterformated}
+  \FormatIntegerThreeDigit{\endIter}{\endIterformatedthree}
+  %
+  \plothpsolsol{#2/hp/p2/unref_0.1/unref_h_0.3}{\endIterformated}{materials}{#1}%
+}
+
+\newcommand{\plothpsolsol}[4]{%
+  \renewcommand{\DataPath}{\FigurePath/#1}
+
+  \IfSubStr{#4}{unitsquare}
+  {   	\pgfplotsset{%
+      colormap={paraview}{rgb=(0.231373, 0.298039, 0.752941) rgb=(0.865003, 0.865003, 0.865003) rgb=(0.705882, 0.0156863, 0.14902)}%
+    }%
+    \pgfplotsset{colormap name={paraview}}%
+
+    \getelemdbl{\DataPath/#3_ColorbarValues.dat}{min_value}{0}{\scaleMin}
+    \getelemdbl{\DataPath/#3_ColorbarValues.dat}{max_value}{0}{\scaleMax}
+    \getelemdbl{\DataPath/#3_ColorbarValues.dat}{mean_value}{0}{\scaleMean}
+
+    %\tikzset{/tikz/external/export next=false}
+    \begin{tikzpicture}
+      \begin{axis}[name=master,
+          width=\textwidth*0.5,height=\textwidth*0.5,
+          enlargelimits=false,
+          xlabel=$x$,
+          ylabel=$y$,
+          xlabel near ticks,
+          ylabel near ticks,
+          colorbar horizontal,
+          colorbar style={%
+              xtick={\scaleMin,\scaleMean,\scaleMax},
+              title={Value of the solution},
+              at={(master.above north west)},anchor=south west,
+              yshift=2pt,
+              title style={
+                  yshift=5pt%yshift=2pt
+                },
+              yshift=0.2em,
+              xticklabel pos=upper,
+            },
+          %point meta min=\minp,
+          point meta min=\scaleMin,
+          point meta max=\scaleMax,
+        ]
+        %
+        \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/coarse_mesh_fine_#2_#3.png};
+      \end{axis}
+    \end{tikzpicture}}
+  {%else
+    \pgfplotsset{%
+      colormap={paraview}{rgb=(0.05, 1.0, 1.0) rgb=(1.0, 0.0, 0.0) rgb=(0.0, 1.0, 0.0) rgb=(0.0, 0.0, 1.0)}%
+    }
+    %
+    \pgfplotsset{colormap name={paraview}}%
+    \findmax{\DataPath/#3.txt}{uno}{\matuno}
+    \findmax{\DataPath/#3.txt}{dos}{\matdos}
+    \findmax{\DataPath/#3.txt}{tres}{\mattres}
+    \findmax{\DataPath/#3.txt}{cuatro}{\matcuatro}
+
+    %\tikzset{/tikz/external/export next=false}
+    \begin{tikzpicture}
+      \begin{axis}[name=master,
+          width=\textwidth*0.5,height=\textwidth*0.5,
+          enlargelimits=false,
+          %xlabel=$x$,
+          %ylabel=$y$,
+          %xlabel near ticks,
+          %ylabel near ticks,
+          axis line style={draw=none},
+          tick style={draw=none},
+          xticklabels={},
+          yticklabels={},
+          colorbar horizontal,
+          colorbar sampled,
+          colormap access=piecewise constant,
+          colorbar style={
+              samples=4,
+              xtick=data,%={0,1,2,3},
+              xticklabels={0.01,1,10,1000},
+              xticklabel style={xshift=\textwidth*0.5/10},
+              title={Diffusivity of the materials},
+              at={(master.above north west)},anchor=south west,
+              yshift=5pt,
+              title style={
+                  yshift=5pt%yshift=2pt
+                },
+              yshift=0.2em,
+              xticklabel pos=upper,
+            },
+          %point meta min=\minp,
+          % point meta min=\matuno,
+          % point meta max=\matcuatro,
+        ]
+        %
+        \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/#3_#2.png};
+
+      \end{axis}
+    \end{tikzpicture}}%
+}
+
+\newcommand{\plothplevels}[2][]{
+
+  \renewcommand{\DataPath}{\FigurePath/#2/hp/p2/unref_0.1/unref_h_0.3}%\PbName/hp
+  \findmax{\DataPath/outputs.txt}{iter}{\endIter}
+  %\findmin{\DataPath/outputs.txt}{iter}{\initIter} %\plothplevel
+
+  \FormatIntegerThreeDigit{\endIter}{\endIterformated}
+  \foreach \idim in {z}{
+      \begin{subfigure}{\subplotwidth}
+        \plothplevel{#2/hp/p2/unref_0.1/unref_h_0.3}{\endIterformated}{\idim}
+        %\caption{Final $hp$-adapted mesh with polynomial orders in the $\idim$-direction}
+      \end{subfigure}
+    }
+
+  %\pgfmathparse{subtract(\endIter,0)}
+  %\pgfmathtruncatemacro\endIterIndex{\pgfmathresult}
+
+  %\getelem{\DataPath/outputs.txt}{nr_dof}{\endIter}{\nrdofHpEnd}
+  %\getelemdbl{\DataPath/outputs.txt}{Error_H1}{\endIter}{\errorHpEnd}
+}
+
+\newcommand{\plothplevel}[3]{
+  \renewcommand{\DataPath}{\FigurePath/#1}
+
+  \lastelement{\DataPath/outputs.txt}{MaxP}{\maxp}
+  \lastelement{\DataPath/outputs.txt}{MinP}{\minp}
+
+  %\pgfplotsset{colormap/jet} %Barra de color
+  \pgfplotsset{colormap/YlOrRd} %Barra de color
+  %\tikzset{/tikz/external/export next=false}
+  \begin{tikzpicture}
+    \begin{axis}[name=master,
+        width=\textwidth,height=\textwidth,
+        enlargelimits=false,
+        %xlabel=$x$,
+        %ylabel=$y$,
+        %xlabel near ticks,
+        %ylabel near ticks,
+        axis line style={draw=none},
+        tick style={draw=none},
+        xticklabels={},
+        yticklabels={},
+        colorbar horizontal,
+        colorbar style={%
+            xtick={1,2,...,\maxp},
+            title={Order of approximation},
+            at={(master.above north west)},anchor=south west,
+            yshift=5pt,
+            title style={
+                yshift=2pt
+              },
+            yshift=0.2em,
+            xticklabel pos=upper,
+          },
+        %point meta min=\minp,
+        point meta min=1,
+        point meta max=\maxp,
+      ]
+      %
+      \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/boxes/box_mesh_#3_#2.png};
+
+    \end{axis}
+  \end{tikzpicture}
+}
+% ==========
+%\magomate
+% ==========
+\newcommand{\magomate}[3][]{
+  \renewcommand{\DataPath}{\FigurePath/#2/norm0}
+%  \findmax{\DataPath/outputs.txt}{iter}{\endIter}
+%  \FormatIntegerThreeDigit{\endIter}{\endIterformated}
+% \begin{center}
+%  \foreach \idim in {X}{
+%      \begin{subfigure}[t]{0.45\textwidth}
+%    \lefthpmesh{#2/norm0}{\endIterformated}{\idim}
+%    {\caption{Final $hp$-adapted mesh with $p$ in the \ifthenelse{\equal{\idim}{X}}{$x$}{$y$}-direction.}
+%    \label{fig:#2_\idim_final}}
+%  \end{subfigure}
+%  } 
+%  ~
+%  \foreach \idim in {Y}{
+%  \begin{subfigure}[t]{0.45\textwidth}
+%   \righthpmesh{#2/norm0}{\endIterformated}{\idim}
+%    {\caption{Final $hp$-adapted mesh with $p$ in the \ifthenelse{\equal{\idim}{X}}{$x$}{$y$}-direction.}
+%    \label{fig:#2_\idim_final}}
+%  \end{subfigure}
+%  }
+%   \end{center}
+  \findmin{\FigurePath/#2/norm0/outputs.txt}{iter}{\firstIter}
+  \FormatIntegerTwoDigit{\firstIter}{\firstIterformated} 
+  
+  %\begin{subfigure}[t]{0.45\textwidth}
+   %\centering
+   \materials{#2/norm0}{\firstIterformated}{materials_real}{mago}
+    %{\caption{Values for the different materials in the domain.}}
+  %\end{subfigure}
+%  \begin{subfigure}[t]{0.45\textwidth}
+%   \centering
+%   \errormago[#1]{#2}{#3}
+%    {\caption{Evolution of \captionifthenproblem{#3} in the adaptive process.}
+%    \label{fig:error_#2}}
+%  \end{subfigure}
+}
+% =======
+% \materials
+% =======
+\newcommand{\materials}[4]{%
+  \renewcommand{\DataPath}{\FigurePath/#1}
+  
+    	
+      %
+}
+
+%% =======
+%%\plotskew
+%% =======
+\newcommand{\plotskew}[2][]{
+
+  \begin{subfigure}[t]{0.4\textwidth}
+    \centering
+    \vspace{-5.25cm}
+    \skewleft{#2}
+    \vspace{0.90cm}
+    {\caption{Domain illustration ($5 \times 5$ grid)}}
+  \end{subfigure}
+  ~
+ \begin{subfigure}[t]{0.35\textwidth}
+    \centering
+    \skewright{#2}
+    {\caption{$\tcr{\boldsymbol{\sigma(x)}}$ varying 4 orders of magnitude.}}
+  \end{subfigure}
+}
+%% ======
+%%\skewleft
+%% ======
+\newcommand{\skewleft}[2][]{
+
+	%\tikzset{/tikz/external/export next=false}
+	
+	\begin{tikzpicture}[x=0.45cm,y=0.45cm]
+			\node(origin) at (0,0) {};
+			\node(end) at (10,10) {};
+			\node(f_int_origin) at (0.5,0.5) {};
+			\node(f_int_end) at (1.5,1.5) {};
+			\node(l_int_origin) at (8.5,8.5) {};
+			\node(l_int_end) at (9.5,9.5) {};
+			
+			\draw [draw=blue,fill=white,thick] (origin) rectangle (end);
+			
+			\draw[] ($(origin)+(2,0)$) -- ($(origin)+(2,10)$);
+			\draw[] ($(origin)+(4,0)$) -- ($(origin)+(4,10)$);
+			\draw[] ($(origin)+(6,0)$) -- ($(origin)+(6,10)$);
+			\draw[] ($(origin)+(8,0)$) -- ($(origin)+(8,10)$);
+			
+			\draw[] ($(origin)+(0,2)$) -- ($(origin)+(10,2)$);
+			\draw[] ($(origin)+(0,4)$) -- ($(origin)+(10,4)$);
+			\draw[] ($(origin)+(0,6)$) -- ($(origin)+(10,6)$);
+			\draw[] ($(origin)+(0,8)$) -- ($(origin)+(10,8)$);
+			
+			\draw [draw=black,fill=white] (f_int_origin) rectangle (f_int_end) node[pos=0.5] {$\Omega_f$};
+			\draw [draw=black,fill=white] (l_int_origin) rectangle (l_int_end) node[pos=0.5] {$\Omega_l$};
+		\end{tikzpicture}
+}
+%% =======
+%%\skewright
+%% =======
+\newcommand{\skewright}[2][]{
+	\renewcommand{\DataPath}{\FigurePath/#2/norm0}
+	
+	\findmin{\FigurePath/#2/norm0/outputs.txt}{iter}{\firstIter}
+  	\FormatIntegerTwoDigit{\firstIter}{\firstIterformated} 
+  
+	\getelemdbl{\DataPath/mago_ColorbarValues.dat}{min_value}{0}{\scaleMin}
+  	\getelemdbl{\DataPath/mago_ColorbarValues.dat}{max_value}{0}{\scaleMax}
+  	\getelemdbl{\DataPath/mago_ColorbarValues.dat}{mean_value}{0}{\scaleMean}
+  
+  \pgfplotsset{%
+    colormap={paraview}{rgb=(0.231373, 0.298039, 0.752941) rgb=(0.865003, 0.865003, 0.865003) rgb=(0.705882, 0.0156863, 0.14902)}%
+  }%
+  \pgfplotsset{colormap name={paraview}}%
+  
+  \begin{tikzpicture}
+      \begin{axis}[name=master,
+          width=\textwidth,height=\textwidth,
+          enlargelimits=false,
+          xlabel=$x$,
+          ylabel=$y$,
+          xlabel near ticks,
+          ylabel near ticks,
+          colorbar horizontal,
+          colorbar style={%
+              xtick={0.1,500.05,1000},
+              title={Value of $\sigma(x)$ (log scale)},
+              at={(master.above north west)},anchor=south west,
+              yshift=2pt,
+              title style={
+                  yshift=5pt
+                },
+              yshift=0.2em,
+              xticklabel pos=upper,
+            },
+          point meta min=0.1,
+          point meta max=1000,
+        ]
+        
+       \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/mago_\firstIterformated_materials_real.png}; 
+
+      \end{axis}
+    \end{tikzpicture}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OLD
+% ==============
+% elemental routines
+% ==============
+\newcommand{\FormatIntegerTwoDigit}[2]{
+  \pgfmathsetbasenumberlength{2}
+  \pgfmathbasetodec#2{#1}{10}
+}
+
+\newcommand{\FormatIntegerThreeDigit}[2]{
+  \pgfmathsetbasenumberlength{3}
+  \pgfmathbasetodec#2{#1}{10}
+}
+
+\newcommand{\getelem}[4]{
+  \pgfplotstablegetelem{#3}{#2}\of{#1}%
+  \pgfmathtruncatemacro#4{\pgfplotsretval}
+  \pgfplotstableclear{\datatable}
+}
+
+
+\newcommand{\getelemdbl}[4]{
+  \pgfplotstablegetelem{#3}{#2}\of{#1}%
+  \pgfmathsetmacro#4{\pgfplotsretval}
+  \pgfplotstableclear{\datatable}
+}
+
+\newcommand{\findmax}[3]{
+  \pgfplotstableread{#1}{\datatable}
+  \pgfplotstablesort[sort key={#2},sort cmp={float >}]{\sorted}{\datatable}%
+  \pgfplotstablegetelem{0}{#2}\of{\sorted}%
+  \pgfmathtruncatemacro#3{\pgfplotsretval}
+  \pgfplotstableclear{\datatable}
+}
+
+\newcommand{\findmin}[3]{
+  \pgfplotstableread{#1}{\datatable}
+  \pgfplotstablesort[sort key={#2},sort cmp={float <}]{\sorted}{\datatable}%
+  \pgfplotstablegetelem{0}{#2}\of{\sorted}%
+  \pgfmathtruncatemacro#3{\pgfplotsretval}
+  \pgfplotstableclear{\datatable}
+}
+
+\newcommand{\findmaxDbl}[3]{
+  \pgfplotstableread{#1}{\datatable}
+  \pgfplotstablesort[sort key={#2},sort cmp={float >}]{\sorted}{\datatable}%
+  \pgfplotstablegetelem{0}{#2}\of{\sorted}%
+  \pgfmathsetmacro#3{\pgfplotsretval}
+  \pgfplotstableclear{\datatable}
+}
+
+\newcommand{\lastelement}[3]{
+  \pgfplotstableread{#1}{\datatable}
+  \pgfplotstablegetrowsof{\datatable} 
+  \pgfmathtruncatemacro{\rows}{\pgfplotsretval}
+  \pgfmathtruncatemacro{\lastrow}{\rows-1}
+  \pgfplotstablegetelem{\lastrow}{#2}\of{\datatable}
+  \pgfmathsetmacro#3{\pgfplotsretval}
+  \let#3=\pgfplotsretval
+  \pgfplotstableclear{\datatable}
+}
+
+\newcommand{\findminDbl}[3]{
+  \pgfplotstableread{#1}{\datatable}
+  \pgfplotstablesort[sort key={#2},sort cmp={float <}]{\sorted}{\datatable}%
+  \pgfplotstablegetelem{0}{#2}\of{\sorted}%
+  \pgfmathsetmacro#3{\pgfplotsretval}
+  \let#3=\pgfplotsretval
+  \pgfplotstableclear{\datatable}
+}
+
+\pgfplotsset{
+  log x ticks with fixed point/.style={
+      xticklabel={
+          \pgfkeys{/pgf/fpu=true}
+          \pgfmathparse{exp(\tick)}%
+          \pgfmathprintnumber[fixed relative, precision=3]{\pgfmathresult}
+          \pgfkeys{/pgf/fpu=false}
+        }
+    },
+  log y ticks with fixed point/.style={
+      yticklabel={
+          \pgfkeys{/pgf/fpu=true}
+          \pgfmathparse{exp(\tick)}%
+          \pgfmathprintnumber[fixed relative, precision=3]{\pgfmathresult}
+          \pgfkeys{/pgf/fpu=false}
+        }
+    }
+}
+
+\pgfplotscreateplotcyclelist{custom list style}{%
+  color=red, solid, every mark/.append style={solid},mark size=4.0pt,mark=o\\%
+  color=blue, solid, every mark/.append style={solid},mark size=3.0pt,mark=square\\%
+  color=gray!20!black!40, solid, every mark/.append style={solid}, mark size=2.5pt, mark=triangle\\%
+  color=black, solid, every mark/.append style={solid},mark=diamond*\\%
+  color=black!50!red, solid, every mark/.append style={solid}, mark=otimes*\\%
+  color=black!50!yellow, loosely dashed, every mark/.append style={solid},mark=*\\%
+  color=black!50!blue,densely dashed, every mark/.append style={solid},mark=square*\\%
+  color=black!50!magenta,dashdotted, every mark/.append style={solid},mark=otimes*\\%
+  color=black!50!orange,dashdotdotted, every mark/.append style={solid},mark=star\\%
+  color=black!50!cyan, densely dashdotted,every mark/.append style={solid},mark=diamond*\\%
+}
+
+\pgfplotsset{%
+  every axis plot/.append style= {line width=2pt},
+  cycle list name=custom list style,
+}

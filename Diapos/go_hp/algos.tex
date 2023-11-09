@@ -1,0 +1,37 @@
+\begin{frame}
+    \frametitle{Adaptive Mesh Refinement Algorithm}
+
+    \SetKwRepeat{Do}{do}{end}%
+    \begin{algorithm}[H]
+      \SetAlgoLined
+      \KwIn{A given initial mesh}
+      \KwOut{A final \(hp\)-adapted mesh}
+
+     \While{error above tolerance}{
+        Perform a global and uniform (\(h\) or \(p\)) refinement\;
+        Execute a (quasi)-optimal \(hp\)-coarsening step (Algorithm~\ref{alg:unrefining}) to the mesh\;
+        Update error\;
+      }
+      \caption{Adaptive process}
+      \label{alg:adaptive}
+    \end{algorithm}
+\end{frame}
+
+\begin{frame}
+    \frametitle{\( hp \)-Unrefinement Policy}
+    \SetKwRepeat{Do}{do}{end}%
+    \begin{algorithm}[H]
+      \SetAlgoLined
+      \KwIn{A given mesh}
+      \KwOut{An \( hp \)-unrefined mesh}
+
+      \Do{}{
+        Compute the solution on the current mesh\;
+        Compute the element-wise error indicators\;
+        Unrefine the mesh by eliminating the \emph{removable} basis functions with low error indicators\;
+        When no contributions are below a given tolerance, exit\;
+      }
+      \caption{\( hp \)-unrefinement policy}
+      \label{alg:unrefining}
+    \end{algorithm}
+\end{frame}

@@ -1,0 +1,17 @@
+\begin{frame}
+	\frametitle{Main Ingredients}
+	\begin{center}
+		\begin{figure}
+		\begin{tikzpicture}
+			\node[rounded rectangle, draw, ultra thick, align=center](hp){$hp$-adaptivity};
+			\node[below left=of hp, circle, minimum size=3cm,draw, ultra thick, align=center](Data){Data Structures};
+			\node[below right=of hp, circle,minimum size=3cm, draw, ultra thick, align=center](Estim){Automatic\\Adaptive\\Strategy};
+
+			\draw[->,ultra thick] (hp) -- (Data);
+			\draw[->,ultra thick] (hp) -- (Estim);
+		\end{tikzpicture}
+		\caption{Main ingredients}
+		\label{fig:main}
+		\end{figure}
+	\end{center}
+\end{frame}

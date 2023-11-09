@@ -108,3 +108,6 @@ TSWLatexianTemp*
 
 # REVTeX 4.1 notes file (remove the '#' if you don't want this)
 #*Notes.bib
+
+*.md5
+*.auxlock
