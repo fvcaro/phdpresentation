@@ -1,9 +1,0 @@
-\begin{tikzpicture}
-\begin{axis}[scale only axis, xlabel = $Epoch$, ylabel = $Loss$, ytick pos=left, y label style={at={(-0.1,0.5)}}, x label style={at={(0.5,-0.15)}}, legend style= {at={(0.95,0.95)},draw=none,fill=none,nodes={scale=0.8, transform shape}}, legend cell align={left}, height=4cm, width=4cm, xmin=0.95, xmax=30000, xmode=log, xticklabel style={yshift=-3pt}, yticklabel style={xshift=-3pt}]
-%\addplot [red, dashed, line width=0.7pt,domain=0.99999:200000] {-666.67};
-%\addlegendentry{Loss of exact solution}
-\addplot[line width=0.8pt,color=black] %
-	table[x=iter ,y=loss]{Diapos/PDEs_with_NN/Figures/Alternatives//Data//data_NoRegN50M10_R.txt};
-%\addlegendentry{Loss $\mathcal{R}$};
-\end{axis}
-\end{tikzpicture}

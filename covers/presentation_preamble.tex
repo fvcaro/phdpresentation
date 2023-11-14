@@ -22,6 +22,8 @@
 \usepackage{color, colortbl}
 \usepackage{empheq}
 \usepackage{tcolorbox}
+\usepackage{dsfont}
+\usepackage{mathtools,cancel,multicol}
 %\usepackage{caption}
 %\captionsetup[figure]{labelformat=empty}
 \captionsetup[table]{labelformat=empty}
@@ -88,11 +90,13 @@
 \newlength{\trisubplotwidth}
 \newlength{\trisubplotheight}
 
-\setlength{\plotwidth}{8cm}
-\setlength{\plotheight}{7cm}
+%\setlength{\plotwidth}{8cm}
+ \setlength{\plotwidth}{0.9\textwidth}
+%\setlength{\plotheight}{7cm}
+\setlength{\plotheight}{0.85\textheight}
 
 \setlength{\subplotwidth}{0.45\textwidth}
-\setlength{\subplotheight}{0.45\textwidth}
+\setlength{\subplotheight}{\textwidth}
 
 \setlength{\trisubplotwidth}{0.3\textwidth}
 \setlength{\trisubplotheight}{0.3\textwidth}
@@ -276,3 +280,6 @@ single arrow head extend=.4cm,}}
 \newcommand{\abs}[1]{\left|#1\right|}
 \newcommand{\norm}[1]{\left\|#1\right\|}
 \newcommand{\te}{\tilde{\epsilon}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\grad}{\nabla}
+\newcommand{\scalar}[2]{\left<#1\,,#2\right>}

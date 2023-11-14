@@ -1,8 +1,0 @@
-\begin{tikzpicture}
-%https://tex.stackexchange.com/questions/451704/tikz-position-of-an-imported-image
-  \node[anchor=south west,inner sep=0] (image) at (0,0) {\input{Diapos/PDEs_with_NN/Figures/Quadrature_problem/Graphics/Ritz_model_problem_1_loss.tex}};
-  \begin{scope}[x={(image.south east)},y={(image.north west)}]
-  \draw[<-] (0.3,0.55) -- (0.35,0.45) node[below right] {\textcolor{black}{$\mathcal{L}_{\mathcal{R}}(u_{exact})$}};
-  \draw[<-, color=red] (0.35,0.7) -- (0.6,0.85) node[above right] {\textcolor{red}{$\mathcal{L}_{\mathcal{R}}(u_{NN})$}};
-  \end{scope}
-\end{tikzpicture}

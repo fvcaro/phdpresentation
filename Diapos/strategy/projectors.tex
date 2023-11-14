@@ -124,37 +124,26 @@ where we use the $b$-orthogonality of $u_{\mathcal{F}}-u_{\mathcal{E}_K}$ with $
 
 \begin{frame}{Energy-Based Non-Elliptic Problems}
 
-\begin{itemize}
-  \item \textbf{Discrete Inf-Sup Condition:}
-    \begin{itemize}
-      \item We assume that $b$ satisfies the discrete inf-sup condition:
+  \textbf{Discrete Inf-Sup Condition:} We assume that $b$ satisfies the discrete inf-sup condition:
       %\item Existence of a positive constant $\gamma$ such that
       \begin{equation}
         \exists \, \gamma > 0, \quad \inf_{\phi \in \H_{\mathcal{E}_K}}\sup_{\psi \in \H_{\mathcal{E}_K}}\frac{b\left(\phi, \psi\right)}{\norm{\phi}_{e}\norm{\psi}_{e}} \geq \gamma.
         \label{eq:infsup}
       \end{equation}
-    \end{itemize}
 
-  \item \textbf{Utilizing $b$-Orthogonality:}
-    \begin{itemize}
-      \item We use the $b$-orthogonality of $u_{\mathcal{F}}-u_{\mathcal{E}_K}$ with respect to $\H_{\mathcal{E}_K}$.
+  \textbf{Utilizing $b$-Orthogonality:} We use the $b$-orthogonality of $u_{\mathcal{F}}-u_{\mathcal{E}_K}$ with respect to $\H_{\mathcal{E}_K}$.
       %\item This allows control of $\norm{\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}-u_{\mathcal{E}_K}}_e$:
       \begin{align}
         \gamma\norm{\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}-u_{\mathcal{E}_K}}_e & \leq \sup_{\psi \in \H_{\mathcal{E}_K}}\frac{b\left(\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}-u_{\mathcal{E}_K}, \psi\right)}{\norm{\psi}_{e}} \\
         & \leq M_b \norm{u_{\mathcal{F}}-\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}}_e,
       \end{align}
       where $M_b$ is the continuity constant of $b$.
-    \end{itemize}
 
-  \item \textbf{Concluding Inequality:}
-    \begin{itemize}
-      \item Hence, we derive the following bound:
+  \textbf{Concluding Inequality:} Hence, we derive the following bound:
       \begin{equation}
         \norm{u_{\mathcal{F}}-u_{\mathcal{E}_K}}_e^2 \lesssim \norm{u_{\mathcal{F}}-\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}}_e^2=\norm{\Pi_{\mathcal{F}}^{\mathcal{R}_K}u_{\mathcal{F}}}_e^2.
         \label{eq:en_ne_bound}
       \end{equation}
-    \end{itemize}
-\end{itemize}
 
 \end{frame}
 
@@ -166,7 +155,7 @@ where we use the $b$-orthogonality of $u_{\mathcal{F}}-u_{\mathcal{E}_K}$ with $
     	\label{eq:adjointH}
     	b\left(\phi_{\mathcal{F}},v_{\mathcal{F}}\right)=l\left(\phi_{\mathcal{F}}\right), \quad \forall \phi_{\mathcal{F}} \in \H_{\mathcal{F}},
   	\end{align}
-        with the following specifications:
+        where:
         \begin{itemize}
             \item the objective is to produce a space $\H_{\mathcal{F}}$ with minimal dimension such that the error in the Quantity of Interest (QoI) is below a user-defined tolerance,
             \item the QoI of the solution $u_{\mathcal{F}}$ is expressed as $l(u_{\mathcal{F}})$,
@@ -210,10 +199,10 @@ Since $\H_{\mathcal{E}_K} \subset \H_{\mathcal{F}}$, we have
 \frametitle{Error Indicators Using a Pseudo-Dual Operator}
     \begin{block}{The Adjoint Problem}
         Find $\te$ such that
-      \begin{align}
-         \hat{b}\left(\phi_{\mathcal{F}},\te\right)=l\left(\phi_{\mathcal{F}}\right) - b\left(\phi_{\mathcal{F}},\Pi_{\mathcal{F}}^{\mathcal{E}_K} v_{\mathcal{F}}\right), \quad \forall \phi \in \H,
+      \begin{equation}
+         \hat{b}\left(\phi_{\mathcal{F}},\te\right)=l\left(\phi_{\mathcal{F}}\right) - b\left(\phi_{\mathcal{F}},\Pi_{\mathcal{F}}^{\mathcal{E}_K} v_{\mathcal{F}}\right), \quad \forall \phi \in \mathcal{H},
         \label{eq:forward_e}
-      \end{align}
+      \end{equation}
         with the following specifications:
         \begin{itemize}
             \item $\eta_K$ is defined as the error indicator associated with the element $K$
@@ -224,4 +213,11 @@ Since $\H_{\mathcal{E}_K} \subset \H_{\mathcal{F}}$, we have
             \item where, the operator $a\left(\cdot ,\cdot\right)$ is defined as $a\left(\cdot ,\cdot\right) = \hat{b}\left(\cdot ,\cdot\right)$.
         \end{itemize}
     \end{block}     
+    \begin{thebibliography}{}
+    \beamertemplatearticlebibitems
+   \bibitem{darrigrand2020painless}
+		V. Darrigrand, D. Pardo, I. Muga
+		\newblock Goal-oriented adaptivity using unconventional error representations for the 1D Helmholtz equation
+		\newblock \emph{Computers \& Mathematics with Applications}, 2015
+    \end{thebibliography}
 \end{frame}
