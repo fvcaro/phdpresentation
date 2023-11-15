@@ -1,4 +1,33 @@
 \begin{frame}
+  \frametitle{2D Numerical results for \( hp \)-adaptivity}
+
+  \begin{block}{Lower bound of the relative error}
+    We estimate the following lower bound of the error \( e_{\textrm{rel}}^{\textrm{energy}} \) as follows:
+    \begin{equation}
+      \tilde{e}_{\textrm{rel}}^{\textrm{\, energy}} \coloneqq 
+      \frac{\abs{\norm{u}_{\H} - \norm{u_{\calT_{c}}}_{\H}}}{\norm{u}_{\H}} \cdot 100 
+      \leq e_{\textrm{rel}}^{\textrm{energy}} \coloneqq  
+      \frac{\norm{u - u_{\calT_{c}}}_{\H}}{\norm{u}_{\H}} \cdot 100.
+    \end{equation}
+  \end{block}
+  
+  \begin{block}{Our Quantity of Interest (QoI)}
+    For the GOA problems, we define our QoI as
+    \begin{equation}
+      l\left(\phi\right) = 
+      \frac{1}{\abs{\Omega_{l}}} \scalaire{\mathds{1}_{\Omega_{l}}}{\phi}_{L^2(\Omega)}, 
+      \quad \forall \phi \in \H,
+    \end{equation}
+    where:
+    \begin{itemize}
+      \item \( \abs{\Omega_{l}} \) defines the area or volume of \( \Omega_{l} \),
+      \item \( \mathds{1}_{\Omega_{l}} \) is a function equal to one if \( x \in \Omega_{l} \), and zero otherwise.
+    \end{itemize}
+  \end{block}
+
+\end{frame}
+
+\begin{frame}
   \frametitle{2D Numerical results for $hp$-adaptivity}
 
   \begin{block}{Singular Poisson example}
