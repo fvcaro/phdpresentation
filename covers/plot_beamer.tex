@@ -6,6 +6,8 @@
 \newcommand*{\FigurePath}{Figures}
 \newcommand*{\DataPath}{}
 
+%\tikzset{/tikz/external/export next=false}
+
 \newcommand*{\directadjointsolution}[5]{%
   \renewcommand*{\DataPath}{\FigurePath/#1}
   \pgfplotsset{%
@@ -16,8 +18,6 @@
   \getelemdbl{\DataPath/#3_#2_ColorbarValues.dat}{min_value}{0}{\scaleMin}
   \getelemdbl{\DataPath/#3_#2_ColorbarValues.dat}{max_value}{0}{\scaleMax}
   \getelemdbl{\DataPath/#3_#2_ColorbarValues.dat}{mean_value}{0}{\scaleMean}
-
-  %\tikzset{/tikz/external/export next=false}
 
   \begin{tikzpicture}
     \begin{axis}[name=master,
@@ -32,8 +32,10 @@
             xtick={\scaleMin,\scaleMean,\scaleMax},
             title={#4 solution},
             at={(master.above north west)},anchor=south west,
-            yshift=2pt,
-            title style={yshift=5pt},
+            yshift=0.5em,
+            title style={
+                yshift=2pt
+            },
             xticklabel pos=upper,
         },
         point meta min=\scaleMin,
@@ -101,7 +103,6 @@
 
   \lastelement{\DataPath/outputs.txt}{MaxP}{\maxp}
   \lastelement{\DataPath/outputs.txt}{MinP}{\minp}
-  %\tikzset{/tikz/external/export next=false}
   \pgfplotsset{colormap/YlOrRd}
   \begin{tikzpicture}
     \begin{axis}[name=master,
@@ -137,100 +138,124 @@
     \end{axis}
   \end{tikzpicture}
 }
-% ========
-% unrefmago
-% ========
-%\newcommand{\plothpunrefmago}[1]{
-%  \renewcommand{\DataPath}{\FigurePath/Unref/#1/hp/order_1}
-%  \findmax{\DataPath/outputs.txt}{iter}{\endIter}
-%
-%  \findmax{\FigurePath/#1/hp/outputs.txt}{iter}{\endIterh}
-%
-%  \FormatIntegerTwoDigit{\endIterh}{\endIterhformated}
-%
-%  \begin{center}
-%    \begin{figure}
-%      \foreach \i in {1,2,...,\endIter}{%
-%        \only<+>{%
-%          \begin{subfigure}{\subplotwidthhp}
-%            \centering
-%            \tikzset{/tikz/external/export next=false}
-%            \FormatIntegerThreeDigit{\i}{\iformat}
-%            \plothpmagomesh{Unref/#1/hp/order_1}{\iformat}{#1/hp/coarse_mesh_fine_\endIterhformated_Direct_solution_abs}%
-%            \subcaption{Adaptive iteration \i ~of \endIter}
-%          \end{subfigure}
-%          \begin{subfigure}{\subplotwidthhp}
-%            \centering
-%            \errorplotlogUnrefBorrar{Unref/#1/hp/order_1}{\i}
-%            \subcaption{Evolution of the relative error}
-%          \end{subfigure}
-%          \only<1->{\caption{Adaptive process for a Helmholtz problem}}
-%        }
-%      }
-%    \end{figure}
-%  \end{center}
-%}
-%
-%\newcommand{\plothpmagomesh}[3]{%
-%  \renewcommand{\DataPath}{\FigurePath/#1}
-%
-%  \begin{tikzpicture}
-%    \begin{axis}[name=master,
-%        width=\textwidth,height=\textwidth,
-%        enlargelimits=false,
-%        xlabel=$x$,
-%        ylabel=$y$,
-%        xlabel near ticks,
-%        ylabel near ticks,
-%        hide axis,
-%      ]
-%
-%      \IfSubStr{#1}{square}{%
-%        \addplot [forget plot] graphics[xmin=-1,xmax=1,ymin=-1,ymax=1] {\DataPath/mesh_X_#2.png};
-%      }{%
-%        \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/mesh_X_#2.png};
-%      }
-%      \addplot [forget plot, opacity=0.2] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\FigurePath/#3};
-%
-%    \end{axis}
-%  \end{tikzpicture}%
-%}
-%
-%\newcommand{\errorplotlogUnrefBorrar}[2]{
-%  \renewcommand{\DataPath}{\FigurePath/#1}
-%
-%  \findmax{\DataPath/outputs.txt}{nr_dof}{\maxdof}
-%  \findmin{\DataPath/outputs.txt}{nr_dof}{\mindof}
-%  \findmaxDbl{\DataPath/outputs.txt}{Error}{\maxerror}
-%  \findminDbl{\DataPath/outputs.txt}{Error}{\minerror}
-%
-%  \begin{tikzpicture}
-%    \begin{axis}[name=mainerrorplot,
-%        xlabel={Number of dof},
-%        ylabel=Relative error in \%,
-%        ymode=log,
-%        xmode=log,
-%        ymin=1e-7,
-%        ymax=1e3,
-%        xmin=\mindof,
-%        xmax=\maxdof,
-%        width=0.9\textwidth,height=0.85\plotwidthmesh,
-%        ylabel near ticks,
-%        xlabel near ticks,
-%        enlargelimits=true,
-%        legend style={draw=black,fill=white,legend cell align=left, at={(0.5,1.01)}, anchor=south},
-%        legend columns=-1
-%      ]
-%      \addplot+[ line width=1pt, select coords between index={0}{#2}] table[x expr=\thisrow{nr_dof},y expr=\thisrow{Error}] {\FigurePath/#1/outputs.txt};
-%    \end{axis}
-%  \end{tikzpicture}
-%}
+% ==========
+%\comparerrors
+% ==========
+\newcommand{\comparerrors}[2][]{
+  \begin{subfigure}[t]{0.4\textwidth}
+    \centering
+    \errorleft[#1]{#2}{Lower}
+  \end{subfigure}
+   ~
+ \begin{subfigure}[t]{0.4\textwidth}
+    \centering
+    \errorright[#1]{#2}{Error}
+  \end{subfigure}
+}
+% ======
+%\errorleft
+% ======
+\newcommand{\errorleft}[3][]{
+  \renewcommand{\DataPath}{\FigurePath/#2}
+  \renewcommand{\PbName}{#2} 
+  \renewcommand{\ColName}{#3}
 
+  \begin{tikzpicture}
+    \pgfplotsset{xmode=log}
 
+    \begin{axis}[name=mainerrorplot,
+        xlabel={nDoFs (log scale)},
+        ylabel=Relative error in \% (log scale),
+        ymode=log,
+        xmode=log,
+        width=\textwidth,height=\plotheight,
+        ylabel near ticks,
+        xlabel near ticks,
+        enlargelimits=true,
+        legend style={draw=black,fill=white,legend cell align=left, at={(0.5,1.01)}, anchor=south},
+        legend columns=-1
+      ]
+      %
+      \foreach\method in {#1}{												
+          \ifthenelse{\equal{\method}{h}}{
+            \foreach \order in {1,2}{
+                \edef\temp{\noexpand\addlegendentry{$h$ ($p=\order$)}}
+                \pgfplotstableread{\FigurePath/\PbName/h/order_\order/outputs.txt}\loadedtable
+                \addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{\ColName}] {\loadedtable};
+                \temp
+              }
+          }{}
+          \ifthenelse{\equal{\method}{hp}}{
+            \foreach \jdex in {1}{
+                \edef\temp{\noexpand\addlegendentry{$hp$ $(p+2)$}}
+                \pgfplotstableread{\FigurePath/\PbName/hp/order_1/outputs.txt}\loadedtable
+                \addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{\ColName}] {\loadedtable};
+                \temp
+              }
+          }{}
+          \ifthenelse{\equal{\method}{p}}{
+            \edef\temp{\noexpand\addlegendentry{$p$}}
+            \pgfplotstableread{\FigurePath/\PbName/p/outputs.txt}\loadedtable
+            \addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{\ColName}] {\loadedtable};
+            \temp
+          }{}
+        }
+    \end{axis}
+  \end{tikzpicture}
+   {\caption{Evolution of $\tilde{e}_{\textrm{rel}}^{\textrm{\, energy}}$ in the process.}}
+}
+% =======
+%\errorright
+% =======
+\newcommand{\errorright}[3][]{
+  \renewcommand{\DataPath}{\FigurePath/#2}
+  \renewcommand{\PbName}{#2} 
+  \renewcommand{\ColName}{#3}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OLD
+  \begin{tikzpicture}
+    \pgfplotsset{xmode=log}
 
-
+    \begin{axis}[name=mainerrorplot,
+        xlabel={nDoFs (log scale)},
+        ymode=log,
+        xmode=log,
+        yticklabel pos=right,
+        width=\textwidth,height=\plotheight,
+        ylabel near ticks,
+        xlabel near ticks,
+        enlargelimits=true,
+        legend style={draw=black,fill=white,legend cell align=left, at={(0.5,1.01)}, anchor=south},
+        legend columns=-1
+      ]
+      %
+      \foreach\method in {#1}{												
+          \ifthenelse{\equal{\method}{h}}{
+            \foreach \order in {1,2}{
+                \edef\temp{\noexpand\addlegendentry{$h$ ($p=\order$)}}
+                \pgfplotstableread{\FigurePath/\PbName/h/order_\order/outputs.txt}\loadedtable
+                \addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{\ColName}] {\loadedtable};
+                \temp
+              }
+          }{}
+          \ifthenelse{\equal{\method}{hp}}{
+            \foreach \jdex in {1}{
+                \edef\temp{\noexpand\addlegendentry{$hp$ $(p+2)$}}
+                \pgfplotstableread{\FigurePath/\PbName/hp/order_1/outputs.txt}\loadedtable
+                \addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{\ColName}] {\loadedtable};
+                \temp
+              }
+          }{}
+          \ifthenelse{\equal{\method}{p}}{
+            \edef\temp{\noexpand\addlegendentry{$p$}}
+            \pgfplotstableread{\FigurePath/\PbName/p/outputs.txt}\loadedtable
+            \addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{\ColName}] {\loadedtable};
+            \temp
+          }{}
+        }
+    \end{axis}
+  \end{tikzpicture}
+  {\caption{Evolution of $e_{\textrm{rel}}^{\textrm{QoI}}$ in the process.}}
+}
 
 \tikzset{mark size=3}
 
@@ -277,885 +302,6 @@
 }
 }
 
-\newcommand{\boxplotmagochecksize}[3][]{
-
-%\ResultPath
-  \renewcommand{\DataPath}{#1/#2/mat_check_1k}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskeruno{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartileuno{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\medianuno{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartileuno{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskeruno{\pgfplotsretval}
-
-
-  \renewcommand{\DataPath}{#1/#2/mat_check_10k}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskerdos{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartiledos{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\mediandos{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartiledos{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskerdos{\pgfplotsretval}
-
-  \renewcommand{\DataPath}{#1/#2/mat_check_100k}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskertres{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartiletres{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\mediantres{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartiletres{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskertres{\pgfplotsretval}
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}
-  \begin{axis}
-    [
-      boxplot/draw direction=y,
-       boxplot/variable width,
-      x axis line style={opacity=0},
-      axis x line*=bottom,
-      axis y line=left,
-      enlarge y limits,
-      ymajorgrids,
-      xtick={1,2,3,4,5},
-      xticklabels={1k, 10k, 100k},
-      ymode=log,
-      height=\plotheight,
-      width=0.8\plotwidth,
-%      ymin=1e-2,
-%      ymax=1e1,
-      xlabel={Number of \textbf{validation} samples},
-      ylabel={Relative error in the QoI ($\%$)}
-    ]
-     \addplot+[
-      boxplot prepared={
-          median=\medianuno,
-          upper quartile=\uppquartileuno,
-          lower quartile=\lowquartileuno,
-          upper whisker=\uppwiskeruno,
-          lower whisker=\lowwiskeruno,
-%          every box/.style={very thick,dashed,draw=black,fill=yellow},
-%         every whisker/.style={red,ultra thick},
-%    	 every median/.style={densely dotted,cyan,ultra thick},
-        },
-    ] coordinates {}; 
-    \addplot+[
-      boxplot prepared={
-          median=\mediandos,
-          upper quartile=\uppquartiledos,
-          lower quartile=\lowquartiledos,
-          upper whisker=\uppwiskerdos,
-          lower whisker=\lowwiskerdos,
-%          every box/.style={very thick,dashed,draw=black,fill=yellow},
-%    	 every whisker/.style={red,ultra thick},
-%    	 every median/.style={densely dotted,cyan,ultra thick},
-        },
-    ] coordinates {};
-    \addplot+[
-      boxplot prepared={
-          median=\mediantres,
-          upper quartile=\uppquartiletres,
-          lower quartile=\lowquartiletres,
-          upper whisker=\uppwiskertres,
-          lower whisker=\lowwiskertres
-        },
-    ] coordinates {};
-%%    \addplot+[
-%%      boxplot prepared={
-%%          median=\mediancin,
-%%          upper quartile=\uppquartilecin,
-%%          lower quartile=\lowquartilecin,
-%%          upper whisker=\uppwiskercin,
-%%          lower whisker=\lowwiskercin,
-%%          every box/.style={fill=gray!70}
-%%%         every whisker/.style={red,ultra thick},
-%%%    	 every median/.style={densely dotted,cyan,ultra thick}
-%%        },
-%%    ] coordinates {};
-  \end{axis}
-\end{tikzpicture}
- \caption{Different number of testing samples in an \textbf{adaptive grid of #3 samples.}}
-\end{figure}
-}
-
-
-%%%%%%%%%%%%%%%%
-% \boxplotmagoTimeAdapt
-%%%%%%%%%%%%%%%%
-
-
-\newcommand{\boxplotmagoTimeAdapt}[5][]{
-
-%\ResultPath
-  \renewcommand{\DataPath}{#1/#3/mat_check#2}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskeruno{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartileuno{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\medianuno{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartileuno{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskeruno{\pgfplotsretval}
-
-
-  \renewcommand{\DataPath}{#1/#4/mat_check#2}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskerdos{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartiledos{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\mediandos{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartiledos{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskerdos{\pgfplotsretval}
-
-  \renewcommand{\DataPath}{#1/#5/trapi_adapt100_100k}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskertres{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartiletres{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\mediantres{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartiletres{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskertres{\pgfplotsretval}
-
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}
-  \begin{axis}
-    [
-      boxplot/draw direction=y,
-       boxplot/variable width,
-      x axis line style={opacity=0},
-      axis x line*=bottom,
-      axis y line=left,
-      enlarge y limits,
-      ymajorgrids,
-      xtick={1,2,3,4,5},
-      xticklabels={1, 10, 100},
-      yticklabels={},
-      ymode=log,
-      height=\plotheight,
-      width=0.8\plotwidth,
-%      ymin=1e-2,
-      ymax=200,
-      xlabel={Number of samples for the \textbf{adaptive} process},
-%      ylabel={Relative error in the QoI ($\%$)}
-    ]
-     \addplot+[
-      boxplot prepared={
-          median=\medianuno,
-          upper quartile=\uppquartileuno,
-          lower quartile=\lowquartileuno,
-          upper whisker=\uppwiskeruno,
-          lower whisker=\lowwiskeruno,
-%          every box/.style={very thick,dashed,draw=black,fill=yellow},
-%         every whisker/.style={red,ultra thick},
-%    	 every median/.style={densely dotted,cyan,ultra thick},
-        },
-    ] coordinates {}; 
-    \addplot+[
-      boxplot prepared={
-          median=\mediandos,
-          upper quartile=\uppquartiledos,
-          lower quartile=\lowquartiledos,
-          upper whisker=\uppwiskerdos,
-          lower whisker=\lowwiskerdos,
-%          every box/.style={very thick,dashed,draw=black,fill=yellow},
-%    	 every whisker/.style={red,ultra thick},
-%    	 every median/.style={densely dotted,cyan,ultra thick},
-        },
-    ] coordinates {};
-    \addplot+[
-      boxplot prepared={
-          median=\mediantres,
-          upper quartile=\uppquartiletres,
-          lower quartile=\lowquartiletres,
-          upper whisker=\uppwiskertres,
-          lower whisker=\lowwiskertres
-        },
-    ] coordinates {};
-
-\node[red] at (1,300) {\large $\sim10$s};
-\node[blue] at (2,300) {\large$\sim1$min};
-\node[black!60!green!80] at (3,300) {\large $\sim16$h};
-%\node[black] at (4,300) {\large 1.5h};
-  
-   \end{axis}
-\end{tikzpicture}
- \caption{\textbf{Execution times} in a Mac laptop for grids with a threshold max-error of 1 $\%$.}
-% \caption{Box plot for \textbf{different adaptive grids} with a threshold error of 1 $\%$}
-\end{figure}
-}
-
-%%%%%%%%%%%%%%%%
-% \boxplotmagoTime
-%%%%%%%%%%%%%%%%
-
-\newcommand{\boxplotmagoTime}[5][]{
-
-%\ResultPath
-  \renewcommand{\DataPath}{#1/#3/mat_check#2}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskeruno{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartileuno{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\medianuno{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartileuno{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskeruno{\pgfplotsretval}
-
-
-  \renewcommand{\DataPath}{#1/#4/mat_check#2}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskerdos{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartiledos{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\mediandos{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartiledos{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskerdos{\pgfplotsretval}
-
-  \renewcommand{\DataPath}{#1/#5/trapi_adapt100_100k}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskertres{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartiletres{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\mediantres{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartiletres{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskertres{\pgfplotsretval}
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}
-  \begin{axis}
-    [
-      boxplot/draw direction=y,
-       boxplot/variable width,
-      x axis line style={opacity=0},
-      axis x line*=bottom,
-      axis y line=left,
-      enlarge y limits,
-      ymajorgrids,
-      xtick={1,2,3,4,5},
-      xticklabels={1, 10, 100},
-      yticklabels={},
-      ymode=log,
-      height=\plotheight,
-      width=0.8\plotwidth,
-%      ymin=1e-2,
-      ymax=200,
-      xlabel={Number of samples for the \textbf{adaptive} process},
-%      ylabel={Relative error in the QoI ($\%$)}
-    ]
-     \addplot+[
-      boxplot prepared={
-          median=\medianuno,
-          upper quartile=\uppquartileuno,
-          lower quartile=\lowquartileuno,
-          upper whisker=\uppwiskeruno,
-          lower whisker=\lowwiskeruno,
-        },
-    ] coordinates {}; 
-    \addplot+[
-      boxplot prepared={
-          median=\mediandos,
-          upper quartile=\uppquartiledos,
-          lower quartile=\lowquartiledos,
-          upper whisker=\uppwiskerdos,
-          lower whisker=\lowwiskerdos,
-        },
-    ] coordinates {};
-    \addplot+[
-      boxplot prepared={
-          median=\mediantres,
-          upper quartile=\uppquartiletres,
-          lower quartile=\lowquartiletres,
-          upper whisker=\uppwiskertres,
-          lower whisker=\lowwiskertres
-        },
-    ] coordinates {};
-
-\node[red] at (1,300) {\large $\sim10$min};
-\node[blue] at (2,300) {\large$\sim80$min};
-\node[black!60!green!80] at (3.1,300) {\large $\sim28$h (1sam/s)};
-%\node[black] at (4,300) {\large 1.5h};
-  
-   \end{axis}
-\end{tikzpicture}
- \caption{\textbf{Execution times} in a Mac laptop for grids with a threshold max-error of 1 $\%$.}
-% \caption{Box plot for \textbf{different adaptive grids} with a threshold error of 1 $\%$}
-\end{figure}
-}
-
-%%%%%%%%%%%%%%%%
-% \boxplotmagoNdof
-%%%%%%%%%%%%%%%%
-
-\newcommand{\boxplotmagoNdof}[6][]{
-
-%\ResultPath
-  \renewcommand{\DataPath}{#1/mat_check_#3}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskeruno{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartileuno{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\medianuno{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartileuno{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskeruno{\pgfplotsretval}
-
-
-  \renewcommand{\DataPath}{#1/mat_check_#4}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskerdos{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartiledos{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\mediandos{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartiledos{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskerdos{\pgfplotsretval}
-
-  \renewcommand{\DataPath}{#1/mat_check_#5}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskertres{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartiletres{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\mediantres{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartiletres{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskertres{\pgfplotsretval}
-
-  \renewcommand{\DataPath}{#1/mat_check_#6}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskercua{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartilecua{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\mediancua{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartilecua{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskercua{\pgfplotsretval}
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}
-  \begin{axis}
-    [
-      boxplot/draw direction=y,
-       boxplot/variable width,
-      x axis line style={opacity=0},
-      axis x line*=bottom,
-      axis y line=left,
-      enlarge y limits,
-      ymajorgrids,
-      xtick={1,2,3,4},
-      xticklabels={1, 5, 10, 100},
-      ymode=log,
-      height=\plotheight,
-      width=0.8\plotwidth,
-%      ymin=1e-2,
-%      ymax=1e1,
-      xlabel={Number of samples for the \textbf{adaptive} process},
-      ylabel={Relative error in the QoI ($\%$)}
-    ]
-     \addplot+[
-      boxplot prepared={
-          median=\medianuno,
-          upper quartile=\uppquartileuno,
-          lower quartile=\lowquartileuno,
-          upper whisker=\uppwiskeruno,
-          lower whisker=\lowwiskeruno,
-%          every box/.style={very thick,dashed,draw=black,fill=yellow},
-%         every whisker/.style={red,ultra thick},
-%    	 every median/.style={densely dotted,cyan,ultra thick},
-        },
-    ] coordinates {}; 
-    \addplot+[
-      boxplot prepared={
-          median=\mediandos,
-          upper quartile=\uppquartiledos,
-          lower quartile=\lowquartiledos,
-          upper whisker=\uppwiskerdos,
-          lower whisker=\lowwiskerdos,
-%          every box/.style={very thick,dashed,draw=black,fill=yellow},
-%    	 every whisker/.style={red,ultra thick},
-%    	 every median/.style={densely dotted,cyan,ultra thick},
-        },
-    ] coordinates {};
-    \addplot+[
-      boxplot prepared={
-          median=\mediantres,
-          upper quartile=\uppquartiletres,
-          lower quartile=\lowquartiletres,
-          upper whisker=\uppwiskertres,
-          lower whisker=\lowwiskertres
-        },
-    ] coordinates {};
-    \addplot+[
-      boxplot prepared={
-          median=\mediancua,
-          upper quartile=\uppquartilecua,
-          lower quartile=\lowquartilecua,
-          upper whisker=\uppwiskercua,
-          lower whisker=\lowwiskercua
-        },
-    ] coordinates {};
-  \end{axis}
-\end{tikzpicture}
- \caption{Different number of adaptive grids with a \textbf{stopping criteria of #2 DoFs}.}
-\end{figure}
-}
-
-\newcommand{\boxplotmagocheck}[7][]{
-
-%\ResultPath
-  \renewcommand{\DataPath}{#1/#3/mat_check#2}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskeruno{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartileuno{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\medianuno{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartileuno{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskeruno{\pgfplotsretval}
-
-
-  \renewcommand{\DataPath}{#1/#4/mat_check#2}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskerdos{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartiledos{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\mediandos{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartiledos{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskerdos{\pgfplotsretval}
-
-  \renewcommand{\DataPath}{#1/#5/mat_check#2}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskertres{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartiletres{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\mediantres{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartiletres{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskertres{\pgfplotsretval}
-
-  \renewcommand{\DataPath}{#1/#6/mat_check#2}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskercua{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartilecua{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\mediancua{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartilecua{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskercua{\pgfplotsretval}
-
-  \renewcommand{\DataPath}{#1/#7/mat_check#2}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskercin{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartilecin{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\mediancin{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartilecin{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskercin{\pgfplotsretval}
-
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}
-  \begin{axis}
-    [
-      boxplot/draw direction=y,
-       boxplot/variable width,
-      x axis line style={opacity=0},
-      axis x line*=bottom,
-      axis y line=left,
-      enlarge y limits,
-      ymajorgrids,
-      xtick={1,2,3,4,5},
-      xticklabels={1, 5, 10, 50, 100},
-      ymode=log,
-      height=\plotheight,
-      width=0.8\plotwidth,
-%      ymin=1e-2,
-%      ymax=1e1,
-      xlabel={Number of samples for the \textbf{adaptive} process},
-      ylabel={Relative error in the QoI ($\%$)}
-    ]
-     \addplot+[
-      boxplot prepared={
-          median=\medianuno,
-          upper quartile=\uppquartileuno,
-          lower quartile=\lowquartileuno,
-          upper whisker=\uppwiskeruno,
-          lower whisker=\lowwiskeruno,
-%          every box/.style={very thick,dashed,draw=black,fill=yellow},
-%         every whisker/.style={red,ultra thick},
-%    	 every median/.style={densely dotted,cyan,ultra thick},
-        },
-    ] coordinates {}; 
-    \addplot+[
-      boxplot prepared={
-          median=\mediandos,
-          upper quartile=\uppquartiledos,
-          lower quartile=\lowquartiledos,
-          upper whisker=\uppwiskerdos,
-          lower whisker=\lowwiskerdos,
-%          every box/.style={very thick,dashed,draw=black,fill=yellow},
-%    	 every whisker/.style={red,ultra thick},
-%    	 every median/.style={densely dotted,cyan,ultra thick},
-        },
-    ] coordinates {};
-    \addplot+[
-      boxplot prepared={
-          median=\mediantres,
-          upper quartile=\uppquartiletres,
-          lower quartile=\lowquartiletres,
-          upper whisker=\uppwiskertres,
-          lower whisker=\lowwiskertres
-        },
-    ] coordinates {};
-    \addplot+[
-      boxplot prepared={
-          median=\mediancua,
-          upper quartile=\uppquartilecua,
-          lower quartile=\lowquartilecua,
-          upper whisker=\uppwiskercua,
-          lower whisker=\lowwiskercua
-        },
-    ] coordinates {};
-    \addplot+[
-      boxplot prepared={
-          median=\mediancin,
-          upper quartile=\uppquartilecin,
-          lower quartile=\lowquartilecin,
-          upper whisker=\uppwiskercin,
-          lower whisker=\lowwiskercin,
-%          every box/.style={fill=gray!70}
-%         every whisker/.style={red,ultra thick},
-%    	 every median/.style={densely dotted,cyan,ultra thick}
-        },
-    ] coordinates {};
-  \end{axis}
-\end{tikzpicture}
- \caption{Different number of adaptive grids with a \textbf{threshold max-error of 1 $\%$}.}
-% \caption{Box plot for \textbf{different adaptive grids} with a threshold error of 1 $\%$}
-\end{figure}
-}
-
-
-
-\newcommand{\boxplotmago}[5][]{
-
-%\ResultPath
-  \renewcommand{\DataPath}{#1/#2/Check/mat_check}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskeruno{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartileuno{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\medianuno{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartileuno{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskeruno{\pgfplotsretval}
-
-
-  \renewcommand{\DataPath}{#1/#3/Check/mat_check}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskerdos{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartiledos{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\mediandos{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartiledos{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskerdos{\pgfplotsretval}
-
-
- \renewcommand{\DataPath}{#1/#4/Check/mat_check}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskertres{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartiletres{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\mediantres{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartiletres{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskertres{\pgfplotsretval}
-
- \renewcommand{\DataPath}{#1/#5/Check/mat_check}
-  \pgfplotstableread[header=false]{\DataPath/QoI_error_boxplot.csv}{\mytable}
-
- \pgfplotstablegetelem{0}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowwiskercua{\pgfplotsretval}
-
-\pgfplotstablegetelem{1}{[index]0}\of{\mytable}
-\pgfmathsetmacro\lowquartilecua{\pgfplotsretval}
-
-\pgfplotstablegetelem{2}{[index]0}\of{\mytable}
-\pgfmathsetmacro\mediancua{\pgfplotsretval}
-
-\pgfplotstablegetelem{3}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppquartilecua{\pgfplotsretval}
-
-\pgfplotstablegetelem{4}{[index]0}\of{\mytable}
-\pgfmathsetmacro\uppwiskercua{\pgfplotsretval}
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}
-  \begin{axis}
-    [
-      boxplot/draw direction=y,
-       boxplot/variable width,
-      x axis line style={opacity=0},
-      axis x line*=bottom,
-      axis y line=left,
-      enlarge y limits,
-      ymajorgrids,
-      xtick={1,2,3,4,5},
-      xticklabels={1, 5, 10, 100, 100(10k)},
-      ymode=log,
-      height=\plotheight,
-      width=0.8\plotwidth,
-%      ymin=1e-2,
-%      ymax=1e1,
-      xlabel={Number of samples for the \textbf{adaptive} process},
-      ylabel={Relative error in the QoI ($\%$)}
-    ]
-     \addplot+[
-      boxplot prepared={
-          median=\medianuno,
-          upper quartile=\uppquartileuno,
-          lower quartile=\lowquartileuno,
-          upper whisker=\uppwiskeruno,
-          lower whisker=\lowwiskeruno,
-%          every box/.style={very thick,dashed,draw=black,fill=yellow},
-%         every whisker/.style={red,ultra thick},
-%    	 every median/.style={densely dotted,cyan,ultra thick},
-        },
-    ] coordinates {}; 
-    \addplot+[
-      boxplot prepared={
-          median=\mediandos,
-          upper quartile=\uppquartiledos,
-          lower quartile=\lowquartiledos,
-          upper whisker=\uppwiskerdos,
-          lower whisker=\lowwiskerdos,
-%          every box/.style={very thick,dashed,draw=black,fill=yellow},
-%    	 every whisker/.style={red,ultra thick},
-%    	 every median/.style={densely dotted,cyan,ultra thick},
-        },
-    ] coordinates {};
-    \addplot+[
-      boxplot prepared={
-          median=\mediantres,
-          upper quartile=\uppquartiletres,
-          lower quartile=\lowquartiletres,
-          upper whisker=\uppwiskertres,
-          lower whisker=\lowwiskertres
-        },
-    ] coordinates {};
-    \addplot+[
-      boxplot prepared={
-          median=\mediancua,
-          upper quartile=\uppquartilecua,
-          lower quartile=\lowquartilecua,
-          upper whisker=\uppwiskercua,
-          lower whisker=\lowwiskercua
-        },
-    ] coordinates {};
-%    \addplot+[
-%      boxplot prepared={
-%          median=\mediancin,
-%          upper quartile=\uppquartilecin,
-%          lower quartile=\lowquartilecin,
-%          upper whisker=\uppwiskercin,
-%          lower whisker=\lowwiskercin,
-%          every box/.style={fill=gray!70}
-%%         every whisker/.style={red,ultra thick},
-%%    	 every median/.style={densely dotted,cyan,ultra thick}
-%        },
-%    ] coordinates {};
-  \end{axis}
-\end{tikzpicture}
- \caption{Different number of adaptive grids with a \textbf{threshold max-error of 0.1 $\%$}.}
-\end{figure}
-}
-
 %:\plothpunrefMAGO
 \newcommand{\plothpunrefmago}[1]{
 \renewcommand{\DataPath}{\FigurePath/Unref/#1/hp/order_1}
@@ -1172,14 +318,8 @@
 \only<+>{%
 \begin{subfigure}{\subplotwidthhp}
 \centering
-%\tikzset{/tikz/external/export next=false}
 \FormatIntegerThreeDigit{\i}{\iformat}
 \plothpmagomesh{Unref/#1/hp/order_1}{\iformat}{#1/hp/coarse_mesh_fine_\endIterhformated_Direct_solution_abs}%
-%\pgfmathparse{add(\i,0)} 
-%\pgfmathtruncatemacro\plotindex{\pgfmathresult}
-%\pgfmathparse{add(\endIter,0)} 
-%\pgfmathtruncatemacro\lastindex{\pgfmathresult}
-%\vspace{10mm}
 \subcaption{Adaptive iteration \i ~of \endIter}
 \end{subfigure}
 \begin{subfigure}{\subplotwidthhp}
@@ -1195,17 +335,10 @@
 \end{figure}
 \end{center}
 }
-
-
 %:\plothpmagomesh
 \newcommand{\plothpmagomesh}[3]{%
 \renewcommand{\DataPath}{\FigurePath/#1}
-%
-%\lastelement{\DataPath/outputs.txt}{MaxP}{\maxp}
-%\lastelement{\DataPath/outputs.txt}{MinP}{\minp}
-%
-%\pgfplotsset{colormap/YlOrRd}
-%\tikzset{/tikz/external/export next=false}
+
 \begin{tikzpicture}
 \begin{axis}[name=master,
 width=\textwidth,height=\textwidth,

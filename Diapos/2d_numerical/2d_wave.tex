@@ -1,0 +1,99 @@
+\begin{frame}
+  \frametitle{2D Numerical results for $hp$-adaptivity}
+  
+  \begin{block}{Wave propagation problem}
+     Find \(u\) satisfying:
+    \begin{alignat}{2}
+      - \Delta u -k^{2}u   & = \mathds{1}_{\Omega_{f}} &  & \quad \text{in } \Omega, \label{eq:helmholtzgoal} \\
+      u                    & = 0                       &  & \quad \text{on } \Gamma_{D}, \\
+      \nabla u \cdot \vec{n} & = 0                     &  & \quad \text{on } \Gamma_{N}.
+    \end{alignat}
+  \end{block}
+
+  \begin{multicols}{2}
+    \textbf{Domain Definitions:}
+    \begin{itemize}
+      \item \(\Omega_{f} = \left(0,\frac{1}{4}\right)^{2} \subset \Omega\), 
+      \item \(k = \left(8 \cdot 2 \pi, 2 \pi\right)\), 
+      \item \(\Omega_{l} = \left(\frac{3}{4},1\right)^{2} \subset \Omega\),
+      \item \(a\left(\cdot ,\cdot\right) \coloneqq \abs{\scalar{\grad \cdot}{\grad \cdot}_{L^{2}\left(\Omega\right)}} + \abs{k^{2}} \abs{\scalar{\cdot}{\cdot}_{L^{2}\left(\Omega\right)}}\).
+    \end{itemize}
+
+   \begin{figure}
+      \centering
+      \begin{tikzpicture}[x=2.01cm,y=2.01cm]
+        % Nodes definition
+        \node(n1) at (0,0){};
+        \node(n2) at (1,0){};
+        \node(n3) at (1,1){};
+        \node(n4) at (0,1){};
+        \node(n5) at (0.25,0.25){};
+        \node(n6) at (0.75,0.25){};
+        \node(n7) at (0.75,0.75){};
+        \node(n8) at (0.25,0.75){};
+
+        % Drawing rectangles
+        \draw (n1) rectangle (n5) node[pos=0.5] {\footnotesize\( \Omega_{f} \)};
+        \draw (n7) rectangle (n3) node[pos=0.5] {\footnotesize\( \Omega_{l} \)};
+
+        % Boundary lines
+        \draw[line width=0.5mm, color=blue] (n5) rectangle (n7);
+        \draw[line width=0.5mm, color=blue] (n4.center) -- (n1.center) -- (n2.center) node[pos=0.5,pin={-90: \( \Gamma_{D} \)}]{};
+        \draw[line width=0.5mm, color=red] (n4.center)--  (n3.center) -- node[pos=0.5,pin={0: \( \Gamma_{N} \)}]{} (n2.center);
+
+        % Pattern filling
+        \draw [draw=black, pattern=north west lines, pattern color=gray!50] (n5) rectangle (n7);
+
+        % Label for Omega
+        \node(omega) at (0.5,0.85){\( \Omega \)};
+      \end{tikzpicture}
+      \caption{Domain \(\Omega = \left(0,1\right)^{2} \setminus \left(\frac{1}{4},\frac{3}{4}\right)^{2} \subset \mathbb{R}^{2}\).}
+    \end{figure}
+
+  \end{multicols}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Wave propagation problem}
+	\begin{figure}[t!]
+   		\goasolutions{Helm2DGOA}{abs}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Energy-norm adaptivity}
+  	\plothpmeshes[]{Helm2DGOANon}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Energy-norm adaptivity}
+
+  \begin{figure}
+    \centering
+    \begin{tikzpicture}
+      \begin{axis}[name=master,
+        width=0.5\textwidth,height=0.5\textwidth,
+        enlargelimits=false,
+        xlabel=$x$,
+        ylabel=$y$,
+        xlabel near ticks,
+        ylabel near ticks,
+        axis line style={draw=none},
+        tick style={draw=none},
+        hide axis,
+      ]
+      \addplot graphics[xmin=0,xmax=1,ymin=0,ymax=1] {Figures/Helm2DGOANon/h/order_1/grid_006.png};
+      \end{axis}
+    \end{tikzpicture}
+    \caption{Final $h$-adapted mesh for $p=1$.}
+  \end{figure}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Testing ERRORS}
+	\begin{figure}[htp!]
+  	\comparerrors[hp,h]{Helm2DGOANon}
+\end{figure}
+\end{frame}
