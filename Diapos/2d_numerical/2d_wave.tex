@@ -92,8 +92,45 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Testing ERRORS}
+	\frametitle{Energy-norm adaptivity}
 	\begin{figure}[htp!]
-  	\comparerrors[hp,h]{Helm2DGOANon}
-\end{figure}
+  	\comparerrors[]{Helm2DGOANon}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Goal-Oriented adaptivity}
+  	\plothpmeshes[]{Helm2DGOA}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Goal-Oriented adaptivity}
+
+  \begin{figure}
+    \centering
+    \begin{tikzpicture}
+      \begin{axis}[name=master,
+        width=0.5\textwidth,height=0.5\textwidth,
+        enlargelimits=false,
+        xlabel=$x$,
+        ylabel=$y$,
+        xlabel near ticks,
+        ylabel near ticks,
+        axis line style={draw=none},
+        tick style={draw=none},
+        hide axis,
+      ]
+      \addplot graphics[xmin=0,xmax=1,ymin=0,ymax=1] {Figures/Helm2DGOA/h/order_1/grid_007.png};
+      \end{axis}
+    \end{tikzpicture}
+    \caption{Final $h$-adapted mesh for $p=1$.}
+  \end{figure}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Energy-norm and Goal-Oriented $hp$-adaptive strategy}
+	\begin{figure}[htp!]
+  	\compareconver[hp]{Helm2DGOA}{Helm2DGOANon}
+	\end{figure}
 \end{frame}

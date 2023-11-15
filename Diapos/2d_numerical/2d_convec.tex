@@ -1,0 +1,28 @@
+\begin{frame}
+  \frametitle{2D Numerical results for $hp$-adaptivity}
+  
+  \begin{block}{Convection-dominated diffusion: example 1}
+     Find \(u\) satisfying:
+    \begin{alignat}{2}
+    -\eps \Delta u + \sigma \cdot \grad u & = f &  & \text{ in } \Omega, \label{eq:convection} \\
+    u                                     & =0  &  & \text{ on } {\partial \Omega}. % \nonumber
+  \end{alignat}
+  \end{block}
+
+    \textbf{Definitions:}
+    \begin{itemize}
+      \item \(\Omega=\left(0,1\right)^{2} \subset \mathbb{R}^{2}\),
+      \item \(\sigma=\left(3,1\right)^{\text{T}}\), 
+      \item \(\eps= 10^{-3}\),
+      \item \(u\left(x,y\right) = \displaystyle{e^{\frac{\eps}{x \left(x - 1\right)} } \cosh \Big(500 \big(\frac{1}{2} + \sigma^{-1} \left(x, -y\right)\big) \Big)^{-2}}\),
+      \item \(a\left(\cdot ,\cdot\right) \coloneqq \left(\eps + C\right) \scalar{\grad \cdot}{\grad \cdot}_{L^{2}\left(\Omega\right)}\).
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Convection-dominated diffusion: example 1}
+  \begin{figure}
+  	\plotsolution[]{intBL}
+\end{figure}
+\end{frame}
