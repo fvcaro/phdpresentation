@@ -1,0 +1,163 @@
+\begin{frame}
+  \frametitle{1D Numerical results for Goal-Oriented $h$- and $p$-adaptivity}
+  \small % Reducing text size
+
+  \begin{block}{Relative Error}
+    The relative error in the Quantity of Interest (QoI) is defined as:
+    \begin{equation}
+      \scriptsize % Further reducing equation size
+      e_{\textrm{rel}}^{\textrm{QoI}} \coloneqq \frac{|l(u) - l(u_{\mathcal{T}_{c}})|}{|l(u)|} \times 100,
+    \end{equation}
+    where $u$ is the fine grid solution, and $u_{\mathcal{T}_{c}}$ is the coarser mesh solution.
+  \end{block} 
+  
+  \begin{block}{Helmholtz Goal-Oriented problem}
+    Find $u$ such that:
+    \begin{alignat}{2}
+      \scriptsize % Reducing equation size
+      -u'' -k^{2}u & = \mathds{1}_{(0,\frac{2}{5})} \quad \text{in} \ (0,1), \\
+      u(0)         & = 0, \\
+      u'(1)        & = 0.
+    \end{alignat}
+    QoI: $l(u)= 5 \int_{\frac{3}{5}}^{\frac{4}{5}} u \, dx$.
+  \end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Evolution of the Relative Error: $h$-adaptivity}
+	\begin{figure}
+  	\centering
+  	\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={DoF per wavelength},
+        ylabel=Relative error in the QoI (\%),
+        ymode=log,
+        xmode=log,
+        ylabel near ticks,
+        xlabel near ticks,
+        width=0.9\plotwidth,height=0.9\plotheight,
+        legend style={draw=black, fill=white, legend cell align=left, at={(0.5,1.01)}, anchor=south},
+        log x ticks with fixed point,
+        xtick={3, 10, 40, 200, 600},
+        legend columns=2,
+      ]
+
+      \addplot+[] table[x=DoFs_per_wavelength, y=Error]{Diapos/1d_numerical/Figures/Helm1D-7/h/order_1/outputs.txt}node[pos=0.61, pin={[pin edge=solid]180:$k=7 \cdot 2\pi$}]{};
+
+      \addplot+[] table[x=DoFs_per_wavelength, y=Error]{Diapos/1d_numerical/Figures/Helm1D-14/h/order_1/outputs.txt}node[pos=0.8, pin={[pin edge=solid]-90:$k=14 \cdot 2\pi$}]{};
+
+      \addplot+[] table[x=DoFs_per_wavelength, y=Error]{Diapos/1d_numerical/Figures/Helm1D-28/h/order_1/outputs.txt}node[pos=1, pin={[pin edge=solid]90:$k=28 \cdot 2\pi$}]{};
+
+    \end{axis}
+  \end{tikzpicture}
+  	\caption{Evolution of $e_{\textrm{rel}}^{\textrm{QoI}}$ using $h$-adaptivity. Initial mesh size $h=\frac{1}{30}$ and uniform $p=1$.}
+	\end{figure}	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Evolution of the Relative Error: $p$-adaptivity}
+	\begin{figure}
+  	\centering
+  	\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={DoF per wavelength},
+        ylabel=Relative error in the QoI (\%),
+        ymode=log,
+        xmode=log,
+        ylabel near ticks,
+        xlabel near ticks,
+        width=0.9\plotwidth,height=0.9\plotheight,
+        legend style={draw=black, fill=white, legend cell align=left, at={(0.5,1.01)}, anchor=south},
+        log x ticks with fixed point,
+        xtick={4, 10, 20, 30},
+        legend columns=2,
+      ]
+
+      \addplot+[] table[x=DoFs_per_wavelength, y=Error]{Diapos/1d_numerical/Figures/Helm1D-7/p/order_1/outputs.txt}node[pos=1, pin={[pin edge=solid] 180:$k=7 \cdot 2\pi$}]{};
+
+      \addplot+[] table[x=DoFs_per_wavelength, y=Error]{Diapos/1d_numerical/Figures/Helm1D-14/p/order_1/outputs.txt}node[pos=0.75, pin={[pin edge=solid]180:$k=14 \cdot 2\pi$}]{};
+
+      \addplot+[] table[x=DoFs_per_wavelength, y=Error]{Diapos/1d_numerical/Figures/Helm1D-28/p/order_1/outputs.txt}node[pos=0.65, pin={[pin edge=solid]180:$k=28 \cdot 2\pi$}]{};
+
+    \end{axis}
+  \end{tikzpicture}
+  		\caption{Evolution of $e_{\textrm{rel}}^{\textrm{QoI}}$ using $p$-adaptivity. Uniform mesh size $h=\frac{1}{30}$.}
+	\end{figure}	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Solution and Final Adaptive Meshes}
+	\pgfplotsset{colormap/YlOrRd}
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[scale=0.85]
+    \findmax{Diapos/1d_numerical/Figures/Helm1D-7/p/order_1/coarse_meshes/coarse_mesh_06.txt}{order}{\maxp}
+
+    \begin{axis}[
+        name=master,
+        width=\textwidth,
+        height=\plotheight,
+        enlargelimits=false,
+        enlarge y limits=true,
+        enlarge y limits=0.15,
+        xlabel=$x$,
+        ylabel=$u(x)$,
+      ]
+      \addplot+[no markers, solid] table[x=X, y=My_beautiful_solution_real] {Diapos/1d_numerical/Figures/Helm1D-7/h/order_1/coarse_meshes/coarse_sol_dir_06.txt} node[pos=0.72, above]{direct};
+      \addplot+[no markers, solid] table[x=X, y=My_beautiful_solution_real] {Diapos/1d_numerical/Figures/Helm1D-7/h/order_1/coarse_meshes/coarse_sol_adj_06.txt} node[pos=0.555, anchor=south west]{adjoint};
+    \end{axis}
+
+    \begin{axis}[
+        name=pmesh,
+        colormap access=const,
+        colorbar horizontal,
+        colorbar sampled,
+        colorbar style={
+          samples=\maxp+1,
+          xtick={0.5,1.5,...,\maxp},
+          xticklabels={1,2,...,\maxp},
+          at={(master.above north west)},
+          anchor=south west,
+          title=Approximation order $p$,
+          title style={yshift=3pt}, % Adjust the value as needed
+          xticklabel pos=upper,
+          yshift=1em,
+          xtick style={draw=none},
+          title style={yshift=2pt},
+        },
+        width=\textwidth,
+        at={(master.south west)},
+        enlargelimits=false,
+        axis lines=none,
+        height=2cm,
+        ticks=none,
+        point meta min=0,
+        point meta max=\maxp,
+        title=$p$-Mesh,
+        title style={left, at={(0,0)}, align=right},
+      ]
+      \addplot [patch, patch type=rectangle, point meta=explicit, line width=0.1pt, faceted color=black] table[meta expr=\thisrow{order}-0.5] {Diapos/1d_numerical/Figures/Helm1D-7/p/order_1/coarse_meshes/coarse_mesh_06.txt};
+    \end{axis}
+
+    \begin{axis}[
+        name=hmesh,
+        width=\textwidth,
+        at={(master.north west)},
+        anchor=north west,
+        enlargelimits=false,
+        axis lines=none,
+        height=2cm,
+        ticks=none,
+        point meta min=0,
+        point meta max=\maxp,
+        title=$h$-Mesh,
+        title style={left, at={(0,0)}, align=right},
+      ]
+      \addplot [patch, patch type=rectangle, point meta=explicit, line width=0.1pt, faceted color=black] table[meta expr=\thisrow{order}-0.5] {Diapos/1d_numerical/Figures/Helm1D-7/h/order_1/coarse_meshes/coarse_mesh_05.txt};
+    \end{axis}
+
+  \end{tikzpicture}
+  \caption{Solutions with $k = 7 \cdot 2 \pi$ problem after the $h$-adaptive process.}
+\end{figure}
+\end{frame}

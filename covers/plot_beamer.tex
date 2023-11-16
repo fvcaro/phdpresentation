@@ -529,6 +529,65 @@ node[pos=0.1, pin={[pin edge=solid, pin distance=0.4cm]270:$h$ ($p=2$)}] {};
       \end{axis}
     \end{tikzpicture}
 }
+% ==========
+%\plotmaterials
+% ==========
+\newcommand{\plotmaterials}[2][]{
+  \renewcommand{\DataPath}{\FigurePath/#2/hp/order_1}
+  \findmax{\DataPath/outputs.txt}{iter}{\endIter}
+
+  \FormatIntegerTwoDigit{\endIter}{\endIterformated}
+  \FormatIntegerThreeDigit{\endIter}{\endIterformatedthree}
+  \begin{center}
+  	\materials{#2/hp/order_1}{\endIterformated}{materials}{#1}%
+  \end{center}
+}
+% =======
+%\materials
+% =======
+\newcommand{\materials}[4]{
+  \renewcommand{\DataPath}{\FigurePath/#1}
+
+    \pgfplotsset{
+      colormap={paraview}{rgb=(0.05, 1.0, 1.0) rgb=(1.0, 0.0, 0.0) rgb=(0.0, 1.0, 0.0) rgb=(0.0, 0.0, 1.0)}%
+    }
+    \pgfplotsset{colormap name={paraview}}%
+    \findmax{\DataPath/#3.txt}{uno}{\matuno}
+    \findmax{\DataPath/#3.txt}{dos}{\matdos}
+    \findmax{\DataPath/#3.txt}{tres}{\mattres}
+    \findmax{\DataPath/#3.txt}{cuatro}{\matcuatro}
+
+    \begin{tikzpicture}
+      \begin{axis}[name=master,
+          width=\textwidth*0.5,height=\textwidth*0.5,
+          enlargelimits=false,
+          axis line style={draw=none},
+          tick style={draw=none},
+          xticklabels={},
+          yticklabels={},
+          colorbar horizontal,
+          colorbar sampled,
+          colormap access=piecewise constant,
+          colorbar style={
+              samples=4,
+              xtick=data,
+              xticklabels={0.01,1,10,1000},
+              xticklabel style={xshift=\textwidth*0.5/10},
+              title={Diffusivity of the materials},
+              at={(master.above north west)},anchor=south west,
+              yshift=5pt,
+              title style={
+                  yshift=5pt
+                },
+              yshift=0.2em,
+              xticklabel pos=upper,
+            },
+        ]
+        %
+        \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {\DataPath/#3_#2.png};
+      \end{axis}
+    \end{tikzpicture}
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OLD
 % ==============
 % elemental routines

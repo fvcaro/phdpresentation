@@ -1,0 +1,112 @@
+\begin{frame}
+  \frametitle{3D Numerical results for $hp$-adaptivity}
+  
+  \begin{block}{Wave propagation problem}
+     Find \(u\) satisfying:
+  \begin{alignat}{2}
+    - \nabla \cdot \left( \sigma \nabla u\right) - k^{2}u & = \mathds{1}_{\Omega_{f}} &  & \text{ in } \Omega, \\
+    u                                          & =0                        &  & \text{ on } {\Gamma_{D}},                      \\
+    \grad u\cdot \vec{n}                       & =0                        &  & \text{ on } {\Gamma_{N}},
+  \end{alignat}
+  \end{block}
+
+    \textbf{Definitions:}
+    \begin{itemize}
+      \item \(\Omega = \left(0,1\right)^{3} \subset \R^{3}\),
+      \item \(k = \left(4 \cdot 2 \pi, 2 \pi\right)\), 
+      \item \( \Omega_{f} = \left(0,\frac{1}{4}\right)^{3} \subset \Omega \),
+      \item \(\Omega_{l} = \left(\frac{3}{4},1\right)^{3} \subset \Omega\),
+      \item \( a\left(\cdot ,\cdot\right) \coloneqq  \abs{\scalar{\grad \cdot}{\sigma \grad \cdot}_{L^{2}\left(\Omega\right)}} + \abs{k^{2}} \abs{\scalar{\cdot}{\cdot}_{L^{2}\left(\Omega\right)}} \).
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Wave propagation problem}
+\begin{figure}
+  \plotmaterials[noaxis]{Helm3DGOA}
+  {\caption{Diffusive coefficient values for the different materials in the domain.}
+  \label{fig:matHelmtresD}}
+\end{figure}
+\end{frame}
+%
+%\begin{frame}
+%	\frametitle{Wave propagation problem}
+%	\begin{figure}[t!]
+%   		\goasolutions{Helm2DGOA}{abs}
+%	\end{figure}
+%\end{frame}
+%
+%\begin{frame}
+%	\frametitle{Energy-norm adaptivity}
+%  	\plothpmeshes[]{Helm2DGOANon}
+%\end{frame}
+%
+%\begin{frame}
+%  \frametitle{Energy-norm adaptivity}
+%
+%  \begin{figure}
+%    \centering
+%    \begin{tikzpicture}
+%      \begin{axis}[name=master,
+%        width=0.5\textwidth,height=0.5\textwidth,
+%        enlargelimits=false,
+%        xlabel=$x$,
+%        ylabel=$y$,
+%        xlabel near ticks,
+%        ylabel near ticks,
+%        axis line style={draw=none},
+%        tick style={draw=none},
+%        hide axis,
+%      ]
+%      \addplot graphics[xmin=0,xmax=1,ymin=0,ymax=1] {Figures/Helm2DGOANon/h/order_1/grid_006.png};
+%      \end{axis}
+%    \end{tikzpicture}
+%    \caption{Final $h$-adapted mesh for $p=1$.}
+%  \end{figure}
+%
+%\end{frame}
+%
+%\begin{frame}
+%	\frametitle{Energy-norm adaptivity}
+%	\begin{figure}[htp!]
+%  	\comparerrors[]{Helm2DGOANon}
+%	\end{figure}
+%\end{frame}
+%
+%\begin{frame}
+%	\frametitle{Goal-Oriented adaptivity}
+%  	\plothpmeshes[]{Helm2DGOA}
+%\end{frame}
+%
+%\begin{frame}
+%  \frametitle{Goal-Oriented adaptivity}
+%
+%  \begin{figure}
+%    \centering
+%    \begin{tikzpicture}
+%      \begin{axis}[name=master,
+%        width=0.5\textwidth,height=0.5\textwidth,
+%        enlargelimits=false,
+%        xlabel=$x$,
+%        ylabel=$y$,
+%        xlabel near ticks,
+%        ylabel near ticks,
+%        axis line style={draw=none},
+%        tick style={draw=none},
+%        hide axis,
+%      ]
+%      \addplot graphics[xmin=0,xmax=1,ymin=0,ymax=1] {Figures/Helm2DGOA/h/order_1/grid_007.png};
+%      \end{axis}
+%    \end{tikzpicture}
+%    \caption{Final $h$-adapted mesh for $p=1$.}
+%  \end{figure}
+%
+%\end{frame}
+%
+%\begin{frame}
+%	\frametitle{Energy-norm and Goal-Oriented $hp$-adaptive strategy}
+%	\begin{figure}[htp!]
+%  	\compareconver[hp]{Helm2DGOA}{Helm2DGOANon}
+%	\end{figure}
+%\end{frame}
