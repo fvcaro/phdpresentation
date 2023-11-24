@@ -1,0 +1,24 @@
+\begin{tikzpicture}
+                \node[rounded rectangle, draw, very thick] (Solve) {Solve};
+                \node[right = of Solve, rounded rectangle, draw, very thick, align=center] (Estimate) {Estimate};
+                \node[right =1.2 of Estimate, rounded rectangle, draw, very thick] (Mark) {Mark};
+                \node[right = of Mark, rounded rectangle, draw, very thick, align=center] (Update) {Update \\ the mesh};
+                \draw[->, very thick] (Solve) -- (Estimate);
+                \draw[->, very thick] (Estimate) -- (Mark);
+                \draw[->, very thick] (Mark) -- (Update);
+                
+                \node[below= 1/2 of Estimate, align=center, rounded corners, rectangle, draw, very thick, dashed] (DetailsEstimate) {
+                    $\bullet$ Find the {\color{green!50!black} removable} workers\\
+                    $\bullet$ Estimate their contribution
+                };
+                \node[below= 2 of Mark, align=center, rounded corners, rectangle, draw, very thick, dashed] (DetailsMark) {
+                    $\bullet$ Mark the {\color{green!50!black} lazy} workers
+                };
+                \node[below= 3 of Update, align=center, rounded corners, rectangle, draw, very thick, dashed] (DetailsUpdate) {
+                    $\bullet$ Fire them
+                };
+
+                \draw[->, very thick, dashed] (Estimate) -- (DetailsEstimate);
+                \draw[->, very thick, dashed] (Mark) -- (DetailsMark);
+                \draw[->, very thick, dashed] (Update) -- (DetailsUpdate);
+            \end{tikzpicture}

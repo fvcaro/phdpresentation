@@ -1,0 +1,145 @@
+\begin{frame}
+  \frametitle{Numerical results}
+
+  \begin{block}{Maximum relative error}
+    The maximum relative error is given by:
+\begin{equation}
+e_{\textrm{rel}}^{\textrm{max}} = \max_{i=1,\ldots,S} \left| \frac{l\left(u^{\m_{i}}\right) - l\left(u^{\m_{i}}_{\mathcal{T}_{c}}\right)}{l\left(u^{\m_{i}}\right)} \right| \cdot 100.
+\label{eq:maxrelerrorqoimago}
+\end{equation}
+
+  \end{block}
+  
+  \begin{block}{Mean relative error}
+    The mean relative error is:
+\begin{equation}
+e_{\textrm{rel}}^{\textrm{mean}} = \frac{1}{S} \sum_{i=1}^S \left| \frac{l\left(u^{\m_{i}}\right) - l\left(u^{\m_{i}}_{\mathcal{T}_{c}}\right)}{l\left(u^{\m_{i}}\right)} \right| \cdot 100.
+\label{eq:meanrelerrorqoimago}
+\end{equation}
+  \end{block}
+ \end{frame}
+ 
+ \begin{frame}
+    \frametitle{Numerical results}
+ \begin{block}{Wave propagation problem}
+     Find \(u\) satisfying:
+    \begin{alignat}{2}
+      - \nabla \cdot \left(\nabla u\right) -  j \sigma(\x) \; u   & = 1 &  & \text{ in } \Omega, \\
+    						              u   & = 0 &  & \text{ on } {\partial \Omega}.
+    \end{alignat}
+  \end{block}
+  
+\begin{multicols}{2}
+    \textbf{Domain Definitions:}
+    \begin{itemize}
+      \item \(\Omega_f = \left(\frac{1}{20}, \frac{3}{20}\right)^{2}\), 
+      \item \(\Omega_l = \left(\frac{17}{20}, \frac{19}{20}\right)^{2}\),
+      \item \(\Omega = \left(0,1\right)^{2} \subset \mathbb{R}^{2}\).
+    \end{itemize}
+
+   \begin{figure}
+      \centering
+      \input{Diapos/2d_mago/Figures/domain_mago_poisson.tex}
+      \caption{Domain illustration ($5 \times 5$ grid).}
+    \end{figure}
+
+  \end{multicols}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Values for the materials in the domain}
+
+  \begin{figure}
+    \centering	
+      \input{Diapos/2d_mago/Figures/materials.tex}
+  \end{figure}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Final MAGO $hp$-adapted meshes}
+  	\plothpmago[]{Wave2D}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Contrasting Norms in Error Indicators}
+	\begin{figure}
+		\centering
+		\input{Diapos/2d_mago/Figures/convergence.tex}
+		\caption{Convergence for different norms in the error indicators (100 samples)}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{MAGO: Testing the Adaptive Meshes with 10K Samples}
+	\begin{figure}
+	\quintuplebox[Helmholtz]{Grid}{mat_check_10k}{1}{5}{10}{100}{1000}
+ 	{\caption{\textbf{Different adaptive grids} with a threshold maximum relative error set at $10^{-5}$.}
+	\label{fig:boxplothelm}}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Computational costs of generating the database}
+
+ \begin{block}{Computational cost \( C^{\text{SAGO}} \)}
+    For dimension \( d = 2 \), we approximate the computational cost \( C^{\text{SAGO}} \) of generating one GOA mesh for each of the \( S_{\text{G}} \) samples by: 
+    \begin{equation}
+        C^{\text{SAGO}} \approx \sum_{i=1}^{S_{\text{G}}} \left( N_{\text{f}(i)}^{\text{sago}} \right)^{\left( 1+\frac{d-1}{2} \right)}.
+        \label{eq:cost_sago}
+    \end{equation}
+\end{block}
+  
+  \begin{block}{Computational cost \( C^{\text{MAGO}} \)}
+    In addition, we provide an approximate estimation of the computational costs for MAGO by:
+    \begin{equation}
+      C^{\text{MAGO}} \approx \sum_{i=1}^{S_{\text{A}}} \left( N_{\text{f}(i)}^{\text{mago}} \right)^{\left( 1+\frac{d-1}{2} \right)} + \sum_{i=1}^{S_{\text{G}}} \left( N_{\text{c}(i)}^{\text{mago}} \right)^{\left( 1+\frac{d-1}{2} \right)}.
+      \label{eq:cost_mago}
+    \end{equation}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Computational Costs: SAGO vs. MAGO Strategies}
+
+  %{\small % Reducing the font size for the first table
+  \begin{table}
+    \centering
+    \begin{tabular}{c|cccc}
+        \textbf{Number of DoF} & \multicolumn{4}{c}{\( C^{\text{SAGO}} \)} \\
+        \midrule \midrule
+        & \multicolumn{4}{c}{\( S_{\text{G}} \)} \\
+        \toprule
+        \( N_{\text{f}}^{\text{sago}} \) & \( 10^5 \) & \( 10^7 \) & \( 10^9 \) & \( 10^{11} \)\\
+        \midrule
+        41259   &  \( 8.4 \cdot 10^{11} \)   &   \( 8.4 \cdot 10^{13} \)   &   \( 8.4 \cdot 10^{15} \)   &   \( 8.4 \cdot 10^{17} \) \\
+        \bottomrule
+    \end{tabular}
+    %\caption{Computational cost based on the factorization cost of generating the database using the SAGO strategy.}
+    \label{tab:helm_sago}
+  \end{table}
+  %}
+
+  \vspace{-0.5em} % Adjust spacing between the tables if necessary
+
+  %{\small % Reducing the font size for the second table
+  \begin{table}
+    \centering
+    \begin{tabular}{c|cc|cccc}
+        & \multicolumn{2}{c|}{\textbf{Number of DoF}} & \multicolumn{4}{c}{\( C^{\text{MAGO}} \)} \\
+        \midrule \midrule
+        & & & \multicolumn{4}{c}{\( S_{\text{G}} \)} \\
+        \toprule
+        \( S_{\text{A}} \) & \( N_{\text{c}}^{\text{mago}} \) & \( N_{\text{f}}^{\text{mago}} \) & \( 10^5 \) & \( 10^7 \) & \( 10^9 \) & \( 10^{11} \)\\
+        \midrule
+        5     & 15440 & 52351 & \( 1.9 \cdot 10^{11} \) & \( 1.9 \cdot 10^{13} \) & \( 1.9 \cdot 10^{15} \) & \( 1.9 \cdot 10^{17} \) \\
+        10    & 16867 & 57171 & \( 2.2 \cdot 10^{11} \) & \( 2.2 \cdot 10^{13} \) & \( 2.2 \cdot 10^{15} \) & \( 2.2 \cdot 10^{17} \) \\
+        100   & 15870 & 53661 & \( 2.0 \cdot 10^{11} \) & \( 2.0 \cdot 10^{13} \) & \( 2.0 \cdot 10^{15} \) & \( 2.0 \cdot 10^{17} \) \\
+        1000  & 17477 & 60381 & \( 2.5 \cdot 10^{11} \) & \( 2.3 \cdot 10^{13} \) & \( 2.3 \cdot 10^{15} \) & \( 2.3 \cdot 10^{17} \) \\
+        \bottomrule
+    \end{tabular}
+    %\caption{Computational cost based on the factorization cost of generating the database using the MAGO strategy.}
+    \label{tab:helm_mago}
+  \end{table}
+  %}
+\end{frame}

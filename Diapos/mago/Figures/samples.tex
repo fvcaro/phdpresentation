@@ -1,0 +1,56 @@
+\begin{itemize}
+    	\item Let \( \mathbf{m}_i \) denote a collection of \( P \) parameters: \( \mathbf{m}_i = \left\{\sigma_1, \ldots, \sigma_P \right\} \). 
+    	\item Let \( \mathbf{M} = \left\{\mathbf{m}_1, \ldots, \mathbf{m}_S \right\} \) be a set of \( S \) samples. 
+    \end{itemize}
+    \end{block}
+    
+    \vspace{-1mm}
+    
+
+	\begin{figure}
+    \centering
+    \begin{tikzpicture}[x=0.25cm, y=0.25cm]
+        \node (origin) at (0,0) {};
+        \node (end) at ($(origin)+(10,10)$) {};
+      
+        \node (f_int_origin) at (0.5,0.5) {};
+        \node (f_int_end) at (1.5,1.5) {};
+        \node (l_int_origin) at (8.5,8.5) {};
+        \node (l_int_end) at (9.5,9.5) {};
+      
+        \node (layer1) at ($(origin)+(0,-0)$) {};
+        \node (layer1_end) at ($(layer1)+(10,10)$) {};
+      
+        \draw [draw=black, fill=white, thick] (layer1) rectangle (layer1_end);
+        \draw[] ($(layer1)+(5,0)$) -- ($(layer1)+(5,10)$);
+        \draw[] ($(layer1)+(0,5)$) -- ($(layer1)+(10,5)$);
+        \node (s14) at ($(layer1)+(2.5,2.5)$) {$\sig_{3}^S$};
+        \node (s15) at ($(layer1)+(7.5,2.5)$) {$\sig_{4}^S$};
+        \node (s16) at ($(layer1)+(2.5,7.5)$) {$\sig_{1}^S$};
+        \node (s17) at ($(layer1)+(7.5,7.5)$) {$\sig_{2}^S$};
+        \node (l_m3) at ($(layer1)+(5,-2)$) {$\mathbf{m}_S$}; 
+ 
+        \node (layer1_c) at ($(layer1)-(15,0)$) {};
+        \node (layer1_end_c) at ($(layer1_end)-(15,0)$) {};
+        \draw [draw=black, fill=white, thick] (layer1_c) rectangle (layer1_end_c);
+        \draw[] ($(layer1_c)+(5,0)$) -- ($(layer1_c)+(5,10)$);
+        \draw[] ($(layer1_c)+(0,5)$) -- ($(layer1_c)+(10,5)$);           
+        \node (s10) at ($(layer1_c)+(2.5,2.5)$) {$\sig_{3}^2$};
+        \node (s11) at ($(layer1_c)+(7.5,2.5)$) {$\sig_{4}^2$};
+        \node (s12) at ($(layer1_c)+(2.5,7.5)$) {$\sig_{1}^2$};
+        \node (s13) at ($(layer1_c)+(7.5,7.5)$) {$\sig_{2}^2$};
+        \node (l_m2) at ($(layer1_c)+(5,-2)$) {$\mathbf{m}_2$}; 
+      
+        \node (layer1_d) at ($(layer1_c)-(15,0)$) {};
+        \node (layer1_end_d) at ($(layer1_end_c)-(15,0)$) {};
+        \draw [draw=black, fill=white, thick] (layer1_d) rectangle (layer1_end_d);
+        \draw[] ($(layer1_d)+(5,0)$) -- ($(layer1_d)+(5,10)$);
+        \draw[] ($(layer1_d)+(0,5)$) -- ($(layer1_d)+(10,5)$);          
+        \node (s6) at ($(layer1_d)+(2.5,2.5)$) {$\sig_3^1$};
+        \node (s7) at ($(layer1_d)+(7.5,2.5)$) {$\sig_4^1$};
+        \node (s8) at ($(layer1_d)+(2.5,7.5)$) {$\sig_1^1$};
+        \node (s9) at ($(layer1_d)+(7.5,7.5)$) {$\sig_2^1$};
+        \node (l_m1) at ($(layer1_d)+(5,-2)$) {$\mathbf{m}_1$}; 
+      
+        \node (l_m8) at ($(layer1)+(-2,-2)$) {$\cdots$};
+    \end{tikzpicture}

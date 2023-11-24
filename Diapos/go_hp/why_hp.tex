@@ -1,34 +1,8 @@
-\newsavebox{\Advantages}
-\sbox{\Advantages}{%
-\scalebox{0.9}{% Add your desired scale factor here
-    \begin{tikzpicture}
-        \node[rounded rectangle, draw, ultra thick, color=green!50!black, align=center](Expo){\( hp \)-adaptive FEM\\achieves exponential\\convergence rates};
-        \node[below = of Expo, rounded rectangle, draw, ultra thick, color=green!50!black, align=center](Feat){Precise mesh refinement\\near singularities};
-        \node[below = of Feat, rounded rectangle, draw, ultra thick, color=green!50!black, align=center](Cheap){Smaller meshes with\\higher accuracy per\\number of degrees of freedom};
-        \node[fit=(Feat)(Expo)(Cheap), rectangle, rounded corners, draw, ultra thick, inner sep=1em](adv){};
-        \node[anchor=center, rounded corners, draw, thick, fill=white] at (adv.north){Advantages};
-    \end{tikzpicture}
-}
-}
-
-\newsavebox{\limitations}
-\sbox{\limitations}{%
-\scalebox{0.9}{% Add your desired scale factor here
-    \begin{tikzpicture}
-        \node[rounded rectangle, draw, ultra thick, color=red, align=center](Mesh){Solution accuracy\\heavily mesh-dependent,\\requiring precise\\mesh design};
-        \node[below= of Mesh, rounded rectangle, draw, ultra thick, color=red, align=center](Accuracy){Increasing accuracy\\leads to prohibitive\\computational costs};
-        \node[fit=(Mesh)(Accuracy), rectangle, rounded corners, draw, ultra thick, inner sep=1em](limit){};
-        \node[anchor=center, rounded corners, draw, thick, fill=white] at (limit.north){Limitations};
-    \end{tikzpicture}
-}
-}
-
 \begin{frame}
-    \frametitle{Why \( hp \)-adaptivity?}
-    \begin{center}
-        \begin{tikzpicture}
-            \node(advan){\usebox{\Advantages}};
-            \node[right=2cm of advan](lim){\usebox{\limitations}}; % Adjust the spacing as needed
-        \end{tikzpicture}
-    \end{center}
+	\frametitle{Why \( hp \)-adaptivity?}
+	\begin{figure}
+  	\hspace{-1cm}
+	\centering
+  	\input{Diapos/go_hp/Figures/advantages.tex}
+	\end{figure}	
 \end{frame}

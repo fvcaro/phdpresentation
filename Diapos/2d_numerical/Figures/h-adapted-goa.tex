@@ -1,0 +1,15 @@
+\begin{tikzpicture}
+      \begin{axis}[name=master,
+        width=0.5\textwidth,height=0.5\textwidth,
+        enlargelimits=false,
+        xlabel=$x$,
+        ylabel=$y$,
+        xlabel near ticks,
+        ylabel near ticks,
+        axis line style={draw=none},
+        tick style={draw=none},
+        hide axis,
+      ]
+      \addplot graphics[xmin=0,xmax=1,ymin=0,ymax=1] {Figures/Helm2DGOA/h/order_1/grid_007.png};
+      \end{axis}
+    \end{tikzpicture}

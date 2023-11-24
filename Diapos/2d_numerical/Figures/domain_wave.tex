@@ -1,0 +1,26 @@
+\begin{tikzpicture}[x=2.01cm,y=2.01cm]
+        % Nodes definition
+        \node(n1) at (0,0){};
+        \node(n2) at (1,0){};
+        \node(n3) at (1,1){};
+        \node(n4) at (0,1){};
+        \node(n5) at (0.25,0.25){};
+        \node(n6) at (0.75,0.25){};
+        \node(n7) at (0.75,0.75){};
+        \node(n8) at (0.25,0.75){};
+
+        % Drawing rectangles
+        \draw (n1) rectangle (n5) node[pos=0.5] {\footnotesize\( \Omega_{f} \)};
+        \draw (n7) rectangle (n3) node[pos=0.5] {\footnotesize\( \Omega_{l} \)};
+
+        % Boundary lines
+        \draw[line width=0.5mm, color=blue] (n5) rectangle (n7);
+        \draw[line width=0.5mm, color=blue] (n4.center) -- (n1.center) -- (n2.center) node[pos=0.5,pin={-90: \( \Gamma_{D} \)}]{};
+        \draw[line width=0.5mm, color=red] (n4.center)--  (n3.center) -- node[pos=0.5,pin={0: \( \Gamma_{N} \)}]{} (n2.center);
+
+        % Pattern filling
+        \draw [draw=black, pattern=north west lines, pattern color=gray!50] (n5) rectangle (n7);
+
+        % Label for Omega
+        \node(omega) at (0.5,0.85){\( \Omega \)};
+      \end{tikzpicture}

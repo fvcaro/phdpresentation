@@ -5,41 +5,7 @@
 
 \vspace{-1cm}
 \begin{figure}
-\begin{tikzpicture}
-
-%comment the lint to show the image with a grid to help in finding the coordinates for the path.
-\tikzset{develop clipping path=false}
-\node at (5,0){
-\clippicture{[width=5.2cm]{Diapos/Conclusions/img/bil_1.jpg}}{(0,0.5).. controls (0.2,1.15) and (0.8,1.15).. (1,0.5)-- (0.8,0)--(0.2,0)}
-};
-
-
-\tikzset{develop clipping path=false}
-\node at (1,0){
-\clippicture{[width=4.4cm]{Diapos/Conclusions/img/tls_1.jpg}}{(0,0.5).. controls (0.2,1.15) and (0.8,1.15).. (1,0.5)-- (0.8,0)--(0.2,0)}
-};
-\node at (2.5,2){Bilbao};
-\node at (-1,-2){Toulouse};
-\node at (10.5,-0.5){Kraków};
-
-\node at (1,-3){
-\clippicture{[height=2.2cm]{Diapos/Conclusions/img/tls_2.png}}{(0,0.5).. controls (0.2,1.15) and (0.8,1.15).. (1,0.5)-- (0.8,0)--(0.2,0)}
-};
-
-\node at (8,-2){
-\clippicture{[height=3.5cm]{Diapos/Conclusions/img/agh_2.jpg}}{(0,0.5).. controls (0.2,1.15) and (0.8,1.15).. (1,0.5)-- (0.8,0)--(0.2,0)}
-};
-
-\node at (9,2){
-\clippicture{[width=5cm]{Diapos/Conclusions/img/agh_1.jpg}}{(0,0.5).. controls (0.2,1.15) and (0.8,1.15).. (1,0.5)-- (0.8,0)--(0.2,0)}
-};
-
-%\node at (8,-4.3){Contact: \href{dzubiaur@gmail.com}{dzubiaur@gmail.com}};
-
-%\draw[very thin,rounded corners=2pt, fill=orange!30!white ] (3,1) rectangle (7,2.5);
-%\node[color=black] at (5,1.75) {\footnotesize \textcolor{black}{\textbf{\begin{tabular}{c} Research Stays \end{tabular}}}};
-
-\end{tikzpicture}
+\input{Diapos/Conclusions/Figures/bilbao.tex}
 \end{figure}
 
 \end{frame}

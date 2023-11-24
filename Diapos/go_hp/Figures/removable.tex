@@ -1,0 +1,89 @@
+\begin{subfigure}[b]{\subplotwidth}
+	\centering
+	\begin{tikzpicture}[x=2cm,y=2cm,decoration={markings,
+     		mark=at position 0 with{\draw (0pt,-2pt) -- (0pt,2pt);},
+     		mark=at position 1 with{\draw (0pt,-2pt) -- (0pt,2pt);},
+	}
+	]
+
+	\node(father1) at (0,0) {};
+	\node(father2) at (1,0) {};
+	\node(father3) at (2,0) {};
+
+	\node(son1) at (0,-1) {};
+	\node(son2)  at (0.5,-1) {};
+	\node(son3)  at (1,-1) {};
+	\node(son4)  at (1.5,-1) {};
+	\node(son5)  at (2,-1) {};
+
+	\node(basis1) at ($(father2)+(0,0.5)$){};
+	\node(basis2) at ($(son2)+(0,0.5)$){};
+	\node(basis3) at ($(son4)+(0,0.5)$){};
+
+	\draw [postaction={decorate}] (father1.center) -- (father2.center) node[pos=0.5](elemfather1){};
+	\draw [postaction={decorate}] (father2.center) -- (father3.center) node[pos=0.5](elemfather2){};
+
+	\draw[dashed] (father1.center) -- (son1.center);
+	\draw[dashed] (father2.center) -- (son3.center);
+
+	\draw [postaction={decorate}] (son1.center) -- (son2.center) node[pos=0.5](elemson1){};
+	\draw [postaction={decorate}] (son2.center) -- (son3.center) node[pos=0.5](elemson2){};
+
+	\node[anchor=north] at (elemfather1) {};
+	\node[anchor=north] at (elemfather2) {};
+
+	\node[anchor=north] at (elemson1) {};
+	\node[anchor=north] at (elemson2) {};
+	% linear basis function
+	\draw[color=red, thick] (father1.center) -- (basis1.center) -- (father3.center);
+	\draw[color=red, thick] (son1.center) -- (basis2.center) -- (son3.center);
+	% degree 2 basis function
+	\draw[color=red, thick]    (son1.center) .. controls ($(elemson1)+(-0.1,+0.15)$) and ($(elemson1)+(0.1,0.15)$) ..  (son2.center) ;
+	\draw[color=green!50!black,ultra thick]    (son2.center) .. controls ($(elemson2)+(-0.1,+0.15)$) and ($(elemson2)+(0.1,0.15)$) ..  (son3.center);
+	\draw[color=green!50!black,ultra thick]    (father2.center) .. controls ($(elemfather2)+(-0.1,+0.15)$) and ($(elemfather2)+(0.1,0.15)$) ..  (father3.center) ;
+	% degree 3 basis function
+	\draw[color=green!50!black,ultra thick]   (son1.center) .. controls ($(elemson1)+(-0.1,-0.15)$) and ($(elemson1)+(0.1,0.15)$) ..  (son2.center);
+	\end{tikzpicture}
+	\caption{$hp$-case\label{fig:basis1Dhp}}
+	\end{subfigure}
+	\begin{subfigure}[b]{\subplotwidth}
+	\centering
+	\begin{tikzpicture}[x=2cm,y=2cm,decoration={markings,% switch on markings mark=% actually add a mark
+     		mark=at position 0 with{\draw (0pt,-2pt) -- (0pt,2pt);},
+     	mark=at position 1 with{\draw (0pt,-2pt) -- (0pt,2pt);},
+	}
+	]
+	\node(father1) at (0,0) {};
+	\node(father2) at (1,0) {};
+	\node(father3) at (2,0) {};
+
+	\node(son1) at (0,-1) {};
+	\node(son2)  at (0.5,-1) {};
+	\node(son3)  at (1,-1) {};	
+	\node(son4)  at (1.5,-1) {};
+	\node(son5)  at (2,-1) {};
+
+	\node(basis1) at ($(father2)+(0,0.5)$){};
+	\node(basis2) at ($(son2)+(0,0.5)$){};
+	\node(basis3) at ($(son4)+(0,0.5)$){};
+
+	\draw [postaction={decorate}] (father1.center) -- (father2.center) node[pos=0.5](elemfather1){};
+	\draw [postaction={decorate}] (father2.center) -- (father3.center) node[pos=0.5](elemfather2){};
+
+	\draw[dashed] (father1.center) -- (son1.center);
+	\draw[dashed] (father2.center) -- (son3.center);
+
+	\draw [postaction={decorate}] (son1.center) -- (son2.center) node[pos=0.5](elemson1){};
+	\draw [postaction={decorate}] (son2.center) -- (son3.center) node[pos=0.5](elemson2){};
+
+	\node[anchor=north] at (elemfather1) {};
+	\node[anchor=north] at (elemfather2) {};
+
+	\node[anchor=north] at (elemson1) {};
+	\node[anchor=north] at (elemson2) {};
+	% linear basis function
+	\draw[color=red, thick]   (father1.center) -- (basis1.center) -- (father3.center);
+	\draw[color=green!50!black, ultra thick]   (son1.center) -- (basis2.center) -- (son3.center) ;
+	\end{tikzpicture}
+	\caption{$h$-case \label{fig:basis1Dh}}
+\end{subfigure}

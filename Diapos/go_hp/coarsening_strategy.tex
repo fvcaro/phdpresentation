@@ -1,33 +1,49 @@
 \begin{frame}
-\frametitle{A Painless Automatic Adaptive Strategy}
- 	%\tikzset{/tikz/external/export next=false}
-	\begin{center}
-	\resizebox{0.55\textwidth}{!}{% Resize to the width of the text block
-	\begin{tikzpicture}
-		\node[rounded rectangle, draw, very thick](Init) {Initial coarse mesh};
-		\node[below right=1/2 of Init,rounded rectangle, draw, very thick,color=blue,align=center](ref) {Arbitrary \\(user-defined/global)\\ refinements};
-		\node[below= of ref, rounded rectangle, draw, very thick,color=green!50!black, align=center](unrefProcess) {Quasi-optimal\\$hp$-unrefinements};
-		\node[below right=1/2 of unrefProcess,rounded rectangle, draw, very thick](final) {Adapted mesh};
+    \frametitle{A Painless Automatic Adaptive Strategy}
+    
+    \begin{figure}
+        \centering
+        \input{Diapos/go_hp/Figures/strategy.tex}
+    \end{figure}
 
-		\draw[->, thick] (Init) -| (ref);
-		\draw[->, thick,color=blue] (ref.east) to[out=0,in=0] (unrefProcess.east);
-		\draw[->, thick,color=green!50!black] (unrefProcess.west) to[out=180,in=180] node[pos=0.5](PinExitRef){} (ref.west);
-		\draw[->, thick] (unrefProcess) |- (final);
-	\end{tikzpicture}
-	}
-	\end{center}
-	 \begin{thebibliography}{10}
-\beamertemplatearticlebibitems
-\scriptsize
-\bibitem{darrigrand2020painless}
-V. Darrigrand, D. Pardo, T. Chaumont-Frelet, I. G{\'o}mez-Revuelto, L. E. Garc{\'i}a-Castillo
-\newblock A painless automatic $hp$-adaptive strategy for elliptic problems
-\newblock \emph{Finite Elements in Analysis and Design}, 2020.
-\beamertemplatearticlebibitems
-\scriptsize
-\bibitem{caro2022painless}
-F. V. Caro, V. Darrigrand, J. Alvarez-Aramberri, E. Alberdi, D. Pardo
-\newblock A painless multi-level automatic goal-oriented $hp$-adaptive coarsening strategy for elliptic and non-elliptic problems
-\newblock \emph{Computer Methods in Applied Mechanics and Engineering}, 2022.
-\end{thebibliography}
+    \begin{thebibliography}{10}
+        \beamertemplatearticlebibitems
+        \scriptsize
+        \bibitem{darrigrand2020painless}
+        V. Darrigrand, D. Pardo, T. Chaumont-Frelet, I. G{\'o}mez-Revuelto, L. E. Garc{\'i}a-Castillo
+        \newblock A painless automatic $hp$-adaptive strategy for elliptic problems
+        \newblock \emph{Finite Elements in Analysis and Design}, 2020.
+
+        \beamertemplatearticlebibitems
+        \scriptsize
+        \bibitem{caro2022painless}
+        F. V. Caro, V. Darrigrand, J. Alvarez-Aramberri, E. Alberdi, D. Pardo
+        \newblock A painless multi-level automatic goal-oriented $hp$-adaptive coarsening strategy for elliptic and non-elliptic problems
+        \newblock \emph{Computer Methods in Applied Mechanics and Engineering}, 2022.
+    \end{thebibliography}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Quasi-optimal \( hp \)-unrefinements}
+    \vfill
+    \begin{center}
+        \begin{figure}
+            \centering
+        		\input{Diapos/go_hp/Figures/workers.tex}
+            \caption{Quasi-optimal \( hp \)-unrefinement steps}
+        \end{figure}
+    \end{center}    
+\end{frame}
+
+\begin{frame}
+	\frametitle{Removable 1D Basis Functions}
+	\begin{block}{Definition}
+	We define {\color{green!50!black} removable} basis functions as those we can eliminate from the discretization without modifying any other basis 	function while preserving \textbf{complete} polynomial spaces. 
+	\end{block}
+	\begin{figure}
+	 \hspace{-1cm}
+	\centering
+	 \input{Diapos/go_hp/Figures/removable.tex}
+	\caption{Removable 1D basis functions}
+	\end{figure}
 \end{frame}

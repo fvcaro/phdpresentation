@@ -1,0 +1,30 @@
+\begin{tikzpicture}
+			\begin{axis}[
+				xlabel={Number of DoF},
+				ylabel=Relative error in the QoI (\%),
+				ymode=log,
+				xmode=log,
+				ymin=-10,
+				ymax=10000,
+				xmin=50,
+				xmax=1e5,
+				ylabel near ticks,
+				xlabel near ticks,
+				enlargelimits=true,
+				legend style={draw=black,fill=white,legend cell align=left, at={(0.5,1.01)}, anchor=south},
+				legend columns=-1,
+				height=\plotheight,
+				width=0.7\plotwidth
+				]
+				
+				\addplot+[ line width=1pt] table[x =nr_dof,y=ErrorQoI_linf ]{Figures/Wave2D/hp/order_1/norm_0/outputs.txt};
+				\addlegendentry{$|| \cdot ||_{\infty}$}
+				
+				 \addplot+[ line width=1pt] table[x =nr_dof,y=ErrorQoI_linf]{Figures/Wave2D/hp/order_1/norm_1/outputs.txt};
+				\addlegendentry{$|| \cdot ||_{1}$}
+				
+				\addplot+[ line width=1pt] table[x =nr_dof,y=ErrorQoI_linf]{Figures/Wave2D/hp/order_1/norm_2/outputs.txt};
+				\addlegendentry{$|| \cdot ||_{2}$}
+				
+			\end{axis}
+		\end{tikzpicture}

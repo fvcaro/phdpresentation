@@ -1,0 +1,38 @@
+ \pgfplotsset{%
+    colormap={paraview}{rgb=(0.231373, 0.298039, 0.752941) rgb=(0.865003, 0.865003, 0.865003) rgb=(0.705882, 0.0156863, 0.14902)}%
+  }%
+  \pgfplotsset{colormap name={paraview}}%
+  
+\begin{tikzpicture}
+    \begin{axis}[name=master,
+        width=0.475\textwidth,height=0.475\textwidth,
+        enlargelimits=false,
+        xlabel=$x$,
+        ylabel=$y$,
+        xlabel near ticks,
+        ylabel near ticks,
+        colorbar horizontal,
+        colorbar style={%
+            xtick={0.1,500.05,1000},
+            title={Value of $\sigma(x)$ (log scale)},
+            at={(master.above north west)},anchor=south west,
+            yshift=2pt,
+            title style={
+                yshift=5pt
+              },
+            yshift=0.2em,
+            xticklabel pos=upper,
+          },
+        point meta min=0.1,
+        point meta max=1000,
+        xmin=0, xmax=1,
+        ymin=0, ymax=1,
+        xtick={0,0.5,1},
+        ytick={0,0.5,1},
+        axis line style={draw=none}, % Add this line to remove the border
+      ]
+      
+     \addplot [forget plot] graphics[xmin=0,xmax=1,ymin=0,ymax=1] {Figures/Wave2D/hp/order_1/norm_0/mago_00_materials_real.png}; 
+
+    \end{axis}
+\end{tikzpicture}

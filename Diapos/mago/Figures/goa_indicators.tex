@@ -1,0 +1,183 @@
+ \begin{tikzpicture}[x=0.27cm,y=0.27cm]
+
+      \node(origin) at (0,0) {};
+      \node(end) at ($(origin)+(10,10)$) {};
+      
+      \node(f_int_origin) at (0.5,0.5) {};
+      \node(f_int_end) at (1.5,1.5) {};
+      \node(l_int_origin) at (8.5,8.5) {};
+      \node(l_int_end) at (9.5,9.5) {};
+      
+      	
+ 
+       \draw [draw=black,fill=white,very thick] (origin) rectangle (end);
+      \draw [draw=black,fill=brown!20,very thick] (origin) rectangle ($(origin)+(5,5)$);
+      \draw [draw=black,fill=gray!20,very thick] ($(origin)+(5,0)$) rectangle ($(origin)+(10,5)$);
+      \draw [draw=black,fill=purple!20,very thick] ($(origin)+(0,5)$) rectangle ($(origin)+(5,10)$);
+      \draw [draw=black,fill=orange!40,very thick] ($(origin)+(5,5)$) rectangle ($(origin)+(10,10)$);
+      
+      \draw[] ($(origin)+(2.5,0)$) -- ($(origin)+(2.5,10)$);
+      \draw[] ($(origin)+(7.5,0)$) -- ($(origin)+(7.5,10)$);
+      \draw[] ($(origin)+(0,2.5)$) -- ($(origin)+(10,2.5)$);
+      \draw[] ($(origin)+(0,7.5)$) -- ($(origin)+(10,7.5)$);
+            
+      \node(e) at ($(origin)+(1.25,1.25)$) {\normalsize{$\eta^1_{13}$}};
+      \node(e) at ($(origin)+(3.75,1.25)$) {\normalsize{$\eta^1_{14}$}};
+      \node(e) at ($(origin)+(6.25,1.25)$) {\normalsize{$\eta^1_{15}$}};
+      \node(e) at ($(origin)+(8.75,1.25)$) {\normalsize{$\eta^1_{16}$}};
+      
+      \node(e) at ($(origin)+(1.25,3.75)$) {\normalsize{$\eta^1_{9}$}};
+      \node(e) at ($(origin)+(3.75,3.75)$) {\normalsize{$\eta^1_{10}$}};
+      \node(e) at ($(origin)+(6.25,3.75)$) {\normalsize{$\eta^1_{11}$}};
+      \node(e) at ($(origin)+(8.75,3.75)$) {\normalsize{$\eta^1_{12}$}};
+      
+      \node(e) at ($(origin)+(1.25,6.25)$) {\normalsize{$\eta^1_{5}$}};
+      \node(e) at ($(origin)+(3.75,6.25)$) {\normalsize{$\eta^1_{6}$}};
+      \node(e) at ($(origin)+(6.25,6.25)$) {\normalsize{$\eta^1_{7}$}};
+      \node(e) at ($(origin)+(8.75,6.25)$) {\normalsize{$\eta^1_{8}$}};
+      
+      \node(e) at ($(origin)+(1.25,8.75)$) {\normalsize{$\eta^1_{1}$}};
+      \node(e) at ($(origin)+(3.75,8.75)$) {\normalsize{$\eta^1_{2}$}};
+      \node(e) at ($(origin)+(6.25,8.75)$) {\normalsize{$\eta^1_{3}$}};
+      \node(e) at ($(origin)+(8.75,8.75)$) {\normalsize{$\eta^1_{4}$}};
+            
+      \node(l_m1) at ($(origin)+(5,-1)$) {$\m_1$}; 
+      
+      
+      
+      \node(layer1) at ($(origin)+(13,-0)$) {};
+      \node(layer1_end) at ($(layer1)+(10,10)$) {};      
+%      \draw [draw=black,fill=white,very thick] (layer1) rectangle (layer1_end);
+      \draw [draw=black,fill=green!20,very thick] (layer1) rectangle ($(layer1)+(5,5)$);
+      \draw [draw=black,fill=blue!20,very thick] ($(layer1)+(5,0)$) rectangle ($(layer1)+(10,5)$);
+      \draw [draw=black,fill=brown!50,very thick] ($(layer1)+(0,5)$) rectangle ($(layer1)+(5,10)$);
+      \draw [draw=black,fill=red!30,very thick] ($(layer1)+(5,5)$) rectangle ($(layer1)+(10,10)$);
+      
+      \draw[] ($(layer1)+(2.5,0)$) -- ($(layer1)+(2.5,10)$);
+      \draw[] ($(layer1)+(7.5,0)$) -- ($(layer1)+(7.5,10)$);
+      \draw[] ($(layer1)+(0,2.5)$) -- ($(layer1)+(10,2.5)$);
+      \draw[] ($(layer1)+(0,7.5)$) -- ($(layer1)+(10,7.5)$);
+            
+      \node(e) at ($(layer1)+(1.25,1.25)$) {\normalsize{$\eta^2_{13}$}};
+      \node(e) at ($(layer1)+(3.75,1.25)$) {\normalsize{$\eta^2_{14}$}};
+      \node(e) at ($(layer1)+(6.25,1.25)$) {\normalsize{$\eta^2_{15}$}};
+      \node(e) at ($(layer1)+(8.75,1.25)$) {\normalsize{$\eta^2_{16}$}};
+      
+      \node(e) at ($(layer1)+(1.25,3.75)$) {\normalsize{$\eta^2_{9}$}};
+      \node(e) at ($(layer1)+(3.75,3.75)$) {\normalsize{$\eta^2_{10}$}};
+      \node(e) at ($(layer1)+(6.25,3.75)$) {\normalsize{$\eta^2_{11}$}};
+      \node(e) at ($(layer1)+(8.75,3.75)$) {\normalsize{$\eta^2_{12}$}};
+      
+      \node(e) at ($(layer1)+(1.25,6.25)$) {\normalsize{$\eta^2_{5}$}};
+      \node(e) at ($(layer1)+(3.75,6.25)$) {\normalsize{$\eta^2_{6}$}};
+      \node(e) at ($(layer1)+(6.25,6.25)$) {\normalsize{$\eta^2_{7}$}};
+      \node(e) at ($(layer1)+(8.75,6.25)$) {\normalsize{$\eta^2_{8}$}};
+      
+      \node(e) at ($(layer1)+(1.25,8.75)$) {\normalsize{$\eta^2_{1}$}};
+      \node(e) at ($(layer1)+(3.75,8.75)$) {\normalsize{$\eta^2_{2}$}};
+      \node(e) at ($(layer1)+(6.25,8.75)$) {\normalsize{$\eta^2_{3}$}};
+      \node(e) at ($(layer1)+(8.75,8.75)$) {\normalsize{$\eta^2_{4}$}};
+            
+      \node(l_m2) at ($(layer1)+(5,-1)$) {$\m_2$}; 
+
+      \node(arr) at ($(layer1)+(14,5)$) {$\boldsymbol{\cdots}$}; 
+
+      
+
+      \node(layer2) at ($(layer1)+(18,-0)$) {};
+      \node(layer2_end) at ($(layer2)+(10,10)$) {};
+%      \draw [draw=black,fill=white,very thick] (layer2) rectangle (layer2_end);
+      \draw [draw=black,fill=red!60,very thick] (layer2) rectangle ($(layer2)+(5,5)$);
+      \draw [draw=black,fill=orange!10,very thick] ($(layer2)+(5,0)$) rectangle ($(layer2)+(10,5)$);
+      \draw [draw=black,fill=yellow!77,very thick] ($(layer2)+(0,5)$) rectangle ($(layer2)+(5,10)$);
+      \draw [draw=black,fill=black!25,very thick] ($(layer2)+(5,5)$) rectangle ($(layer2)+(10,10)$);
+      
+      \draw[] ($(layer2)+(2.5,0)$) -- ($(layer2)+(2.5,10)$);
+      \draw[] ($(layer2)+(7.5,0)$) -- ($(layer2)+(7.5,10)$);
+      \draw[] ($(layer2)+(0,2.5)$) -- ($(layer2)+(10,2.5)$);
+      \draw[] ($(layer2)+(0,7.5)$) -- ($(layer2)+(10,7.5)$);
+            
+      \node(e) at ($(layer2)+(1.25,1.25)$) {\normalsize{$\eta^S_{13}$}};
+      \node(e) at ($(layer2)+(3.75,1.25)$) {\normalsize{$\eta^S_{14}$}};
+      \node(e) at ($(layer2)+(6.25,1.25)$) {\normalsize{$\eta^S_{15}$}};
+      \node(e) at ($(layer2)+(8.75,1.25)$) {\normalsize{$\eta^S_{16}$}};
+      
+      \node(e) at ($(layer2)+(1.25,3.75)$) {\normalsize{$\eta^S_{9}$}};
+      \node(e) at ($(layer2)+(3.75,3.75)$) {\normalsize{$\eta^S_{10}$}};
+      \node(e) at ($(layer2)+(6.25,3.75)$) {\normalsize{$\eta^S_{11}$}};
+      \node(e) at ($(layer2)+(8.75,3.75)$) {\normalsize{$\eta^S_{12}$}};
+      
+      \node(e) at ($(layer2)+(1.25,6.25)$) {\normalsize{$\eta^S_{5}$}};
+      \node(e) at ($(layer2)+(3.75,6.25)$) {\normalsize{$\eta^S_{6}$}};
+      \node(e) at ($(layer2)+(6.25,6.25)$) {\normalsize{$\eta^S_{7}$}};
+      \node(e) at ($(layer2)+(8.75,6.25)$) {\normalsize{$\eta^S_{8}$}};
+      
+      \node(e) at ($(layer2)+(1.25,8.75)$) {\normalsize{$\eta^S_{1}$}};
+      \node(e) at ($(layer2)+(3.75,8.75)$) {\normalsize{$\eta^S_{2}$}};
+      \node(e) at ($(layer2)+(6.25,8.75)$) {\normalsize{$\eta^S_{3}$}};
+      \node(e) at ($(layer2)+(8.75,8.75)$) {\normalsize{$\eta^S_{4}$}};
+            
+      \node(l_m2) at ($(layer2)+(5,-1)$) {$\m_S$}; 
+  
+    \end{tikzpicture}
+\end{figure}
+	
+	\vspace{-12mm}
+		\begin{figure}
+         	\centering
+    \begin{tikzpicture}[x=0.4cm,y=0.4cm]
+
+      \node(origin) at (0,0) {};
+      \node(end) at ($(origin)+(10,10)$) {};
+      
+      \node(f_int_origin) at (0.5,0.5) {};
+      \node(f_int_end) at (1.5,1.5) {};
+      \node(l_int_origin) at (8.5,8.5) {};
+      \node(l_int_end) at (9.5,9.5) {};
+      
+      \draw [very thick] ($(origin)+(-7,11)$) to[out=-60, in=135] ($(origin)+(5,10.2)$);
+      \draw [very thick] ($(origin)+(18,11)$) to[out=-120, in=45] ($(origin)+(5,10.2)$);
+       \draw [draw=black,fill=white,very thick] (origin) rectangle (end);
+%      \draw [draw=black,fill=brown!20,very thick] (origin) rectangle ($(origin)+(5,5)$);
+%      \draw [draw=black,fill=gray!20,very thick] ($(origin)+(5,0)$) rectangle ($(origin)+(10,5)$);
+%      \draw [draw=black,fill=purple!20,very thick] ($(origin)+(0,5)$) rectangle ($(origin)+(5,10)$);
+%      \draw [draw=black,fill=orange!40,very thick] ($(origin)+(5,5)$) rectangle ($(origin)+(10,10)$);
+      
+      \draw[] ($(origin)+(2.5,0)$) -- ($(origin)+(2.5,10)$);
+      \draw[] ($(origin)+(5,0)$) -- ($(origin)+(5,10)$);
+      \draw[] ($(origin)+(7.5,0)$) -- ($(origin)+(7.5,10)$);
+      \draw[] ($(origin)+(0,2.5)$) -- ($(origin)+(10,2.5)$);
+      \draw[] ($(origin)+(0,5)$) -- ($(origin)+(10,5)$);
+      \draw[] ($(origin)+(0,7.5)$) -- ($(origin)+(10,7.5)$);
+            
+      \node(e) at ($(origin)+(1.25,1.25)$) {\Large{$\eta_{13}$}};
+      \node(e) at ($(origin)+(3.75,1.25)$) {\Large{$\eta_{14}$}};
+      \node(e) at ($(origin)+(6.25,1.25)$) {\Large{$\eta_{15}$}};
+      \node(e) at ($(origin)+(8.75,1.25)$) {\Large{$\eta_{16}$}};
+      
+      \node(e) at ($(origin)+(1.25,3.75)$) {\Large{$\eta_{9}$}};
+      \node(e) at ($(origin)+(3.75,3.75)$) {\Large{$\eta_{10}$}};
+      \node(e) at ($(origin)+(6.25,3.75)$) {\Large{$\eta_{11}$}};
+      \node(e) at ($(origin)+(8.75,3.75)$) {\Large{$\eta_{12}$}};
+      
+      \node(e) at ($(origin)+(1.25,6.25)$) {\Large{$\eta_{5}$}};
+      \node(e) at ($(origin)+(3.75,6.25)$) {\Large{$\eta_{6}$}};
+      \node(e) at ($(origin)+(6.25,6.25)$) {\Large{$\eta_{7}$}};
+      \node(e) at ($(origin)+(8.75,6.25)$) {\Large{$\eta_{8}$}};
+      
+      \node(e) at ($(origin)+(1.25,8.75)$) {\Large{$\eta_{1}$}};
+      \node(e) at ($(origin)+(3.75,8.75)$) {\Large{$\eta_{2}$}};
+      \node(e) at ($(origin)+(6.25,8.75)$) {\Large{$\eta_{3}$}};
+      \node(e) at ($(origin)+(8.75,8.75)$) {\Large{$\eta_{4}$}};
+            
+      \node(l_m4) at ($(origin)+(-7,5)$) {\large{\tcr{A single $hp$-grid}}}; 
+%      \node(l_m5) at ($(origin)+(-7,5)$) {combining all}; 
+%      \node(l_m6) at ($(origin)+(-7,3)$) {error indicators}; 
+      \node(l_m7) at ($(origin)+(-2,5)$) {$\rightarrow$}; 
+      
+      \node(l_m8) at ($(origin)+(16,7)$) {Different Alternatives}; 
+      \node(l_m8) at ($(origin)+(16,5.75)$) {to combine the}; 
+      \node(l_m8) at ($(origin)+(16,4.25)$) {error indicators:}; 
+      \node(l_m9) at ($(origin)+(16,2)$) {$l_1$-norm, $l_2$-norm, $l_\infty$-norm}; 
+  
+    \end{tikzpicture}

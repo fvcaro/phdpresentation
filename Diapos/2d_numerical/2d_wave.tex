@@ -21,32 +21,7 @@
 
    \begin{figure}
       \centering
-      \begin{tikzpicture}[x=2.01cm,y=2.01cm]
-        % Nodes definition
-        \node(n1) at (0,0){};
-        \node(n2) at (1,0){};
-        \node(n3) at (1,1){};
-        \node(n4) at (0,1){};
-        \node(n5) at (0.25,0.25){};
-        \node(n6) at (0.75,0.25){};
-        \node(n7) at (0.75,0.75){};
-        \node(n8) at (0.25,0.75){};
-
-        % Drawing rectangles
-        \draw (n1) rectangle (n5) node[pos=0.5] {\footnotesize\( \Omega_{f} \)};
-        \draw (n7) rectangle (n3) node[pos=0.5] {\footnotesize\( \Omega_{l} \)};
-
-        % Boundary lines
-        \draw[line width=0.5mm, color=blue] (n5) rectangle (n7);
-        \draw[line width=0.5mm, color=blue] (n4.center) -- (n1.center) -- (n2.center) node[pos=0.5,pin={-90: \( \Gamma_{D} \)}]{};
-        \draw[line width=0.5mm, color=red] (n4.center)--  (n3.center) -- node[pos=0.5,pin={0: \( \Gamma_{N} \)}]{} (n2.center);
-
-        % Pattern filling
-        \draw [draw=black, pattern=north west lines, pattern color=gray!50] (n5) rectangle (n7);
-
-        % Label for Omega
-        \node(omega) at (0.5,0.85){\( \Omega \)};
-      \end{tikzpicture}
+      \input{Diapos/2d_numerical/Figures/domain_wave.tex}
       \caption{Domain \(\Omega = \left(0,1\right)^{2} \setminus \left(\frac{1}{4},\frac{3}{4}\right)^{2} \subset \mathbb{R}^{2}\).}
     \end{figure}
 
@@ -71,21 +46,7 @@
 
   \begin{figure}
     \centering
-    \begin{tikzpicture}
-      \begin{axis}[name=master,
-        width=0.5\textwidth,height=0.5\textwidth,
-        enlargelimits=false,
-        xlabel=$x$,
-        ylabel=$y$,
-        xlabel near ticks,
-        ylabel near ticks,
-        axis line style={draw=none},
-        tick style={draw=none},
-        hide axis,
-      ]
-      \addplot graphics[xmin=0,xmax=1,ymin=0,ymax=1] {Figures/Helm2DGOANon/h/order_1/grid_006.png};
-      \end{axis}
-    \end{tikzpicture}
+    \input{Diapos/2d_numerical/Figures/h-adapted.tex}
     \caption{Final $h$-adapted mesh for $p=1$.}
   \end{figure}
 
@@ -108,21 +69,7 @@
 
   \begin{figure}
     \centering
-    \begin{tikzpicture}
-      \begin{axis}[name=master,
-        width=0.5\textwidth,height=0.5\textwidth,
-        enlargelimits=false,
-        xlabel=$x$,
-        ylabel=$y$,
-        xlabel near ticks,
-        ylabel near ticks,
-        axis line style={draw=none},
-        tick style={draw=none},
-        hide axis,
-      ]
-      \addplot graphics[xmin=0,xmax=1,ymin=0,ymax=1] {Figures/Helm2DGOA/h/order_1/grid_007.png};
-      \end{axis}
-    \end{tikzpicture}
+    \input{Diapos/2d_numerical/Figures/h-adapted-goa.tex}
     \caption{Final $h$-adapted mesh for $p=1$.}
   \end{figure}
 

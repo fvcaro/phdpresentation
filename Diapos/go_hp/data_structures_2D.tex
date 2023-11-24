@@ -1,67 +1,8 @@
 \begin{frame}
 	\frametitle{Multi-Level Mesh Data Structure 2D}
 	\begin{figure}
-	\begin{center}
-	%\tikzset{/tikz/external/export next=false}
-	\begin{tikzpicture}[x=3cm,y=3cm]
-	\begin{scope}[%every node/.append style={yslant=0.5,xslant=-1.3},
-        yslant=0.5,xslant=-1.3
-        ]
-	\draw[fill= gray!60!white, line width=1pt] (0,0) rectangle (1.5,1.5);
-	\path[fill=white!80!gray, draw] (0.5,0.5) rectangle (1,1);
-	\draw[step=1/2, line width=1pt] (0,0) grid (1.5,1.5);
-
-	\foreach \x in {0,0.5,1, 1.5}{
-		\foreach \y in {0,0.5,1,1.5}{
-			\node[circle, draw, fill=black, inner sep=2pt] at (\x,\y){};
-		}
-	}
-	\node at (0.5,0.5) (root1){};
-	\node at (0.5,1) (root2){};
-	\node at (1,0.5) (root3){};
-	\node at (1,1) (root4){};
-	\end{scope}
-
-	\begin{scope}[
-	yshift=0.9cm,
-	%every node/.append style={yslant=0.5,xslant=-1.3},
-        yslant=0.5,xslant=-1.3
-        ]
-	\node at (0.5,0.5) (son1){};
-	\node at (0.5,1) (son2){};
-	\node at (1,0.5) (son3){};
-	\node at (1,1) (son4){};
-
-	\node at (0.75,0.5) (son5){};
-	\node at (0.75,1) (son6){};
-	\node at (0.5,0.75) (son7){};
-	\node at (1,0.75) (son8){};
-
-	\foreach \i in {1,2,...,4}{
-		\draw[dashed] (son\i) -- (root\i);
-	}
-	
-	\path[fill=gray, opacity=0.6] (0.5,0.5) rectangle (1,1);
-	\draw[dotted,  line width=1pt] (0.5,0.5) rectangle (1,1);
-	\draw[line width=1pt] (son5) -- (son6);
-	\draw[line width=1pt] (son7) -- (son8);
-
-	\foreach \xy in { (son5), (son6), (son7) , (son8)}{
-		\node[circle, draw, fill=white, inner sep=2pt] at \xy{};
-	}
-	\node[circle, draw, fill=black, inner sep=2pt] at (0.75,0.75){};
-
-	\path (son3) to node[pos=0.1](pinEdge){} (son4);
-
-	\node[above right =0.2 of pinEdge, anchor=west, inner sep=1pt](legend1){Dirichlet edge};
-	\node[above right =0.2 of son8, anchor=south, inner sep=1pt](legend2){Dirichlet node};
-
-	\draw[color=black, thin, shorten <=-3pt,<-] (pinEdge) -- (legend1.south west);
-	\draw[color=black, thin, shorten <=-2pt,<-] (son8) -- (legend2.south);
-	\end{scope}
-	\end{tikzpicture}
-	%\missingfigure[figwidth=6cm]{Testing a long text string}
-	\end{center}
+        \centering
+	\input{Diapos/go_hp/Figures/data_2d.tex}
 	\caption{\alert{Multi-level} 2D mesh without constraints on hanging nodes using Dirichlet nodes. The bubble basis functions are at the \alert{lowest level} of each family \label{fig:Multilevel}}
 	\end{figure}
 	\vfill

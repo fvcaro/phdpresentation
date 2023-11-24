@@ -1,0 +1,23 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={DoF per wavelength},
+        ylabel=Relative error in the QoI (\%),
+        ymode=log,
+        xmode=log,
+        ylabel near ticks,
+        xlabel near ticks,
+        width=0.9\plotwidth,height=0.9\plotheight,
+        legend style={draw=black, fill=white, legend cell align=left, at={(0.5,1.01)}, anchor=south},
+        log x ticks with fixed point,
+        xtick={3, 10, 40, 200, 600},
+        legend columns=2,
+      ]
+
+      \addplot+[] table[x=DoFs_per_wavelength, y=Error]{Diapos/1d_numerical/Figures/Helm1D-7/h/order_1/outputs.txt}node[pos=0.61, pin={[pin edge=solid]180:$k=7 \cdot 2\pi$}]{};
+
+      \addplot+[] table[x=DoFs_per_wavelength, y=Error]{Diapos/1d_numerical/Figures/Helm1D-14/h/order_1/outputs.txt}node[pos=0.8, pin={[pin edge=solid]-90:$k=14 \cdot 2\pi$}]{};
+
+      \addplot+[] table[x=DoFs_per_wavelength, y=Error]{Diapos/1d_numerical/Figures/Helm1D-28/h/order_1/outputs.txt}node[pos=1, pin={[pin edge=solid]90:$k=28 \cdot 2\pi$}]{};
+
+    \end{axis}
+  \end{tikzpicture}

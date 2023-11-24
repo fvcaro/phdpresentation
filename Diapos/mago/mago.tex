@@ -1,0 +1,136 @@
+\begin{frame}
+    \frametitle{A Goal-Oriented strategy for parametric PDEs}
+    
+    \vspace{-1mm}
+    \begin{block}{Definitions}
+    \input{Diapos/mago/Figures/samples.tex}
+    \caption{Representation of $S$ different samples.}
+    \label{fig:all_the_samples}
+\end{figure}
+
+\note[Moreover, due to the singularities or discontinuities in the derivatives along with material interfaces that the solutions may exhibit, these problems often demand rather fine or complex finite element grids to accurately describe them \\ enormous number of problems that DNNs employ for approximating the inverse operator in the training process, it becomes necessary to design efficient numerical methods that maintain the computational cost under control.]
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Variational Formulation}
+    \begin{block}{Abstract Variational Formulation}
+        Find \( u_{\mathcal{F}} \in \H_{\mathcal{F}} \) such that
+        \begin{align}
+        \label{eq:directH1_mago_discrete}
+            b^{\mathbf{m}}\left(u^{\mathbf{m}}_{\mathcal{F}},\phi_{\mathcal{F}}\right) = f^{\mathbf{m}}\left(\phi_{\mathcal{F}}\right), \quad \forall \phi_{\mathcal{F}} \in \H_{\mathcal{F}},
+        \end{align}
+        where:
+        \begin{itemize}
+            \item \( b^{\mathbf{m}} \) corresponds to the bilinear form that characterizes the problem related to the model \( \mathbf{m} \),
+            \item \( f^{\mathbf{m}}(\cdot) \) is a linear form.
+        \end{itemize}
+        \vspace{1em} % Added vertical space
+        Find \( v^{\mathbf{m}}_{\mathcal{F}} \in \H_{\mathcal{F}} \) such that
+        \begin{align}
+        \label{eq:adjointH1_mago_discrete}
+            b^{\mathbf{m}}\left(\phi_{\mathcal{F}},v^{\mathbf{m}}_{\mathcal{F}}\right)=l^{\mathbf{m}}\left(\phi_{\mathcal{F}}\right), \quad \forall \phi_{\mathcal{F}} \in \H_{\mathcal{F}},
+        \end{align}
+        where:
+        \begin{itemize}
+            \item \( l^{\mathbf{m}}(\cdot) \) is a linear continuous form. 
+        \end{itemize}
+    \end{block}     
+\end{frame}
+
+\begin{frame}
+\frametitle{A Goal-Oriented strategy for parametric PDEs}
+
+\begin{block}{Objective}
+We are interested in controlling \(\left|l\left(u^{\mathbf{m}}_{\mathcal{F}}\right) - l\left(u^{\mathbf{m}}_{\mathcal{E}_K}\right)\right|, \; \forall K \in \mathcal{T}\).
+\end{block}
+
+\begin{block}{Approximation and Bound}
+We find that:
+\begin{equation}
+  \left|l\left(u^{\mathbf{m}}_{\mathcal{F}}\right) - l\left(u^{\mathbf{m}}_{\mathcal{E}_K}\right)\right| \simeq \left|b\left(\Pi_{\mathcal{F}}^{\mathcal{R}_K} u^{\mathbf{m}}_{\mathcal{F}}, \Pi_{\mathcal{F}}^{\mathcal{R}_K} v^{\mathbf{m}}_{\mathcal{F}}\right)\right|
+  \leq  \left|a\left(\Pi_{\mathcal{F}}^{\mathcal{R}_K} u^{\mathbf{m}}_{\mathcal{F}}, \Pi_{\mathcal{F}}^{\mathcal{R}_K} v^{\mathbf{m}}_{\mathcal{F}}\right)\right|,
+  \label{eq:upper_bound_goa}
+\end{equation}
+where \(a\) is an alternative operator \textemdash not necessarily the original bilinear form.
+\end{block}
+
+\begin{block}{Isotropic Element-wise Indicators}
+Therefore, we define the isotropic element-wise indicators \(\eta_K, \forall K \in \mathcal{T}\), as:
+\begin{equation}
+  \eta^{\mathbf{m}}_K \coloneqq \left|a\left(\Pi_{\mathcal{F}}^{\mathcal{R}_K} u^{\mathbf{m}}_{\mathcal{F}}, \Pi_{\mathcal{F}}^{\mathcal{R}_K} v^{\mathbf{m}}_{\mathcal{F}}\right)\right|, \quad \forall K \in \mathcal{T}.
+  \label{eq:error_indicator_goa}
+\end{equation}
+\end{block}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{MAGO: (M)ulti-(A)daptive (G)oal-(O)riented}
+    \begin{block}{Abstract Variational Formulation}
+        Find \( u^{\mathbf{m}_i}_{\mathcal{F}} \in \H_{\mathcal{F}} \) such that
+        \begin{align}
+		b^{\mathbf{m}_i}\left(u^{\mathbf{m}_i}_{\mathcal{F}},\phi_{\mathcal{F}}\right) = f^{\mathbf{m}_i}\left(\phi_{\mathcal{F}}\right), \quad \forall \phi_{\mathcal{F}} \in \H_{\mathcal{F}}.
+        \end{align}
+        \vspace{1em} % Added vertical space
+        Find \( v^{\mathbf{m}_i}_{\mathcal{F}} \in \H_{\mathcal{F}} \) such that
+        \begin{align}
+           b^{\mathbf{m}_i}\left(\phi_{\mathcal{F}},v^{\mathbf{m}_i}_{\mathcal{F}}\right) = l^{\mathbf{m}_i}\left(\phi_{\mathcal{F}}\right), \quad \forall \phi_{\mathcal{F}} \in \H_{\mathcal{F}}.
+        \end{align}
+        where \( i = 1, \ldots, S \), indicating that we solve \( S \) forward and adjoint discrete problems.
+    \end{block}    
+    \begin{block}{Objective}
+          Build a \underline{\textbf{single}} final \( hp \)-mesh, optimizing its size to be as small as possible for all the samples in a single GOA process.
+	\end{block} 
+\end{frame}
+%\begin{block}{Approximation and Bound}
+%    We control the error in each sample individually:
+%    \begin{equation}
+%      \left|l\left(u^{\mathbf{m}_i}_{\mathcal{F}}\right) - l\left(u^{\mathbf{m}_i}_{\mathcal{E}_K}\right)\right| \simeq \left|b\left(\Pi_{\mathcal{F}}^{\mathcal{R}_K} u^{\mathbf{m}_i}_{\mathcal{F}},\Pi_{\mathcal{F}}^{\mathcal{R}_K} v^{\mathbf{m}_i}_{\mathcal{F}}\right)\right|
+%     \leq \left|a\left(\Pi_{\mathcal{F}}^{\mathcal{R}_K} u^{\mathbf{m}_i}_{\mathcal{F}},\Pi_{\mathcal{F}}^{\mathcal{R}_K} v^{\mathbf{m}_i}_{\mathcal{F}}\right)\right|.
+%    \end{equation}
+%\end{block}
+%
+%\begin{block}{Isotropic Element-wise Indicators}
+%    To do so, we define an element-wise error indicator \(\eta_K\) for each element \(K\) as follows:
+%    \begin{equation}
+%	    \eta_K = \left\|a\left(\Pi_{\mathcal{F}}^{\mathcal{R}_K} u^{\mathbf{m}_i}_{\mathcal{F}},\Pi_{\mathcal{F}}^{\mathcal{R}_K} v^{\mathbf{m}_i}_{\mathcal{F}}\right)\right\|_{l^p}.
+%    \end{equation}
+%\end{block}
+
+\begin{frame}
+\frametitle{MAGO: (M)ulti-(A)daptive (G)oal-(O)riented}
+
+\begin{block}{Termination Criterion}
+    To control the relative error the QoI, ensuring that it falls within a specified tolerance \(TOL\):
+    \begin{equation}
+        \max_{i, \, \left\{\mathbf{m}_i\right\}_{i=1}^S} \left\{ \frac{\left|l\left(u^{\mathbf{m}_i}\right) - l\left(u^{\mathbf{m}_i}_{\mathcal{T}_{c}}\right)\right|}{\left|l\left(u^{\mathbf{m}_i}\right)\right|}\right\} < TOL. 
+    \end{equation}
+\end{block}
+
+\vspace{1mm}
+
+\begin{block}{Coarsening Step with a Single Mesh}
+    \vspace{2mm}
+    We employ a coarsening step using a single mesh, which involves the following stages:
+    \begin{enumerate}
+        \item Solve the finite element method (FEM) problem for each \(\mathbf{m}_i\).
+        \item Compute element-wise error indicators for each \(\mathbf{m}_i\).
+        \item Combine all the element-wise error indicators into a unified measure.
+        \item Perform mesh unrefinement based on the combined error measure.
+    \end{enumerate}
+\end{block}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{MAGO: (M)ulti-(A)daptive (G)oal-(O)riented}
+    \vspace{-2mm}
+
+    \vspace{-1mm}
+
+    \begin{figure}
+        \centering
+        \input{Diapos/mago/Figures/goa_indicators.tex}
+    \end{figure}
+\end{frame}

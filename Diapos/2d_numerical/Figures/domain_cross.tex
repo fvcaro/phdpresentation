@@ -1,0 +1,26 @@
+ \begin{tikzpicture}[x=3cm,y=3cm]
+        % Nodes for regions
+        \node (n1) at (0.25,0) {};
+        \node (n2) at (0.75,0) {};
+        \node (n3) at (0.75,0.25) {};
+        \node (n4) at (0.25,0.25) {};
+        \node (n5) at (0.5,0.5) {};
+        \node (n7) at (0.75,0.75) {};
+
+        % Rectangles and labels
+        \draw (n4) rectangle (n5) node[pos=0.5] {\footnotesize $\Omega_{f}$};
+        \draw (n5) rectangle (n7) node[pos=0.5] {\footnotesize $\Omega_{l}$};
+
+        % Boundary and labels
+        \draw[line width=0.5mm, color=blue] (0.25,0) -- (0.75,0) -- (0.75,0.25) -- (1,0.25) -- (1,0.75) -- (0.75,0.75) -- (0.75,1) -- (0.25,1) -- (0.25,0.75) -- (0,0.75) -- (0,0.25) -- (0.25,0.25) -- (0.25,0);
+        \node at (0.5,0.9) {$\Omega$};
+
+        % Labels at specific coordinates
+        \node at (0,0) {$0$};
+        \node at (1,0) {$1$};
+        \node at (0,1) {$1$};
+
+        % Dashed lines connecting labels
+        \draw[dashed] (0.05,0) -- (0.97,0);
+        \draw[dashed] (0,0.05) -- (0,0.96);
+      \end{tikzpicture}

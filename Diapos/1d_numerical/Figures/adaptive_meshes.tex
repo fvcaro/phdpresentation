@@ -1,0 +1,67 @@
+ \begin{tikzpicture}[scale=0.85]
+    \findmax{Diapos/1d_numerical/Figures/Helm1D-7/p/order_1/coarse_meshes/coarse_mesh_06.txt}{order}{\maxp}
+
+    \begin{axis}[
+        name=master,
+        width=\textwidth,
+        height=\plotheight,
+        enlargelimits=false,
+        enlarge y limits=true,
+        enlarge y limits=0.15,
+        xlabel=$x$,
+        ylabel=$u(x)$,
+      ]
+      \addplot+[no markers, solid] table[x=X, y=My_beautiful_solution_real] {Diapos/1d_numerical/Figures/Helm1D-7/h/order_1/coarse_meshes/coarse_sol_dir_06.txt} node[pos=0.72, above]{direct};
+      \addplot+[no markers, solid] table[x=X, y=My_beautiful_solution_real] {Diapos/1d_numerical/Figures/Helm1D-7/h/order_1/coarse_meshes/coarse_sol_adj_06.txt} node[pos=0.555, anchor=south west]{adjoint};
+    \end{axis}
+
+    \begin{axis}[
+        name=pmesh,
+        colormap access=const,
+        colorbar horizontal,
+        colorbar sampled,
+        colorbar style={
+          samples=\maxp+1,
+          xtick={0.5,1.5,...,\maxp},
+          xticklabels={1,2,...,\maxp},
+          at={(master.above north west)},
+          anchor=south west,
+          title=Approximation order $p$,
+          title style={yshift=3pt}, % Adjust the value as needed
+          xticklabel pos=upper,
+          yshift=1em,
+          xtick style={draw=none},
+          title style={yshift=2pt},
+        },
+        width=\textwidth,
+        at={(master.south west)},
+        enlargelimits=false,
+        axis lines=none,
+        height=2cm,
+        ticks=none,
+        point meta min=0,
+        point meta max=\maxp,
+        title=$p$-Mesh,
+        title style={left, at={(0,0)}, align=right},
+      ]
+      \addplot [patch, patch type=rectangle, point meta=explicit, line width=0.1pt, faceted color=black] table[meta expr=\thisrow{order}-0.5] {Diapos/1d_numerical/Figures/Helm1D-7/p/order_1/coarse_meshes/coarse_mesh_06.txt};
+    \end{axis}
+
+    \begin{axis}[
+        name=hmesh,
+        width=\textwidth,
+        at={(master.north west)},
+        anchor=north west,
+        enlargelimits=false,
+        axis lines=none,
+        height=2cm,
+        ticks=none,
+        point meta min=0,
+        point meta max=\maxp,
+        title=$h$-Mesh,
+        title style={left, at={(0,0)}, align=right},
+      ]
+      \addplot [patch, patch type=rectangle, point meta=explicit, line width=0.1pt, faceted color=black] table[meta expr=\thisrow{order}-0.5] {Diapos/1d_numerical/Figures/Helm1D-7/h/order_1/coarse_meshes/coarse_mesh_05.txt};
+    \end{axis}
+
+  \end{tikzpicture}

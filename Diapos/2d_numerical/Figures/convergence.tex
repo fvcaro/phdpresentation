@@ -1,0 +1,38 @@
+\begin{tikzpicture}
+\pgfplotsset{xmode=log, ymode=log} % Set log mode for both axes globally
+
+\begin{axis}[
+    name=mainerrorplot,
+    xlabel={nDoFs (log scale)},
+    ylabel={Relative error in \% (log scale)},
+    ymode=log,
+    xmode=log,
+    width=0.9\plotwidth,
+    height=0.9\plotheight,
+    ylabel near ticks,
+    xlabel near ticks,
+    enlargelimits=true,
+    legend style={
+        draw=black,
+        fill=white,
+        legend cell align=left,
+        at={(0.5,1.03)}, 
+        anchor=south
+    },
+    legend columns=-1
+]
+
+% Plot for hp
+\addplot+[line width=1pt] table[x expr=\thisrow{nr_dof}, y expr=\thisrow{Error}] {\FigurePath/CrossGOA/hp/order_1/outputs.txt}
+    node[pos=0.85, pin={[pin edge=solid, pin distance=0.05cm]180:$hp$}] {}; % Adjusted pos from 0.9 to 0.85
+
+% Plot for h with p=1
+\addplot+[line width=1pt] table[x expr=\thisrow{nr_dof}, y expr=\thisrow{Error}] {\FigurePath/CrossGOA/h/order_1/outputs.txt}
+    node[pos=0.9, pin={[pin edge=solid, pin distance=0.005cm]90:$h$ ($p=1$)}] {};
+
+% Plot for h with p=2
+\addplot+[line width=1pt] table[x expr=\thisrow{nr_dof}, y expr=\thisrow{Error}] {\FigurePath/CrossGOA/h/order_2/outputs.txt} 
+    node[pos=1.010, pin={[pin edge=solid, pin distance=0.005cm]90:$h$ ($p=2$)}] {};
+
+\end{axis}
+\end{tikzpicture}

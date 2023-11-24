@@ -1,0 +1,34 @@
+ \begin{tikzpicture}[x=2.5cm,y=2.5cm]
+
+      \node(origin) at (0,0) {};
+      \node(n2) at (1,0){};
+      \node(n3) at (1,1){};
+      \node(n4) at (0,1){};
+      
+      \node(n5) at (0.02,0.02) {};
+      \node(n6) at (0.18,0.18) {};
+      \node(n7) at (0.82,0.82) {};
+      \node(n8) at (0.98,0.98) {};
+      
+      \draw [draw=black,fill=white] (n5) rectangle (n6);
+      \draw [draw=black,fill=white] (n7) rectangle (n8);
+            
+       \node(omega) at (0.5,0.5){$\Omega$};
+       
+       \node(omegaf) at (0.1,0.1){\text{\footnotesize$ \Omega_{f} $}};
+       \node(omegal) at (0.9,0.9){\text{\footnotesize$ \Omega_{l} $}};
+
+      \draw[] ($(origin)+(0.2,0)$) -- ($(origin)+(0.2,1)$);
+      \draw[] ($(origin)+(0.4,0)$) -- ($(origin)+(0.4,1)$);
+      \draw[] ($(origin)+(0.6,0)$) -- ($(origin)+(0.6,1)$);
+      \draw[] ($(origin)+(0.8,0)$) -- ($(origin)+(0.8,1)$);
+
+      \draw[] ($(origin)+(0,0.2)$) -- ($(origin)+(1,0.2)$);
+      \draw[] ($(origin)+(0,0.4)$) -- ($(origin)+(1,0.4)$);
+      \draw[] ($(origin)+(0,0.6)$) -- ($(origin)+(1,0.6)$);
+      \draw[] ($(origin)+(0,0.8)$) -- ($(origin)+(1,0.8)$);
+      
+      \draw[line width=0.5mm, color=blue] (n4.center) -- (origin.center) -- (n2.center) node[pos=0.5,pin={-90: $\partial \Omega$}]{};
+      \draw[line width=0.5mm, color=blue] (n4.center)--  (n3.center) -- (n2.center);
+
+    \end{tikzpicture}
