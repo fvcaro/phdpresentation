@@ -372,11 +372,14 @@ node[pos=0.1, pin={[pin edge=solid, pin distance=0.4cm]270:$h$ ($p=2$)}] {};
   \begin{subfigure}[t]{0.48\textwidth}
     \centering
     \converleft[#1]{#2}{#3}{Error}
+    \vspace{-5mm} % Adjust the negative space as needed
+    \caption{Evolution of goal-oriented adaptivity.}
   \end{subfigure}
   ~
  \begin{subfigure}[t]{0.48\textwidth}
     \centering
     \converright[#1]{#2}{#3}{Lower}
+    \caption{Evolution of energy-norm adaptivity.}
   \end{subfigure}
 }
 % ========
@@ -391,38 +394,33 @@ node[pos=0.1, pin={[pin edge=solid, pin distance=0.4cm]270:$h$ ($p=2$)}] {};
   \begin{tikzpicture}
     \pgfplotsset{xmode=log}
     
-    \begin{axis}[name=mainerrorplot,
-          xlabel={Number of DoF},
-          ylabel=Relative error in \% (log scale),
-          ymode=log,
-          xmode=log,
-           width=\textwidth,height=\plotheight,
-          ylabel near ticks,
-          xlabel near ticks,
-          enlargelimits=true,
-          legend style={draw=black,fill=white,legend cell align=left, at={(0.5,1.01)}, anchor=south},
-          legend columns=-1
-        ]
+    \begin{axis}[
+      name=mainerrorplot,
+      xlabel={Number of DoF},
+      ylabel=Relative error in \% (log scale),
+      ymode=log,
+      xmode=log,
+      width=\textwidth,height=\plotheight,
+      ylabel near ticks,
+      xlabel near ticks,
+      enlargelimits=true,
+      legend style={draw=black,fill=white,legend cell align=left, at={(0.5,1.01)}, anchor=south},
+      legend columns=-1
+    ]
         %
-        \foreach\method in {#1}{												
-          \ifthenelse{\equal{\method}{hp}}{
+        \pgfplotsinvokeforeach{#1}{
+          \ifthenelse{\equal{#1}{hp}}{
             \foreach \order in {1}{
-                \edef\temp{\noexpand\addlegendentry{GOA}}
-                \pgfplotstableread{\FigurePath/\GOAPbName/hp/order_\order/outputs.txt}\loadedtable
-                \addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{\ColName}] {\loadedtable};
-                \temp
+                \addplot+[line width=1pt] table[x expr=\thisrow{nr_dof}, y expr=\thisrow{\ColName}] {\FigurePath/\GOAPbName/hp/order_\order/outputs.txt};
+                \addlegendentryexpanded{$e_{\textrm{rel}}^{\textrm{QoI}}$}
                 
-                \edef\temp{\noexpand\addlegendentry{energy-norm}}
-                \pgfplotstableread{\FigurePath/\EnergyPbName/hp/order_\order/outputs.txt}\loadedtable
-                \addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{\ColName}] {\loadedtable};
-                \temp
-              }
+                \addplot+[line width=1pt] table[x expr=\thisrow{nr_dof}, y expr=\thisrow{\ColName}] {\FigurePath/\EnergyPbName/hp/order_\order/outputs.txt};
+                \addlegendentryexpanded{$\tilde{e}_{\textrm{rel}}^{\textrm{\, energy}}$}
+            }
           }{}
         }
-      \end{axis}
+    \end{axis}
   \end{tikzpicture}
-  \caption{Evolution of goal-oriented adaptivity.}
-  \label{subfig:compagoal}
 }
 % =========
 %\converright
@@ -432,11 +430,12 @@ node[pos=0.1, pin={[pin edge=solid, pin distance=0.4cm]270:$h$ ($p=2$)}] {};
   \renewcommand{\GOAPbName}{#2} 
   \renewcommand{\EnergyPbName}{#3} 
   \renewcommand{\ColName}{#4}
-  
+
   \begin{tikzpicture}
     \pgfplotsset{xmode=log}
     
-    \begin{axis}[name=mainerrorplot,
+    \begin{axis}[
+          name=mainerrorplot,
           xlabel={Number of DoF},
           ymode=log,
           xmode=log,
@@ -449,25 +448,19 @@ node[pos=0.1, pin={[pin edge=solid, pin distance=0.4cm]270:$h$ ($p=2$)}] {};
           legend columns=-1
         ]
         %
- 	\foreach\method in {#1}{												
-          \ifthenelse{\equal{\method}{hp}}{
+        \pgfplotsinvokeforeach{#1}{
+          \ifthenelse{\equal{#1}{hp}}{
             \foreach \order in {1}{
-                \edef\temp{\noexpand\addlegendentry{GOA}}
-                \pgfplotstableread{\FigurePath/\GOAPbName/hp/order_\order/outputs.txt}\loadedtable
-                \addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{\ColName}] {\loadedtable};
-                \temp
-                
-                 \edef\temp{\noexpand\addlegendentry{energy-norm}}
-                \pgfplotstableread{\FigurePath/\EnergyPbName/hp/order_\order/outputs.txt}\loadedtable
-                \addplot+[ line width=1pt] table[x expr=\thisrow{nr_dof},y expr=\thisrow{\ColName}] {\loadedtable};
-                \temp
-              }
+                \addplot+[line width=1pt] table[x expr=\thisrow{nr_dof}, y expr=\thisrow{\ColName}] {\FigurePath/\GOAPbName/hp/order_\order/outputs.txt};
+                \addlegendentryexpanded{$e_{\textrm{rel}}^{\textrm{QoI}}$}
+
+                \addplot+[line width=1pt] table[x expr=\thisrow{nr_dof}, y expr=\thisrow{\ColName}] {\FigurePath/\EnergyPbName/hp/order_\order/outputs.txt};
+                \addlegendentryexpanded{$\tilde{e}_{\textrm{rel}}^{\textrm{\, energy}}$}
+            }
           }{}
         }
-      \end{axis}
+    \end{axis}
   \end{tikzpicture}
-  \caption{Evolution of energy-norm adaptivity.}
-  \label{subfig:compaenergy}
 }
 % =========
 %\plotsolution

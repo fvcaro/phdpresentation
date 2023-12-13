@@ -39,10 +39,10 @@
 	\draw[color=red, thick] (son1.center) -- (basis2.center) -- (son3.center);
 	% degree 2 basis function
 	\draw[color=red, thick]    (son1.center) .. controls ($(elemson1)+(-0.1,+0.15)$) and ($(elemson1)+(0.1,0.15)$) ..  (son2.center) ;
-	\draw[color=green!50!black,ultra thick]    (son2.center) .. controls ($(elemson2)+(-0.1,+0.15)$) and ($(elemson2)+(0.1,0.15)$) ..  (son3.center);
-	\draw[color=green!50!black,ultra thick]    (father2.center) .. controls ($(elemfather2)+(-0.1,+0.15)$) and ($(elemfather2)+(0.1,0.15)$) ..  (father3.center) ;
+	\draw[color=blue,ultra thick]    (son2.center) .. controls ($(elemson2)+(-0.1,+0.15)$) and ($(elemson2)+(0.1,0.15)$) ..  (son3.center);
+	\draw[color=blue,ultra thick]    (father2.center) .. controls ($(elemfather2)+(-0.1,+0.15)$) and ($(elemfather2)+(0.1,0.15)$) ..  (father3.center) ;
 	% degree 3 basis function
-	\draw[color=green!50!black,ultra thick]   (son1.center) .. controls ($(elemson1)+(-0.1,-0.15)$) and ($(elemson1)+(0.1,0.15)$) ..  (son2.center);
+	\draw[color=blue,ultra thick]   (son1.center) .. controls ($(elemson1)+(-0.1,-0.15)$) and ($(elemson1)+(0.1,0.15)$) ..  (son2.center);
 	\end{tikzpicture}
 	\caption{$hp$-case\label{fig:basis1Dhp}}
 	\end{subfigure}
@@ -83,7 +83,7 @@
 	\node[anchor=north] at (elemson2) {};
 	% linear basis function
 	\draw[color=red, thick]   (father1.center) -- (basis1.center) -- (father3.center);
-	\draw[color=green!50!black, ultra thick]   (son1.center) -- (basis2.center) -- (son3.center) ;
+	\draw[color=blue, ultra thick]   (son1.center) -- (basis2.center) -- (son3.center) ;
 	\end{tikzpicture}
 	\caption{$h$-case \label{fig:basis1Dh}}
 \end{subfigure}

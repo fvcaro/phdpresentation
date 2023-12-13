@@ -1,13 +1,13 @@
 \resizebox{0.55\textwidth}{!}{% Resize to the width of the text block
 	\begin{tikzpicture}
 		\node[rounded rectangle, draw, very thick](Init) {Initial coarse mesh};
-		\node[below right=1/2 of Init,rounded rectangle, draw, very thick,color=blue,align=center](ref) {Arbitrary \\(user-defined/global)\\ refinements};
-		\node[below= of ref, rounded rectangle, draw, very thick,color=green!50!black, align=center](unrefProcess) {Quasi-optimal\\$hp$-unrefinements};
+		\node[below right=1/2 of Init,rounded rectangle, draw, very thick,color=green!50!black,align=center](ref) {Arbitrary \\(user-defined/global)\\ refinements};
+		\node[below= of ref, rounded rectangle, draw, very thick,color=blue, align=center](unrefProcess) {Quasi-optimal\\$hp$-unrefinements};
 		\node[below right=1/2 of unrefProcess,rounded rectangle, draw, very thick](final) {Adapted mesh};
 
 		\draw[->, thick] (Init) -| (ref);
-		\draw[->, thick,color=blue] (ref.east) to[out=0,in=0] (unrefProcess.east);
-		\draw[->, thick,color=green!50!black] (unrefProcess.west) to[out=180,in=180] node[pos=0.5](PinExitRef){} (ref.west);
+		\draw[->, thick,color=green!50!black] (ref.east) to[out=0,in=0] (unrefProcess.east);
+		\draw[->, thick,color=blue] (unrefProcess.west) to[out=180,in=180] node[pos=0.5](PinExitRef){} (ref.west);
 		\draw[->, thick] (unrefProcess) |- (final);
 	\end{tikzpicture}
 }

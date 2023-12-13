@@ -8,7 +8,7 @@
       %\tiny % Using tiny size for equations
       e_{\textrm{rel}}^{\textrm{QoI}} \coloneqq \frac{|l(u) - l(u_{\mathcal{T}_{c}})|}{|l(u)|} \times 100,
     \end{equation}
-    where $u$ is the fine grid solution, $u_{\mathcal{T}_{c}}$ is the coarser mesh solution, and $\mathcal{T}$ represents the discretization of $\H$ into finite elements with $\H_{\mathcal{F}} \subset \H$.
+    where $u$ is the fine grid solution, $u_{\mathcal{T}_{c}}$ is the coarser mesh solution.
   \end{block} 
 
   \begin{block}{Helmholtz Goal-Oriented problem}
@@ -19,8 +19,19 @@
       u(0)         & = 0, \\
       u'(1)        & = 0.
     \end{align}
-    QoI: $l(u)= 5 \int_{\frac{3}{5}}^{\frac{4}{5}} u \, dx$.
+    QoI: $l(u)= 5 \int_{\frac{3}{5}}^{\frac{4}{5}} u \, dx$. \, The operator $a\left(\cdot ,\cdot\right)$ is the 1D Laplace operator.
   \end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Solution and Final Adaptive Meshes}
+	\pgfplotsset{colormap/YlOrRd}
+
+\begin{figure}
+  \centering
+  \input{Diapos/1d_numerical/Figures/adaptive_meshes.tex}
+  \caption{Solutions with $k = 7 \cdot 2 \pi$ problem after the $h$-adaptive process.}
+\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -40,15 +51,4 @@
   	\input{Diapos/1d_numerical/Figures/p-adaptivity.tex}
   	\caption{Evolution of $e_{\textrm{rel}}^{\textrm{QoI}}$ using $p$-adaptivity. Uniform mesh size $h=\frac{1}{30}$.}
 	\end{figure}	
-\end{frame}
-
-\begin{frame}
-	\frametitle{Solution and Final Adaptive Meshes}
-	\pgfplotsset{colormap/YlOrRd}
-
-\begin{figure}
-  \centering
-  \input{Diapos/1d_numerical/Figures/adaptive_meshes.tex}
-  \caption{Solutions with $k = 7 \cdot 2 \pi$ problem after the $h$-adaptive process.}
-\end{figure}
 \end{frame}

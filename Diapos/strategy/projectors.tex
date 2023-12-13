@@ -1,7 +1,7 @@
 \begin{frame}
 \frametitle{Variational Formulation}
     \begin{block}{Abstract Variational Formulation}
-        Find $u_{\mathcal{F}} \in \H_{\mathcal{F}}$ such that
+        Find \( u_{\mathcal{F}} \in \H_{\mathcal{F}} \subset \H \) such that
         \begin{align}
         \label{eq:directH1}
             b\left(u_{\mathcal{F}},\phi_{\mathcal{F}}\right) = f\left(\phi_{\mathcal{F}}\right), \quad \forall \phi_{\mathcal{F}} \in \H_{\mathcal{F}},
@@ -22,7 +22,7 @@
 \begin{frame}
 \frametitle{Projection Operator}
 \begin{block}{Definition}
-    Let \( u_{\mathcal{F}} \) be the Galerkin approximation of \( u \) within \( \H_{\mathcal{F}} \) as follows:
+    Let \( u_{\mathcal{F}} \) be the Galerkin approximation of \( u \) within \( \H_{\mathcal{F}}  \subset \H \) as follows:
     \begin{equation}
        u_{\mathcal{F}} \coloneqq \sum_{\phi_{i} \in \mathcal{F}} u_{i} \phi_{i},
     \end{equation}
@@ -35,6 +35,19 @@
         \end{equation}
         where we extract the coefficients of $u_{\mathcal{F}}$ corresponding to the basis functions in $\mathcal{S}$, and we set the others to zero.
     \end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Removable 1D Basis Functions}
+	\begin{block}{Definition}
+	We define {\color{blue} removable} basis functions as those we can eliminate from the discretization without modifying any other basis 	function while preserving \textbf{complete} polynomial spaces. 
+	\end{block}
+	\begin{figure}
+	 \hspace{-1cm}
+	\centering
+	 \input{Diapos/go_hp/Figures/removable.tex}
+	\caption{Removable 1D basis functions}
+	\end{figure}
 \end{frame}
 
 %\begin{frame}
@@ -108,59 +121,59 @@ The choice of these operators might highly influence the results of the adaptive
 
 \end{frame}
 
-\begin{frame}{Energy-norm based Elliptic Problems}
+%\begin{frame}{Energy-norm based Elliptic Problems}
+%
+%For a given element $K \in \mathcal{T}$, our goal is to quantify the energy lost in the solution when removing a subset of basis functions from the set of \emph{removable} basis functions $\mathcal{R}_K$. % Specifically, we compute:
+%\[\norm{u_{\mathcal{F}} - u_{\mathcal{E}_K}}_e^2.\]
+%%Note: A small value indicates that the energy of the removed basis functions is insignificant, suggesting comparable results between fine and unrefined meshes.
+%
+%\textbf{Mathematical Derivation:} Analogously to Cea's lemma proof, we derive:
+%\begin{align}
+%  \norm{u_{\mathcal{F}}-u_{\mathcal{E}_K}}_e^2 &= b\left(u_{\mathcal{F}}-u_{\mathcal{E}_K},u_{\mathcal{F}}-u_{\mathcal{E}_K}\right) \\
+%  &= b\left(u_{\mathcal{F}}-u_{\mathcal{E}_K},u_{\mathcal{F}}-\Pi_{\mathcal{F}}^{\mathcal{E}_K} u_{\mathcal{F}}\right) + b\left(u_{\mathcal{F}}-u_{\mathcal{E}_K},\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}-u_{\mathcal{E}_K}\right) \\
+%  &\leq \norm{u_{\mathcal{F}}-u_{\mathcal{E}_K}}_{e}\norm{u_{\mathcal{F}}-\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}}_e,
+%\end{align}
+%where we use the $b$-orthogonality of $u_{\mathcal{F}}-u_{\mathcal{E}_K}$ with $\H_{\mathcal{E}_K}$ and the Cauchy-Schwarz inequality. Hence,
+%\begin{equation}
+%  \norm{u_{\mathcal{F}}-u_{\mathcal{E}_K}}_e \leq \norm{u_{\mathcal{F}}-\Pi_{\mathcal{F}}^{\mathcal{E}_K} u_{\mathcal{F}}}_e=\norm{\Pi_{\mathcal{F}}^{\mathcal{R}_K} u_{\mathcal{F}}}_e. \label{eq:upperboundSPD}
+%\end{equation}
+%
+%\textbf{Error Indicator:} We define the element-wise error indicator as
+%\begin{equation}
+%  \eta_K\coloneqq \norm{\Pi_{\mathcal{F}}^{\mathcal{R}_K} u_{\mathcal{F}}}_e^2, \quad \forall K \in \mathcal{T}.\label{eq:SPDindicators}
+%\end{equation}
+%
+%\end{frame}
 
-For a given element $K \in \mathcal{T}$, our goal is to quantify the energy lost in the solution when removing a subset of basis functions from the set of \emph{removable} basis functions $\mathcal{R}_K$. % Specifically, we compute:
-\[\norm{u_{\mathcal{F}} - u_{\mathcal{E}_K}}_e^2.\]
-%Note: A small value indicates that the energy of the removed basis functions is insignificant, suggesting comparable results between fine and unrefined meshes.
-
-\textbf{Mathematical Derivation:} Analogously to Cea's lemma proof, we derive:
-\begin{align}
-  \norm{u_{\mathcal{F}}-u_{\mathcal{E}_K}}_e^2 &= b\left(u_{\mathcal{F}}-u_{\mathcal{E}_K},u_{\mathcal{F}}-u_{\mathcal{E}_K}\right) \\
-  &= b\left(u_{\mathcal{F}}-u_{\mathcal{E}_K},u_{\mathcal{F}}-\Pi_{\mathcal{F}}^{\mathcal{E}_K} u_{\mathcal{F}}\right) + b\left(u_{\mathcal{F}}-u_{\mathcal{E}_K},\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}-u_{\mathcal{E}_K}\right) \\
-  &\leq \norm{u_{\mathcal{F}}-u_{\mathcal{E}_K}}_{e}\norm{u_{\mathcal{F}}-\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}}_e,
-\end{align}
-where we use the $b$-orthogonality of $u_{\mathcal{F}}-u_{\mathcal{E}_K}$ with $\H_{\mathcal{E}_K}$ and the Cauchy-Schwarz inequality. Hence,
-\begin{equation}
-  \norm{u_{\mathcal{F}}-u_{\mathcal{E}_K}}_e \leq \norm{u_{\mathcal{F}}-\Pi_{\mathcal{F}}^{\mathcal{E}_K} u_{\mathcal{F}}}_e=\norm{\Pi_{\mathcal{F}}^{\mathcal{R}_K} u_{\mathcal{F}}}_e. \label{eq:upperboundSPD}
-\end{equation}
-
-\textbf{Error Indicator:} We define the element-wise error indicator as
-\begin{equation}
-  \eta_K\coloneqq \norm{\Pi_{\mathcal{F}}^{\mathcal{R}_K} u_{\mathcal{F}}}_e^2, \quad \forall K \in \mathcal{T}.\label{eq:SPDindicators}
-\end{equation}
-
-\end{frame}
-
-\begin{frame}{Energy-Based Non-Elliptic Problems}
-
-  \textbf{Discrete Inf-Sup Condition:} We assume that $b$ satisfies the discrete inf-sup condition:
-      %\item Existence of a positive constant $\gamma$ such that
-      \begin{equation}
-        \exists \, \gamma > 0, \quad \inf_{\phi \in \H_{\mathcal{E}_K}}\sup_{\psi \in \H_{\mathcal{E}_K}}\frac{b\left(\phi, \psi\right)}{\norm{\phi}_{e}\norm{\psi}_{e}} \geq \gamma.
-        \label{eq:infsup}
-      \end{equation}
-
-  \textbf{Utilizing $b$-Orthogonality:} We use the $b$-orthogonality of $u_{\mathcal{F}}-u_{\mathcal{E}_K}$ with respect to $\H_{\mathcal{E}_K}$.
-      %\item This allows control of $\norm{\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}-u_{\mathcal{E}_K}}_e$:
-      \begin{align}
-        \gamma\norm{\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}-u_{\mathcal{E}_K}}_e & \leq \sup_{\psi \in \H_{\mathcal{E}_K}}\frac{b\left(\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}-u_{\mathcal{E}_K}, \psi\right)}{\norm{\psi}_{e}} \\
-        & \leq M_b \norm{u_{\mathcal{F}}-\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}}_e,
-      \end{align}
-      where $M_b$ is the continuity constant of $b$.
-
-  \textbf{Concluding Inequality:} Hence, we derive the following bound:
-      \begin{equation}
-        \norm{u_{\mathcal{F}}-u_{\mathcal{E}_K}}_e^2 \lesssim \norm{u_{\mathcal{F}}-\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}}_e^2=\norm{\Pi_{\mathcal{F}}^{\mathcal{R}_K}u_{\mathcal{F}}}_e^2.
-        \label{eq:en_ne_bound}
-      \end{equation}
-
-\end{frame}
+%\begin{frame}{Energy-Based Non-Elliptic Problems}
+%
+%  \textbf{Discrete Inf-Sup Condition:} We assume that $b$ satisfies the discrete inf-sup condition:
+%      %\item Existence of a positive constant $\gamma$ such that
+%      \begin{equation}
+%        \exists \, \gamma > 0, \quad \inf_{\phi \in \H_{\mathcal{E}_K}}\sup_{\psi \in \H_{\mathcal{E}_K}}\frac{b\left(\phi, \psi\right)}{\norm{\phi}_{e}\norm{\psi}_{e}} \geq \gamma.
+%        \label{eq:infsup}
+%      \end{equation}
+%
+%  \textbf{Utilizing $b$-Orthogonality:} We use the $b$-orthogonality of $u_{\mathcal{F}}-u_{\mathcal{E}_K}$ with respect to $\H_{\mathcal{E}_K}$.
+%      %\item This allows control of $\norm{\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}-u_{\mathcal{E}_K}}_e$:
+%      \begin{align}
+%        \gamma\norm{\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}-u_{\mathcal{E}_K}}_e & \leq \sup_{\psi \in \H_{\mathcal{E}_K}}\frac{b\left(\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}-u_{\mathcal{E}_K}, \psi\right)}{\norm{\psi}_{e}} \\
+%        & \leq M_b \norm{u_{\mathcal{F}}-\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}}_e,
+%      \end{align}
+%      where $M_b$ is the continuity constant of $b$.
+%
+%  \textbf{Concluding Inequality:} Hence, we derive the following bound:
+%      \begin{equation}
+%        \norm{u_{\mathcal{F}}-u_{\mathcal{E}_K}}_e^2 \lesssim \norm{u_{\mathcal{F}}-\Pi_{\mathcal{F}}^{\mathcal{E}_K}u_{\mathcal{F}}}_e^2=\norm{\Pi_{\mathcal{F}}^{\mathcal{R}_K}u_{\mathcal{F}}}_e^2.
+%        \label{eq:en_ne_bound}
+%      \end{equation}
+%
+%\end{frame}
 
 \begin{frame}
 \frametitle{Extension to Goal-Oriented Adaptivity}
     \begin{block}{The Adjoint Problem}
-        Find $v_{\mathcal{F}}\in \H_{\mathcal{F}}$ such that
+        Find \( v_{\mathcal{F}} \in \H_{\mathcal{F}} \subset \H \)  such that
   	\begin{align}
     	\label{eq:adjointH}
     	b\left(\phi_{\mathcal{F}},v_{\mathcal{F}}\right)=l\left(\phi_{\mathcal{F}}\right), \quad \forall \phi_{\mathcal{F}} \in \H_{\mathcal{F}},
@@ -177,57 +190,61 @@ where we use the $b$-orthogonality of $u_{\mathcal{F}}-u_{\mathcal{E}_K}$ with $
 
 \begin{frame}{Quantifying Changes in the Quantity of Interest (QoI)}
 
-For a given element $K \in \mathcal{T}$, we control $\abs{l\left(u_{\mathcal{F}}\right)-l\left(u_{\mathcal{E}_K}\right)}, \; \forall K \in \mathcal{T}$. 
+  For a given element \( K \in \mathcal{T} \), we control 
+  \[
+    \left| l\left(u_{\mathcal{F}}\right) - l\left(u_{\mathcal{E}_K}\right) \right|, \quad \forall K \in \mathcal{T},
+  \]
+  where \( \mathcal{T} \) represents the discretization of \( \H \) into finite elements with \( \H_{\mathcal{F}} \). 
 
-% we aim to quantify the change in the QoI when removing some basis functions from $\mathcal{R}_K$ associated with $K$. 
-\textbf{Using Galerkin Orthogonality:}
-Since $\H_{\mathcal{E}_K} \subset \H_{\mathcal{F}}$, we have
-\begin{equation}
-  b\left(u_{\mathcal{F}}-u_{\mathcal{E}_K}, \phi\right)=0, \quad \forall \phi \in \H_{\mathcal{E}_K}.
-\end{equation}
+  % we aim to quantify the change in the QoI when removing some basis functions from \( \mathcal{R}_K \) associated with \( K \). 
+  \textbf{Using Galerkin Orthogonality:}
+  Since \( \H_{\mathcal{E}_K} \subset \H_{\mathcal{F}} \), we have
+  \begin{equation}
+    b\left(u_{\mathcal{F}} - u_{\mathcal{E}_K}, \phi\right) = 0, \quad \forall \phi \in \H_{\mathcal{E}_K}.
+  \end{equation}
 
-\textbf{Using Decomposition on \( v_\mathcal{F} \):}
-\begin{align}
-  l\left(u_{\mathcal{F}}\right)-l\left(u_{\mathcal{E}_K}\right) & = b\left(u_{\mathcal{F}}-u_{\mathcal{E}_K},v_{\mathcal{F}}-v_{\mathcal{E}_K}\right) \\
-  & = b\left(u_{\mathcal{F}}-u_{\mathcal{E}_K},\Pi_{\mathcal{F}}^{\mathcal{R}_K} v_{\mathcal{F}}\right) \quad (\text{second term vanishes})
-\end{align}
+  \textbf{Using Decomposition on \( v_{\mathcal{F}} \):}
+  \begin{align}
+    l\left(u_{\mathcal{F}}\right) - l\left(u_{\mathcal{E}_K}\right) & = b\left(u_{\mathcal{F}} - u_{\mathcal{E}_K}, v_{\mathcal{F}} - v_{\mathcal{E}_K}\right), \\
+    & = b\left(u_{\mathcal{F}} - u_{\mathcal{E}_K}, \Pi_{\mathcal{F}}^{\mathcal{R}_K} v_{\mathcal{F}}\right).
+  \end{align}
 
-\textbf{Applying Decomposition and Orthogonality:}
-\begin{equation}
-  \abs{l\left(u_{\mathcal{F}}\right)-l\left(u_{\mathcal{E}_K}\right)} \simeq \abs{b\left(\Pi_{\mathcal{F}}^{\mathcal{R}_K} u_{\mathcal{F}},\Pi_{\mathcal{F}}^{\mathcal{R}_K} v_{\mathcal{F}}\right)}
-  \leq  \abs{a\left(\Pi_{\mathcal{F}}^{\mathcal{R}_K} u_{\mathcal{F}},\Pi_{\mathcal{F}}^{\mathcal{R}_K} v_{\mathcal{F}}\right)}.
-\end{equation}
+  \textbf{Applying Decomposition and Orthogonality:}
+  \begin{equation}
+    \left| l\left(u_{\mathcal{F}}\right) - l\left(u_{\mathcal{E}_K}\right) \right| \simeq \left| b\left(\Pi_{\mathcal{F}}^{\mathcal{R}_K} u_{\mathcal{F}}, \Pi_{\mathcal{F}}^{\mathcal{R}_K} v_{\mathcal{F}}\right) \right|
+    \leq \left| a\left(\Pi_{\mathcal{F}}^{\mathcal{R}_K} u_{\mathcal{F}}, \Pi_{\mathcal{F}}^{\mathcal{R}_K} v_{\mathcal{F}}\right) \right|.
+  \end{equation}
 
-\textbf{Defining Element-wise Indicators:}
-\begin{equation}
-  \eta_K \coloneqq \abs{a\left(\Pi_{\mathcal{F}}^{\mathcal{R}_K} u_{\mathcal{F}},\Pi_{\mathcal{F}}^{\mathcal{R}_K} v_{\mathcal{F}}\right)}, \quad \forall K \in \mathcal{T}.
-\end{equation}
+  \textbf{Defining Element-wise Indicators:}
+  \begin{equation}
+    \eta_K \coloneqq \left| a\left(\Pi_{\mathcal{F}}^{\mathcal{R}_K} u_{\mathcal{F}}, \Pi_{\mathcal{F}}^{\mathcal{R}_K} v_{\mathcal{F}}\right) \right|, \quad \forall K \in \mathcal{T}.
+  \end{equation}
 
 \end{frame}
 
-\begin{frame}
-\frametitle{Error Indicators Using a Pseudo-Dual Operator}
-    \begin{block}{The Adjoint Problem}
-        Find $\te$ such that
-      \begin{equation}
-         \hat{b}\left(\phi_{\mathcal{F}},\te\right)=l\left(\phi_{\mathcal{F}}\right) - b\left(\phi_{\mathcal{F}},\Pi_{\mathcal{F}}^{\mathcal{E}_K} v_{\mathcal{F}}\right), \quad \forall \phi \in \mathcal{H},
-        \label{eq:forward_e}
-      \end{equation}
-        where:
-        \begin{itemize}
-            \item $\eta_K$ is defined as the error indicator associated with the element $K$
-             \begin{equation}
-        		\eta_K \coloneqq \abs{\hat{b}\left(\Pi_{\mathcal{F}}^{\mathcal{R}_K} u_{\mathcal{F}}, \te\right)}, \quad \forall K \in \mathcal{T},
-       		\label{eq:1DGOAupperbound}
-     	   \end{equation}
-            \item where, the operator $a\left(\cdot ,\cdot\right)$ is defined as $a\left(\cdot ,\cdot\right) = \hat{b}\left(\cdot ,\cdot\right)$.
-        \end{itemize}
-    \end{block}     
-    \begin{thebibliography}{}
-    \beamertemplatearticlebibitems
-   \bibitem{darrigrand2020painless}
-		V. Darrigrand, D. Pardo, I. Muga
-		\newblock Goal-oriented adaptivity using unconventional error representations for the 1D Helmholtz equation
-		\newblock \emph{Computers \& Mathematics with Applications}, 2015
-    \end{thebibliography}
-\end{frame}
+%\begin{frame}
+%\frametitle{Error Indicators Using a Pseudo-Dual Operator}
+%    \begin{block}{The Adjoint Problem}
+%        Find $\te$ such that
+%      \begin{equation}
+%         \hat{b}\left(\phi_{\mathcal{F}},\te\right)=l\left(\phi_{\mathcal{F}}\right) - b\left(\phi_{\mathcal{F}},\Pi_{\mathcal{F}}^{\mathcal{E}_K} v_{\mathcal{F}}\right), \quad \forall \phi \in \mathcal{H},
+%        \label{eq:forward_e}
+%      \end{equation}
+%        where:
+%        \begin{itemize}
+%            \item $\eta_K$ is defined as the error indicator associated with the element $K$
+%             \begin{equation}
+%        		\eta_K \coloneqq \abs{\hat{b}\left(\Pi_{\mathcal{F}}^{\mathcal{R}_K} u_{\mathcal{F}}, \te\right)}, \quad \forall K \in \mathcal{T},
+%       		\label{eq:1DGOAupperbound}
+%     	   \end{equation}
+%            \item where, the operator $a\left(\cdot ,\cdot\right)$ is defined as $a\left(\cdot ,\cdot\right) = \hat{b}\left(\cdot ,\cdot\right)$.
+%        \end{itemize}
+%    \end{block}     
+%    \begin{thebibliography}{}
+%    \beamertemplatearticlebibitems
+%   \bibitem{darrigrand2020painless}
+%		V. Darrigrand, D. Pardo, I. Muga
+%		\newblock Goal-oriented adaptivity using unconventional error representations for the 1D Helmholtz equation
+%		\newblock \emph{Computers \& Mathematics with Applications}, 2015
+%    \end{thebibliography}
+%\end{frame}

@@ -24,51 +24,51 @@
 
 \end{frame}
 
-\begin{frame}
-  \frametitle{2D Numerical results for $hp$-adaptivity}
-
-  \begin{block}{Singular Poisson example}
-    Find \(u\) satisfying:
-    \begin{alignat}{2}
-      - \Delta u & = \mathds{1}_{\Omega_{f}} && \quad \text{in } \Omega, \\
-      u          & = 0                       && \quad \text{on } \partial \Omega.
-    \end{alignat}
-  \end{block}
-
-  \begin{multicols}{2}
-   \textbf{Domain Definitions:}
-    \begin{itemize}
-      \item \(\Omega_{f} = \left(\frac{1}{4},\frac{1}{2}\right)^{2} \subset \Omega\), 
-      \item \(\Omega_{l} = \left(\frac{1}{2},\frac{3}{4}\right)^{2} \subset \Omega\),
-      \item \(a(\cdot ,\cdot) \coloneqq \scalar{\nabla \cdot}{\nabla \cdot}_{L^{2}(\Omega)}\).
-    \end{itemize}
- 
-    \begin{figure}
-       \centering
-  	\input{Diapos/2d_numerical/Figures/domain_cross.tex}
-      \caption{Domain \\ $\Omega = \left(\left(0,1\right) \times \left(\frac{1}{4},\frac{3}{4}\right)\right) \cup \left(\left(\frac{1}{4},\frac{3}{4}\right) \times \left(0,1\right)\right)$.}
-    \end{figure}
-  \end{multicols}
-
-\end{frame}
-
-\begin{frame}
-	\frametitle{Singular Poisson example}
-	\begin{figure}[t!]
-   		\goasolutions{CrossGOA}{real}
-	\end{figure}
-\end{frame}
-
-\begin{frame}
-	\frametitle{Singular Poisson example}
-  	\plothpmeshes[]{CrossGOA}
-\end{frame}
-
-\begin{frame}
-\frametitle{Singular Poisson Example}
-\begin{figure}[t!]
-\centering
-\input{Diapos/2d_numerical/Figures/convergence.tex}
-\caption{Evolution of $e_{\textrm{rel}}^{\textrm{QoI}}$ in the adaptive process.}
-\end{figure}
-\end{frame}
+%\begin{frame}
+%  \frametitle{2D Numerical results for $hp$-adaptivity}
+%
+%  \begin{block}{Singular Poisson example}
+%    Find \(u\) satisfying:
+%    \begin{alignat}{2}
+%      - \Delta u & = \mathds{1}_{\Omega_{f}} && \quad \text{in } \Omega, \\
+%      u          & = 0                       && \quad \text{on } \partial \Omega.
+%    \end{alignat}
+%  \end{block}
+%
+%  \begin{multicols}{2}
+%   \textbf{Domain Definitions:}
+%    \begin{itemize}
+%      \item \(\Omega_{f} = \left(\frac{1}{4},\frac{1}{2}\right)^{2} \subset \Omega\), 
+%      \item \(\Omega_{l} = \left(\frac{1}{2},\frac{3}{4}\right)^{2} \subset \Omega\),
+%      \item \(a(\cdot ,\cdot) \coloneqq \scalar{\nabla \cdot}{\nabla \cdot}_{L^{2}(\Omega)}\).
+%    \end{itemize}
+% 
+%    \begin{figure}
+%       \centering
+%  	\input{Diapos/2d_numerical/Figures/domain_cross.tex}
+%      \caption{Domain \\ $\Omega = \left(\left(0,1\right) \times \left(\frac{1}{4},\frac{3}{4}\right)\right) \cup \left(\left(\frac{1}{4},\frac{3}{4}\right) \times \left(0,1\right)\right)$.}
+%    \end{figure}
+%  \end{multicols}
+%
+%\end{frame}
+%
+%\begin{frame}
+%	\frametitle{Singular Poisson example}
+%	\begin{figure}[t!]
+%   		\goasolutions{CrossGOA}{real}
+%	\end{figure}
+%\end{frame}
+%
+%\begin{frame}
+%	\frametitle{Singular Poisson example}
+%  	\plothpmeshes[]{CrossGOA}
+%\end{frame}
+%
+%\begin{frame}
+%\frametitle{Singular Poisson Example}
+%\begin{figure}[t!]
+%\centering
+%\input{Diapos/2d_numerical/Figures/convergence.tex}
+%\caption{Evolution of $e_{\textrm{rel}}^{\textrm{QoI}}$ in the adaptive process.}
+%\end{figure}
+%\end{frame}
